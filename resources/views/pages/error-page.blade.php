@@ -1,7 +1,7 @@
 @extends('../layouts/' . $layout)
 
 @section('head')
-    <title>Error Page - Midone - Tailwind HTML Admin Template</title>
+    <title>Error 404</title>
 @endsection
 
 @section('content')
@@ -21,15 +21,29 @@
                 <div class="mt-10 text-white lg:mt-0">
                     <div class="intro-x text-8xl font-medium">404</div>
                     <div class="intro-x mt-5 text-xl font-medium lg:text-3xl">
-                        Oops. This page has gone missing.
+                        Ups. Esta página ha desaparecido.
                     </div>
                     <div class="intro-x mt-3 text-lg">
-                        You may have mistyped the address or the page may have moved.
+                        Es posible que haya escrito mal la dirección o que la página se haya movido.
                     </div>
                     <x-base.button
                         class="intro-x mt-10 border-white px-4 py-3 text-white dark:border-darkmode-400 dark:text-slate-200"
+                        id="btn_regresar"
+                        variant="dark"
                     >
-                        Back to Home
+                    <x-base.loading-icon
+                                class="ml-2 h-6 w-6"
+                                icon="puff"
+                                color="white"
+                            />
+                            &nbsp;&nbsp;&nbsp;
+                                Regresar a la página de incio
+                            &nbsp;&nbsp;
+                    <x-base.loading-icon
+                                class="ml-2 h-6 w-6"
+                                icon="puff"
+                                color="white"
+                            />
                     </x-base.button>
                 </div>
             </div>
@@ -37,3 +51,22 @@
         </div>
     </div>
 @endsection
+@once
+    @push('scripts')
+    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        <script type="module">
+            $(document).ready(function () {
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    }
+                    
+                    
+                });	  
+                $("#btn_regresar").on("click", function () {
+                        window.location.href = ("{{url('/')}}");
+                    });
+            });
+        </script>   
+    @endpush
+@endonce

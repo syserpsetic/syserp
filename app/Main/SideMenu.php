@@ -48,6 +48,14 @@ class SideMenu
             //         ]
             //     ]
             // ],
+            'dashboard-overview-1' => [
+                'icon' => 'home',
+                'route_name' => 'dashboard-overview-1',
+                'params' => [
+                    'layout' => 'side-menu',
+                ],
+                'title' => 'Inicio'
+            ],
             // 'menu-layout' => [
             //     'icon' => 'box',
             //     'title' => 'Menu Layout',

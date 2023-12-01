@@ -113,9 +113,12 @@ Route::middleware('auth:api')->group(function () {
     });
     Route::post('mi-perfil-cambiar-clave', [PerfilController::class, 'cambiar_clave']);
     Route::get('solicitudes', [SolicitudesController::class, 'view_solicitudes'])->name('solicitudes');
-    Route::get('/viaticos', [ViaticosController::class, 'ver_viaticos']);
+    Route::get('solicitudes/data', [SolicitudesController::class, 'data_solicitudes']);
+    Route::get('/viaticos/agregar', [ViaticosController::class, 'agregar_viaticos']);
+    Route::get('/viaticos/editar/{id_viatico}', [ViaticosController::class, 'editar_viaticos']);
     Route::post('/viaticos/guardar', [ViaticosController::class, 'guardar_viaticos']);
 });
 
 Route::get('/auth/redirect/google', [AuthController::class, 'redirectToGoogle']);
 Route::get('/callback/google', [AuthController::class, 'handleGoogleCallback']);
+Route::get('solicitudes/{id_solicitud}/empleado/{id_empleado}/imprimir', [SolicitudesController::class, 'imprimir_solicitudes']);

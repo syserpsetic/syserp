@@ -133,6 +133,15 @@ create table administracion.via_capitulos(
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone
 );
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo I');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo II');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo III');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo IV');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo V');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo VI');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo VII');
+    INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo VIII');
+
 create table administracion.via_articulos(
 	id serial primary key,
 	nombre text,
@@ -144,23 +153,65 @@ create table administracion.via_articulos(
 	constraint via_articulos_fk_001 foreign key (id_capitulo) references administracion.via_articulos
 );
 
-
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 1','Elpresente reglamento define y establece las normas y procedimientos a aplicar para el otorgamiento de Viáticos y Gastos de viaje',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 2','La UNAG reconocerá y pagará viáticos y gastos de viaje a sus funcionarios y empleados ',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 3','Toda asignación de viáticos, gastos de viaje y otros sinilares, se cargarán a la asignacion',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 4','Cuando se requiere los servios de personas particulares',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 5','Los viajes fuera del campus central y las sedes',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 6','se prohíve la adquisiciñon con fondos de la UNAG',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 7','Se limita en la Universidad Nacional de Agricultura ',1);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 8','Para los efectos de aplicación del presente reglamento,se entiende ',2);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 9','Para los efectos de este Reglamento, los viáticos y gastos',3);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 10','El superior jerárquico que solicite y autorica las misiones oficiales',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 11','Las giras dentro y fuera del país deberán programarse',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 12','Los Viáticos y gastos de Viaje dentro y fuera del país, se hara de conformida con lo que determine',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 13','Las tarifas de viáticos, gastos de viaje y otros gastos aquí estipulados, son las cantidades máximas',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 14','Las horas de salida y regreso que se tomarán para efectuar el cómputo de viáticos',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 15','La asignación diaria para viáticos se contará por cada noche que el servidor público universitario',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 16','Los viáticos y gastos de viaje dentro del país de los servidores públicos universitarios ',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 17','En los Centros Regionales, los viáticos y gastos de viaje deberán planificar conforme la disponibilidad',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 18','Cuando se trate de viajes al exterior , los viáticos y gastos de viaje de los Servidores Publicos Universitarios',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 19','Cuando un Servidor Público Universitario, previa invitación formal, asista o participe en algunas actividad',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 20','  Cuando la invitación incluya el reconocimiento de gastos en concepto de alimentación, se dotará al viajero',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 21','El servidor público universitario a quienes se le asigne un vehículo para efectuar un viaje',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 22','Si un viaje no es realizando, el viajero devolverá el valor asignado de viáticos a la Tesorería de la UNAG',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 23','Se prohíbe a los todos los Servidores Públicos Universitarios, aprobar y autorizar Viáticos',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 24','Los Servidores Públicos Universitarios al incurrir en gastos imprevistos y necesarios durente el viaje',4);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 25','Toda persona que se la haya provisto de anticipo de Viáticos y Gastos de Viaje, que concluya una misión',5);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 26','De no cumplirse con las disposiciones antes señaladas',5);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 27','En el caso que el servidor público universitario no liqude el monto otorgado en el plazo establecido',5);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 28','Para la revisión, aprobación y demás efeectos de la liquidación presentada por el servidor público universitario',5);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 29','Se prohíbe el fraccionamiento de los períodos de las misiones con el propósito de eluadir la correcta aplicación',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 30','A ninguna persona se le autorizará un nuevo anticipo de Viáticos y Gastos de viaje, si tuviese pendiente',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 31','Bajo ninguna circunstancia deberá asignarse anticipo de Viáticos y Gastos de Viaje para mayor número de días',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 32','Todo informe y documentación presentada por los servidores públicos universitarios que hubieren viajado',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 33','En ningún caso, los viáticos  y gastos de viaje se utilizarán para reconocer primas, sobresueldos',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 34','Todos los organos y dependencias de la UNAG deberán limitar sus viajes al exterior a lo estrictamente necesarios',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 35','Ninguno de los gastos comprendidos en este Reglamento padrán autorizarse para financiar becas',6);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 36','Las tarifas de viáticos especificadas en el presente reglamento, son las cantidades máximas que deben reconocerse',7);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 37','Los servidores Públicos de la UNAG que viajan a las diferentes unidades a la misma, deberán acatar',7);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 38','Los viáticos, gastos de viaje y otros, autorizados antes de la vigencia de este reglamento',8);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 39','EL presente Reglamento será revisado y modificado en cualquier momento con el propósito',8);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 40','Lo no consignado en este reglamento de Viáticos y Gastos de viaje, deberá sujetarse supletoriamente',8);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 41','Por este acto, se deroga el Reglamento de Viáticos y Gastos de viaje anterior al presente',8);
+    INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 42','El presente Reglamento entrará en vigencia después de su publicación en el Diario Oficial',8);
 
 
 create table administracion.via_ordenes_viajes (
-id serial primary key,
-vehiculo_placa text,
-vehiculo_tipo text,
-fecha_salida timestamp without time zone not null,
-fecha_retorno timestamp without time zone not null,
-numero_empleado_conductor bigint,
-proposito text,
-id_institucion bigint,
-id_fuente bigint,
-    id_gerencia_administrativa bigint,
-id_programa bigint,
+	id serial primary key,
+	vehiculo_placa text,
+	vehiculo_tipo text,
+	fecha_salida timestamp without time zone not null,
+	fecha_retorno timestamp without time zone not null,
+	numero_empleado_conductor bigint,
+	proposito text,
+	id_institucion bigint,
+	id_fuente bigint,
+	id_gerencia_administrativa bigint,
+	id_programa bigint,
     id_unidad_ejecutora bigint,
-    id_actividad_obra bigint,  
+    id_actividad_obra bigint,
+	id_firma_jefatura bigint, 
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone,
@@ -189,6 +240,11 @@ id_programa bigint,
     
     CONSTRAINT via_ordenes_viajes_fk_012 FOREIGN KEY (id_actividad_obra)
         REFERENCES administracion.pre_actividades_obras (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	
+	CONSTRAINT via_ordenes_viajes_fk_013 FOREIGN KEY (id_firma_jefatura)
+        REFERENCES administracion.via_firmas_jefaturas (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
@@ -266,6 +322,21 @@ create table administracion.via_ordenes_viajes_empleados(
 	 ON UPDATE NO ACTION
         ON DELETE NO ACTION
 );
+
+create table administracion.via_firmas_jefaturas(
+	id serial primary key,
+	nombre text,
+	descripcion text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone
+);
+
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('RECTOR', 'Jefe de Rectoría');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('VICERECTOR ACADÉMICO', 'Jefe de Vicerectoría Académica');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('SECRETARIO GENERAL', 'Jefe de Secretaría General');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('DECANO', 'Jefe de Decanatura');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('FIRMA DEL JEFE DE DEPARTAMENTO', 'Jefe de Departamento');
 
 --selecT * from information_schema.tables where table_name like 'via_%'
 

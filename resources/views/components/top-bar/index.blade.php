@@ -6,7 +6,7 @@
         <!-- BEGIN: Logo -->
         <a
             class="-intro-x hidden md:flex"
-            href=""
+            href="/"
         >
             <img
                 class="w-6"
@@ -20,13 +20,17 @@
         <x-base.breadcrumb
             class="-intro-x mr-auto h-full border-white/[0.08] md:ml-10 md:border-l md:pl-10"
             light
-        >
-            <x-base.breadcrumb.link :index="0">Application</x-base.breadcrumb.link>
+        ><x-base.lucide
+                        class="mr-2 h-4 w-4"
+                        icon="User"
+                    />
+            <x-base.breadcrumb.link :index="0" href="/">{{ $fakers[0]['users'][0]['name'] }}</x-base.breadcrumb.link>
             <x-base.breadcrumb.link
                 :index="1"
+                href="/"
                 :active="true"
             >
-                Dashboard
+                {{ $fakers[0]['users'][0]['username'] }}
             </x-base.breadcrumb.link>
         </x-base.breadcrumb>
         <!-- END: Breadcrumb -->
@@ -217,13 +221,13 @@
                         {{ $fakers[0]['users'][0]['username'] }}
                     </div>
                 </x-base.menu.header>
-                <x-base.menu.divider class="bg-white/[0.08]" />
+                <!-- <x-base.menu.divider class="bg-white/[0.08]" />
                 <x-base.menu.item class="hover:bg-white/5" href="mi-perfil-page">
                     <x-base.lucide
                         class="mr-2 h-4 w-4"
                         icon="User"
                     /> Mi Perfil
-                </x-base.menu.item>
+                </x-base.menu.item> -->
                 <!-- <x-base.menu.item class="hover:bg-white/5">
                     <x-base.lucide
                         class="mr-2 h-4 w-4"

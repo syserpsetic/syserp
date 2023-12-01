@@ -5,308 +5,256 @@
 @endsection
 
 @section('subcontent')
-<div class="intro-y col-span-12 lg:col-span-6">
-        <x-base.preview-component class="intro-y box">
-            <div class="p-5">
-                <x-base.preview>
-                    <div>
-                        <h1 class="text-4xl font-medium leading-none">
-                            Ordenes de Viaje
-                        </h1>
-                        <br>
-                        <div class="w-full border-t border-dashed border-slate-200/60 dark:border-darkmode-400"></div>
-                        <x-base.lucide icon="Truck" class="w-6 h-6 inline-block align-middle" />
-                        <span class="inline-block align-middle text-sm">&nbsp; Módulo para registro de ordenes de viajes.</span>
-                                            
-                    </div>
-                </x-base.preview>
-            </div>
-        </x-base.preview-component>
-</div>
-<div class="intro-y mt-8 flex items-center">
-    <x-base.preview-component class="intro-y box mt-5">
-        <!-- BEGIN: Multiple Select -->
-        <div class="p-5">
-            <x-base.form-label for="crud-form-2">Empleados</x-base.form-label>
-            <x-base.tom-select id="input_empleados" class="w-full" data-placeholder="Selección de empleados" multiple>
-                @foreach($empleados as $row)
-                <option value="{{$row['numero_empleado']}}">{{$row['empleado']}} ({{$row['numero_empleado']}})</option>
-                @endforeach
-            </x-base.tom-select>
-        </div>
-        <!-- END: Multiple Select -->
-
-        <!-- BEGIN: Basic Select -->
-        <!-- <div class="p-5">
-            <label>Departamentos</label>
-            <div class="mt-2">
-                <x-base.tom-select id="input_departamentos" class="w-full" data-placeholder="Selección de departamentos">
-                    @foreach($departamentos as $row)
-                    <option value="{{$row['id_departamento']}}">{{$row['descripcion']}}</option>
-                    @endforeach
-                </x-base.tom-select>
-            </div>
-        </div> -->
-        <!-- Inicia sección de dos columnas -->
-        <div class="mt-5 grid grid-cols-12 gap-6">
-            <!-- <div class="intro-y col-span-12 lg:col-span-4">
-                <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Asignación por día</x-base.form-label>
-                    <x-base.input-group class="mt-2" inputGroup>
-                        <x-base.form-input id="input_asignacion" type="number" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese la cantidad" />
-                        <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
-                            Lps
-                        </x-base.input-group.text>
-                    </x-base.input-group>
-                </div>
-            </div> -->
-            <div class="intro-y col-span-12 lg:col-span-6">
-                <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Fecha y hora de salida</x-base.form-label>
-                    <x-base.input-group class="mt-2" inputGroup>
-                        <x-base.form-input id="input_fecha_salida" type="date" aria-label="Price" aria-describedby="input-group-price"/>
-                        <x-base.form-input id="input_hora_salida" type="time" aria-label="Price" aria-describedby="input-group-price"/>
-                        <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
+    <div class="intro-y mt-8 flex flex-col items-center sm:flex-row">
+        <h2 class="mr-auto text-lg font-medium">Lista de solicitudes</h2>
+        <div class="mt-4 flex w-full sm:mt-0 sm:w-auto">
+            <x-base.menu class="ml-auto sm:ml-0">
+                <x-base.menu.button
+                    class="mr-2 shadow-md"
+                    as="x-base.button"
+                    variant="primary"
+                ><x-base.lucide
+                            class="h-4 w-4"
+                            icon="FilePlus"
+                        />&nbsp; Registrar Nueva Solicitud
+                    
+                </x-base.menu.button>
+                <x-base.menu.items class="w-60">
+                    <x-base.menu.item
+                            id="btn_registrar">
                         <x-base.lucide
-                            icon="Calendar"
-                            />
-                        </x-base.input-group.text>
-                    </x-base.input-group>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-6">
-            <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Fecha y hora de regreso</x-base.form-label>
-                    <x-base.input-group class="mt-2" inputGroup>
-                        <x-base.form-input id="input_fecha_regreso" type="date" aria-label="Price" aria-describedby="input-group-price"/>
-                        <x-base.form-input id="input_hora_regreso" type="time" aria-label="Price" aria-describedby="input-group-price"/>
-                        <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
-                        <x-base.lucide
-                            icon="Calendar"
-                            />
-                        </x-base.input-group.text>
-                    </x-base.input-group>
-                </div>
-            </div>
-        </div>
-        <!-- Finaliza sección de dos columnas -->
-        <!-- Inicia sección de dos columnas -->
-        <div class="mt-5 grid grid-cols-12 gap-6">
-            <div class="intro-y col-span-12 lg:col-span-6">
-                <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Vehículo placa No.</x-base.form-label>
-                    <x-base.input-group class="mt-2" inputGroup>
-                        <x-base.form-input id="input_vehiculo_placa" type="text" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese la placa" />
-                        <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
-                        <x-base.lucide
-                            icon="Hash"
-                            />
-                        </x-base.input-group.text>
-                    </x-base.input-group>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-6">
-                <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Tipo de Vehículo</x-base.form-label>
-                    <x-base.input-group class="mt-2" inputGroup>
-                        <x-base.form-input id="input_vehiculo_tipo" type="text" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese el tipo de vehículo" />
-                        <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
-                        <x-base.lucide
+                            class="mr-2 h-4 w-4"
                             icon="Truck"
-                            />
-                        </x-base.input-group.text>
-                    </x-base.input-group>
-                </div>
-            </div>
-        </div>
-        <!-- Finaliza sección de dos columnas -->
-        <!-- Inicia sección de dos columnas -->
-  
-                <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Conductor</x-base.form-label>
-                    <x-base.tom-select id="input_numero_empleado_conductor" class="w-full" data-placeholder="Selección de empleados">
-                        @foreach($empleados as $row)
-                        <option value="{{$row['numero_empleado']}}">{{$row['empleado']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-        
-        <div class="mt-5 grid grid-cols-12 gap-6">
-            <div class="intro-y col-span-12 lg:col-span-12">
-                <div class="p-5">
-                <div class="input-form mt-3">
-                        <div>
-                        <x-base.form-label for="crud-form-2">Itinerario de viaje</x-base.form-label>
-                            <x-base.form-input
-                                id="autocomplete-input"
-                                type="text"
-                                list="itinerario_opciones"
-                                placeholder="Seleccione los destinos"
-                                multiple
-                            />
-                        </div>
-                        
-                        <datalist id="itinerario_opciones">
-                        @foreach($ciudades as $row)
-                            <option value="{{$row['id_ciudad']}}">{{$row['ciudad']}}</option>
-                        @endforeach
-                        </datalist>
-                        
-                     
-                        </div>
-            <x-base.preview-component class="intro-y box mt-5">
-                <div
-                    class="flex flex-col items-center border-b border-slate-200/60 p-5 dark:border-darkmode-400 sm:flex-row">
-                    
-                    <h3 class="mr-auto text-base font-small">
+                        /> Nueva Orden de Viaje
+                    </x-base.menu.item>
+                    <x-base.menu.item>
                         <x-base.lucide
-                        icon="Map-pin"
+                            class="mr-2 h-4 w-4"
+                            icon="Plus"
+                        /> Nueva Licitación
+                    </x-base.menu.item>
+                </x-base.menu.items>
+            </x-base.menu>
+        </div>
+    </div>
+    <!-- BEGIN: HTML Table Data -->
+    <div class="intro-y box mt-5 p-5">
+        <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
+            <form
+                class="sm:mr-auto xl:flex"
+                id="tabulator-html-filter-form"
+            >
+                <div class="items-center sm:mr-4 sm:flex">
+                    <label class="mr-2 w-12 flex-none xl:w-auto xl:flex-initial">
+                        Field
+                    </label>
+                    <x-base.form-select
+                        class="mt-2 w-full sm:mt-0 sm:w-auto 2xl:w-full"
+                        id="tabulator-html-filter-field"
+                    >
+                        <option value="name">Name</option>
+                        <option value="category">Category</option>
+                        <option value="remaining_stock">Remaining Stock</option>
+                    </x-base.form-select>
+                </div>
+                <div class="mt-2 items-center sm:mr-4 sm:flex xl:mt-0">
+                    <label class="mr-2 w-12 flex-none xl:w-auto xl:flex-initial">
+                        Type
+                    </label>
+                    <x-base.form-select
+                        class="mt-2 w-full sm:mt-0 sm:w-auto"
+                        id="tabulator-html-filter-type"
+                    >
+                        <option value="like">like</option>
+                        <option value="=">=</option>
+                        <option value="<">&lt;</option>
+                        <option value="<=">&lt;=</option>
+                        <option value=">">&gt;</option>
+                        <option value=">=">&gt;=</option>
+                        <option value="!=">!=</option>
+                    </x-base.form-select>
+                </div>
+                <div class="mt-2 items-center sm:mr-4 sm:flex xl:mt-0">
+                    <label class="mr-2 w-12 flex-none xl:w-auto xl:flex-initial">
+                        Value
+                    </label>
+                    <x-base.form-input
+                        class="mt-2 sm:mt-0 sm:w-40 2xl:w-full"
+                        id="tabulator-html-filter-value"
+                        type="text"
+                        placeholder="Search..."
+                    />
+                </div>
+                <div class="mt-2 xl:mt-0">
+                    <x-base.button
+                        class="w-full sm:w-16"
+                        id="tabulator-html-filter-go"
+                        type="button"
+                        variant="primary"
+                    >
+                        Go
+                    </x-base.button>
+                    <x-base.button
+                        class="mt-2 w-full sm:mt-0 sm:ml-1 sm:w-16"
+                        id="tabulator-html-filter-reset"
+                        type="button"
+                        variant="secondary"
+                    >
+                        Reset
+                    </x-base.button>
+                </div>
+            </form>
+            <div class="mt-5 flex sm:mt-0">
+                <x-base.button
+                    class="mr-2 w-1/2 sm:w-auto"
+                    id="tabulator-print"
+                    variant="outline-secondary"
+                >
+                    <x-base.lucide
+                        class="mr-2 h-4 w-4"
+                        icon="Printer"
+                    /> Print
+                </x-base.button>
+                <x-base.menu class="w-1/2 sm:w-auto">
+                    <x-base.menu.button
+                        class="w-full sm:w-auto"
+                        as="x-base.button"
+                        variant="outline-secondary"
+                    >
+                        <x-base.lucide
+                            class="mr-2 h-4 w-4"
+                            icon="FileText"
+                        /> Export
+                        <x-base.lucide
+                            class="ml-auto h-4 w-4 sm:ml-2"
+                            icon="ChevronDown"
                         />
-                        <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
-                            Si desea eliminar un destino haga click sobre el.
-                        </span><br>
-                        <div id="contenedorSelecciones"></div>
-                    </h3>
-                    
+                    </x-base.menu.button>
+                    <x-base.menu.items class="w-40">
+                        <x-base.menu.item id="tabulator-export-csv">
+                            <x-base.lucide
+                                class="mr-2 h-4 w-4"
+                                icon="FileText"
+                            /> Export CSV
+                        </x-base.menu.item>
+                        <x-base.menu.item id="tabulator-export-json">
+                            <x-base.lucide
+                                class="mr-2 h-4 w-4"
+                                icon="FileText"
+                            /> Export
+                            JSON
+                        </x-base.menu.item>
+                        <x-base.menu.item id="tabulator-export-xlsx">
+                            <x-base.lucide
+                                class="mr-2 h-4 w-4"
+                                icon="FileText"
+                            /> Export
+                            XLSX
+                        </x-base.menu.item>
+                        <x-base.menu.item id="tabulator-export-html">
+                            <x-base.lucide
+                                class="mr-2 h-4 w-4"
+                                icon="FileText"
+                            /> Export
+                            HTML
+                        </x-base.menu.item>
+                    </x-base.menu.items>
+                </x-base.menu>
+            </div>
+        </div>
+        <div class="scrollbar-hidden overflow-x-auto">
+            <div
+                class="mt-5"
+                id="tabulator"
+            ></div>
+        </div>
+        <!-- BEGIN: Modal Content -->
+        <x-base.dialog id="modal_eliminar">
+            <x-base.dialog.panel>
+                <div class="p-5 text-center">
+                    <x-base.lucide class="mx-auto mt-3 h-16 w-16 text-danger" icon="XCircle" />
+                    <div class="mt-5 text-3xl">¡Advertencia!</div>
+                    <div class="mt-2 text-slate-500">
+                        ¿Realmente desea eliminar este registro?<br />
+                        <div id="id_registro"></div>
+                    </div>
                 </div>
+                <div class="px-5 pb-8 text-center">
+                    <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                        Cancelar
+                    </x-base.button>
+                    <x-base.button class="w-24" type="button" variant="danger" id="btn_eliminar">
+                        Eliminar
+                    </x-base.button>
+                </div>
+            </x-base.dialog.panel>
+        </x-base.dialog>
+        <!-- END: Modal Content -->
+
+    </div>
+        <!-- END: HTML Table Data -->
+        <div class="text-center">
+        <!-- BEGIN: Notification Content -->
+        <div id="success-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
+            <i data-lucide="check-circle" width="24" height="24" class="stroke-1.5 text-success text-success"></i>
+            <div id="success-notification" class="ml-4 mr-4">
                 
-                            
-                       
-            </x-base.preview-component>
-
-                </div>
             </div>
-        </div>
-        <!-- END: Multiple Select -->
-        <div class="p-5">
-            <div class="input-form mt-3">
-                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_proposito">
-                    Propósito del viaje
-                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
-                        Espacio para redactar con libertad
-                    </span>
-                </x-base.form-label>
-                <x-base.form-textarea rows="5" class="form-control" id="input_proposito" name="comment" placeholder="Describa el propósito del viaje..."></x-base.form-textarea>
-            </div>
-        </div>
-        <div class="mt-5 grid grid-cols-12 gap-6">
-            <div class="intro-y col-span-12 lg:col-span-2">
-                <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Fuente</x-base.form-label>
-                    <x-base.tom-select id="input_fuente" class="w-full">
-                        @foreach($fuentes as $row)
-                            <option value="{{$row['id']}}">{{$row['fuente']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-2">
-                <div class="p-5">
-                    <x-base.form-label for="crud-form-2">GA</x-base.form-label>
-                    <x-base.tom-select id="input_ga" class="w-full" disabled>
-                        @foreach($gerencia_administrativa as $row)
-                            <option value="{{$row['id']}}" {{$row['seleccion']}}>{{$row['gerencia']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-2">
-                <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Programa</x-base.form-label>
-                    <x-base.tom-select id="input_programa" class="w-full">
-                        @foreach($programas as $row)
-                            <option value="{{$row['id']}}">{{$row['programa']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-2">
-                <div class="p-5">
-                    <x-base.form-label for="crud-form-2">UE</x-base.form-label>
-                    <x-base.tom-select id="input_ue" class="w-full">
-                        @foreach($ue as $row)
-                            <option value="{{$row['id']}}">{{$row['ue']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-            </div>
-            <div class="intro-y col-span-12 lg:col-span-4">
-                <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Actividad</x-base.form-label>
-                    <x-base.tom-select id="input_actividad" class="w-full">
-                        @foreach($act as $row)
-                            <option value="{{$row['id']}}">{{$row['act']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
-                </div>
-            </div>
-        </div>
-        <!-- <div class="p-5">
-            <div class="input-form mt-3">
-                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="validation-form-6">
-                    Artículos aplicados
-                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
-                        Espacio para redactar con libertad
-                    </span>
-                </x-base.form-label>
-                <x-base.form-textarea rows="5" class="form-control" id="validation-form-6" name="comment" placeholder="Describa el propósito del viaje..."></x-base.form-textarea>
-            </div>
-        </div> -->
-
-        <div class="p-5">
-            <x-base.form-label for="crud-form-2">Artículos aplicados</x-base.form-label>
-            <x-base.tom-select id="input_articulos" class="w-full" data-placeholder="Selección de artículos" multiple>
-                @foreach($articulos as $row)
-                <option value="{{$row['id']}}">{{$row['nombre']}}</option>
-                @endforeach
-            </x-base.tom-select>
         </div>
 
-        <div class="p-5">
-            <x-base.button id="btn_guardar" class="w-40" type="button" variant="primary">
-            <x-base.lucide icon="Save" />&nbsp;
-            <x-base.loading-icon
-                id="icon_guardando"
-                class="w-0 h-0"
-                icon="three-dots"
-            />
+        <div id="danger-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
+            <i data-lucide="x-circle" width="24" height="24" class="stroke-1.5 text-danger text-danger"></i>
+            <div id="danger-notification" class="ml-4 mr-4">
+                
+            </div>
+        </div>
+        <!-- END: Notification Content -->
+    </div>
+    <x-base.preview>
+        <!-- BEGIN: Slide Over Toggle -->
+        <!-- <div class="text-center">
+            <x-base.button data-tw-toggle="modal" data-tw-target="#basic-slide-over-preview" href="#" as="a" variant="primary">
+                Show Slide Over
             </x-base.button>
-        </div>
-        
-    </x-base.preview-component>
+        </div> -->
+        <!-- END: Slide Over Toggle -->
+        <!-- BEGIN: Slide Over Content -->
+        <x-base.slideover id="modal_imprimir_ordenes">
+            <x-base.slideover.panel>
+                <x-base.slideover.title class="p-5">
+                    <h2 class="mr-auto text-base font-medium">
+                        Imprimir Ordenes de Viaje
+                    </h2>
+                </x-base.slideover.title>
+                <x-base.slideover.description id="lista_empleados">
+                    
+                </x-base.slideover.description>
+            </x-base.slideover.panel>
+        </x-base.slideover>
+        <!-- END: Slide Over Content -->
+    </x-base.preview>
 
-</div>
-
-<div class="text-center">
-    <!-- BEGIN: Notification Content -->
-    <div id="success-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
-        <i data-lucide="check-circle" width="24" height="24" class="stroke-1.5 text-success text-success"></i>
-        <div id="success-notification" class="ml-4 mr-4">
-            
-        </div>
-    </div>
-
-    <div id="danger-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
-        <i data-lucide="x-circle" width="24" height="24" class="stroke-1.5 text-danger text-danger"></i>
-        <div id="danger-notification" class="ml-4 mr-4">
-            
-        </div>
-    </div>
-    <!-- END: Notification Content -->
-</div>
-
-
-
+    
 @endsection
 @once
+    @push('vendors')
+        @vite('resources/js/vendor/tabulator/index.js')
+        @vite('resources/js/vendor/lucide/index.js')
+        @vite('resources/js/vendor/xlsx/index.js')
+    @endpush
+@endonce
+@once
     @push('scripts')
-        
+        @vite('resources/js/pages/slideover/index.js')
+        @vite('resources/js/pages/modal/index.js')
         @vite(['resources/sass/app.scss', 'resources/js/app.js'])
         @vite('resources/js/pages/modal/index.js')
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
         <script type="module">
             var accion_guardar = false;
+            var accion = null;
+            var id = null;
             var numero_empleado = null;
             var vehiculo_placa = null;
             var vehiculo_tipo = null;
@@ -324,13 +272,11 @@
             var id_unidad_ejecutora = null;
             var id_actividad_obra = null;
             var id_articulo = null;
+            var url_solicitudes_data = "{{url('/solicitudes/data')}}";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
-            var datos = [];
-            var objeto = {};
-            var n = 0;
 
             $(document).ready(function () {
                 $.ajaxSetup({
@@ -340,188 +286,286 @@
                     
                 });	  
 
-                //Inicia Itinerario
-                    const input = document.getElementById("autocomplete-input");
-                    const datalist = document.getElementById("itinerario_opciones");
-                    var opciones = null;
+                $("#div_imprimir_orden_viaje").hide();
 
-                    input.addEventListener("input", function () {
-                        const inputValue = input.value.toLowerCase();
-                        const options = datalist.querySelectorAll("option");
-                        for (const option of options) {
-                            const optionValue = option.value.toLowerCase();
-                            opciones = optionValue;
-                            if (optionValue === inputValue) {
-                                input.value = option.textContent; // Muestra la descripción
-                                //alert("Valor seleccionado: " + optionValue); // Muestra el valor
-                                break;
+                (function () {
+                "use strict";
+
+
+                // Tabulator
+                if ($("#tabulator").length) {
+                    // Setup Tabulator
+                    const tabulator = new Tabulator("#tabulator", {
+                        ajaxURL: url_solicitudes_data,
+                        paginationMode: "local",
+                        filterMode: "remote",
+                        sortMode: "remote",
+                        printAsHtml: true,
+                        printStyled: true,
+                        pagination: true,
+                        paginationSize: 10,
+                        paginationSizeSelector: [10, 20, 30, 40],
+                        layout: "fitColumns",
+                        responsiveLayout: "collapse",
+                        placeholder: "No matching records found",
+                        columns: [
+                            {
+                                title: "",
+                                formatter: "responsiveCollapse",
+                                width: 40,
+                                minWidth: 30,
+                                hozAlign: "center",
+                                resizable: false,
+                                headerSort: false,
+                            },
+
+                            // For HTML table
+                            {
+                                title: "ID",
+                                width: 70,
+                                minWidth: 30,
+                                field: "id",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="font-medium whitespace-nowrap">${response.id}</div>
+                                </div>`;
+                                },
+                            },
+                            {
+                                title: "PROPÓSITO DE VIAJE",
+                                minWidth: 200,
+                                responsive: 0,
+                                field: "name",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.proposito}</div>
+                                </div>`;
+                                },
+                            },
+                            {
+                                title: "VIAJEROS",
+                                minWidth: 250,
+                                responsive: 0,
+                                field: "name",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.viajeros}</div>
+                                </div>`;
+                                },
+                            },
+                            {
+                                title: "FECHA Y HORA DE SALIDA Y REGRESO",
+                                minWidth: 150,
+                                responsive: 0,
+                                field: "fechas",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.fecha_hora_salida} - ${response.fecha_hora_retorno}</div>
+                                </div>`;
+                                },
+                            },
+                            {
+                                title: "ACCIONES",
+                                minWidth: 100,
+                                field: "actions",
+                                responsive: 1,
+                                hozAlign: "center",
+                                headerHozAlign: "center",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    let a =
+                                        $(`<div class="flex items-center lg:justify-center">
+                                    <a class="flex items-center mr-3 print text-primary" href="javascript:;">
+                                        <i data-lucide="printer" class="w-4 h-4 mr-1"></i> Imprimir 
+                                    </a>
+                                    <a class="flex items-center mr-3 edit" href="javascript:;">
+                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar 
+                                    </a>
+                                    <a class="flex items-center delete text-danger" href="javascript:;">
+                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
+                                    </a>
+                                    </div>`);
+                                    $(a)
+                                        .find(".edit")
+                                        .on("click", function () {
+                                            // var nuevaVentana = window.open("{{url('/viaticos/editar/')}}/"+response.id, "_blank");
+                                            // nuevaVentana.focus();
+                                            window.location.href = ("{{url('/viaticos/editar/')}}/"+response.id);
+                                            //myModal.show();
+                                        });
+
+                                    $(a)
+                                        .find(".delete")
+                                        .on("click", function () {
+                                            $("#id_registro").html('Regsitro: '+response.id)
+                                            accion = 3;
+                                            id = response.id;
+                                            const el = document.querySelector("#modal_eliminar");
+                                            const modal = tailwind.Modal.getOrCreateInstance(el);
+                                            modal.show();
+                                            //guardar_viaticos()
+                                            
+                                        });
+                                    $(a)
+                                        .find(".print")
+                                        .on("click", function () {
+                                            $("#lista_empleados").html('');
+                                            var id_viajeros = response.id_viajeros
+                                            var arreglo_id_viajeros = id_viajeros.split(',');
+                                            var viajeros = response.viajeros
+                                            var arreglo_viajeros = viajeros.split(',');
+                                            $.each(arreglo_id_viajeros, function(index, value) {
+                                                var url_imprimir = `{{url('/solicitudes/${response.id}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
+                                                $("#lista_empleados").append('<a class="flex items-center mr-3 text-primary" href="'+url_imprimir+'">'+
+                                                    '<i data-lucide="user" class="w-4 h-4 mr-1"></i> '+arreglo_viajeros[index]+' '+
+                                                '</a>');
+                                            });
+                                            const el = document.querySelector("#modal_imprimir_ordenes");
+                                            const modal = tailwind.Modal.getOrCreateInstance(el);
+                                            modal.show();
+                                            //guardar_viaticos()
+                                            
+                                        });
+                                    return a[0];
+                                },
+                            },
+                            
+
+                            // For print format
+                            {
+                                title: "ID",
+                                field: "id",
+                                visible: false,
+                                print: true,
+                                download: true,
+                            },
+                        
+                        ],
+                    });
+
+                    tabulator.on("renderComplete", () => {
+                        createIcons({
+                            icons,
+                            attrs: {
+                                "stroke-width": 1.5,
+                            },
+                            nameAttr: "data-lucide",
+                        });
+                    });
+
+                    // Redraw table onresize
+                    window.addEventListener("resize", () => {
+                        tabulator.redraw();
+                        createIcons({
+                            icons,
+                            "stroke-width": 1.5,
+                            nameAttr: "data-lucide",
+                        });
+                    });
+
+                    // Filter function
+                    function filterHTMLForm() {
+                        let field = $("#tabulator-html-filter-field").val();
+                        let type = $("#tabulator-html-filter-type").val();
+                        let value = $("#tabulator-html-filter-value").val();
+                        tabulator.setFilter(field, type, value);
+                    }
+
+                    // On submit filter form
+                    $("#tabulator-html-filter-form")[0].addEventListener(
+                        "keypress",
+                        function (event) {
+                            let keycode = event.keyCode ? event.keyCode : event.which;
+                            if (keycode == "13") {
+                                event.preventDefault();
+                                filterHTMLForm();
                             }
                         }
+                    );
+
+                    // On click go button
+                    $("#tabulator-html-filter-go").on("click", function (event) {
+                        filterHTMLForm();
                     });
 
-                    input.addEventListener("keydown", function (event) {
-                        if (event.key === "Enter" && input.value.trim() !== "") {
-                            agregarSeleccion(input.value, opciones);
-                            input.value = ""; // Borra el campo de entrada
-                        }
+                    // On reset filter form
+                    $("#tabulator-html-filter-reset").on("click", function (event) {
+                        $("#tabulator-html-filter-field").val("name");
+                        $("#tabulator-html-filter-type").val("like");
+                        $("#tabulator-html-filter-value").val("");
+                        filterHTMLForm();
                     });
 
-                    function agregarSeleccion(valor_input, valor_datalist) {
-                        itinerario = null;
-                        // Crea un elemento span para mostrar la selección
-                        const seleccion = document.createElement("button");
-                        seleccion.value = n++;
-                        //alert(seleccion.textContent)
-                        seleccion.textContent = "➜"+valor_input;
-                        datos.push({ 
-                            "id_ciudad"    : valor_datalist,
-                            "pos" : seleccion.value
-                        });
+                    // Export
+                    $("#tabulator-export-csv").on("click", function (event) {
+                        tabulator.download("csv", "data.csv");
+                    });
 
-                        seleccion.addEventListener("click", function () {
-                            seleccion.remove();
-                            datos = datos.filter(function (elemento) {
-                                return elemento.pos !== seleccion.value;
-                            });
-                            //console.log(datos)
-                            objeto.datos = datos;
-                        itinerario = JSON.stringify(objeto.datos);
+                    $("#tabulator-export-json").on("click", function (event) {
+                        tabulator.download("json", "data.json");
+                    });
+
+                    $("#tabulator-export-xlsx").on("click", function (event) {
+                        tabulator.download("xlsx", "data.xlsx", {
+                            sheetName: "Products",
                         });
-                        
-                        objeto.datos = datos;
-                        itinerario = JSON.stringify(objeto.datos);
-                        // Agrega la selección al contenedor
-                        const contenedorSelecciones = document.getElementById("contenedorSelecciones");
-                        contenedorSelecciones.appendChild(seleccion);
-                        //contenedorSelecciones.appendChild(botonEliminar);
-                    }
-                //Finaliza Itinerario
+                    });
+
+                    $("#tabulator-export-html").on("click", function (event) {
+                        tabulator.download("html", "data.html", {
+                            style: true,
+                        });
+                    });
+
+                    // Print
+                    $("#tabulator-print").on("click", function (event) {
+                        tabulator.print();
+                    });
+                }
+            })();
+
 
             });
-            $("#btn_guardar").on("click", function () {
-                numero_empleado = $("#input_empleados").val();
-                fecha_salida = $("#input_fecha_salida").val();
-                hora_salida = $("#input_hora_salida").val();
-                fecha_retorno = $("#input_fecha_regreso").val();
-                hora_retorno = $("#input_hora_regreso").val();
-                vehiculo_placa = $("#input_vehiculo_placa").val();
-                vehiculo_tipo = $("#input_vehiculo_tipo").val();
-                numero_empleado_conductor = $("#input_numero_empleado_conductor").val();
-                proposito = $("#input_proposito").val();
-                id_fuente = $("#input_fuente").val();
-                id_gerencia_administrativa = $("#input_ga").val();
-                id_programa = $("#input_programa").val();
-                id_unidad_ejecutora = $("#input_ue").val();
-                id_actividad_obra = $("#input_actividad").val();
-                id_articulo = $("#input_articulos").val();
-                
-                if(numero_empleado == null || numero_empleado == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Empleados.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
+            $("#btn_registrar").on("click", function () {
+                // var nuevaVentana = window.open("{{url('/viaticos/agregar')}}", "_blank");
+                // nuevaVentana.focus();
+                window.location.href = ("{{url('/viaticos/agregar')}}");
+            });
 
-                if(fecha_salida == null || fecha_salida == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Fecha de Salida.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(hora_salida == null || hora_salida == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Hora de Salida.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(fecha_retorno == null || fecha_retorno == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Fecha de Regreso.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(hora_retorno == null || hora_retorno == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Hora de Regreso.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                fecha_salida = fecha_salida+" "+hora_salida+":00.000000-00";
-                fecha_retorno = fecha_retorno+" "+hora_retorno+":00.000000-00";
-
-                if(vehiculo_placa == null || vehiculo_placa == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Vehículo placa No.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(vehiculo_tipo == null || vehiculo_tipo == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Tipo de Vehículo.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(numero_empleado_conductor == null || numero_empleado_conductor == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Conductor';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(proposito == null || proposito == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Propósito del viaje';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                if(itinerario == null || itinerario == '' || itinerario == [] || itinerario == '[]'){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Itinerario';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
-
-                // if(id_articulo == null || id_articulo == ''){
-                //     titleMsg = 'Valor Requerido'
-                //     textMsg = 'Debe especificar un valor para Artículos aplicados';
-                //     typeMsg = 'error';
-                //     notificacion()
-                //     return false;
-                // }
-                
-                //alert("Enviando...");
-                if(!accion_guardar){
-                    guardar_viaticos()
-                }
-                
-                
+            $("#btn_eliminar").on("click", function () {
+                guardar_viaticos()
+                const el = document.querySelector("#modal_eliminar");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.hide();
             });
 
             function guardar_viaticos() {
                 accion_guardar = true;
-                $("#icon_guardando").addClass('w-8 h-8')
-                $("#btn_guardar").prop("disabled", true);
                 $.ajax({
                     type: "post",
                     url: url_guardar_viaticos,
                     data: {
+                        'accion': accion,
+                        'id': id,
                         'numero_empleado': JSON.stringify(numero_empleado),
                         'vehiculo_placa': vehiculo_placa,
                         'vehiculo_tipo': vehiculo_tipo,
@@ -547,16 +591,13 @@
                             typeMsg = "error";
                             notificacion()
                             accion_guardar = false;
-                            $("#btn_guardar").prop("disabled", false);
-                            $("#icon_guardando").removeClass('w-8 h-8')
                         } else {
                             titleMsg = "Datos Guardados";
                             textMsg = data.msgSuccess;
                             typeMsg = "success";
                             notificacion()
                             accion_guardar = false;
-                            $("#btn_guardar").prop("disabled", false);
-                            $("#icon_guardando").removeClass('w-8 h-8')
+                            $('#tabulator-html-filter-reset').trigger("click");
                         }
                     },
                 });

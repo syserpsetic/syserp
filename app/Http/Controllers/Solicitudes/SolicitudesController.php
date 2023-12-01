@@ -8,11 +8,74 @@ use Illuminate\View\View;
 use Illuminate\Http\Request;
 use DB;
 Use Session;
+use Exception;
 
 class SolicitudesController extends Controller
 {
     public function view_solicitudes(Request $request){
 
-       
+       return view('pages.solicitudes.solicitudes');
+    }
+
+    public function data_solicitudes(Request $request){
+
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes');
+
+        $ordenes_viajes = $response['data'];
+        //throw new \Exception($ordenes_viajes);
+
+        return $ordenes_viajes;
+    }
+
+    public function imprimir_solicitudes($id_solicitud, $id_empleado){
+      
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+            'Content-Type' => 'application/json',
+        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/empleado/imprimir', [
+            'id_solicitud' => $id_solicitud,
+            'id_empleado' => $id_empleado
+        ]);
+
+        $data = $response['solicitud'];
+
+        //throw new Exception($data['nombre_viajero']);
+
+        
+        $file = public_path('/documentos/orden_viaje.docx');
+
+        $template = new \PhpOffice\PhpWord\TemplateProcessor( $file ); 
+            $template->setValue('nombre', $data['nombre_viajero']);
+            $template->setValue('cargo', $data['cargo']);
+            $template->setValue('departamento', $data['departamento']);
+            $template->setValue('vehiculo_placa', $data['vehiculo_placa']);
+            $template->setValue('vehiculo_tipo', $data['vehiculo_tipo']);
+            $template->setValue('fecha_salida', $data['fecha_salida']);
+            $template->setValue('hora_salida', $data['hora_salida']);
+            $template->setValue('fecha_retorno', $data['fecha_retorno']);
+            $template->setValue('hora_retorno', $data['hora_retorno']);
+            $template->setValue('itinerario', $data['itinerario']);
+            $template->setValue('nombre_conductor', $data['nombre_conductor']);
+            $template->setValue('proposito', $data['proposito']);
+            $template->setValue('identidad', $data['identidad']);
+            $template->setValue('fuente', $data['fuente']);
+            $template->setValue('ga', $data['ga']);
+            $template->setValue('programa', $data['programa']);
+            $template->setValue('ue', $data['ue']);
+            $template->setValue('ao', $data['ao']);
+            $template->setValue('articulos', $data['articulos']);
+            $template->setValue('firma_jefatura', $data['firma_jefatura']);
+            $template->setValue('fecha_actual', $data['fecha_actual']);
+            
+            $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
+            $template->saveAs($tempFile);
+            //dd(sys_get_temp_dir());
+            $headers = [
+                "Content-Type: application/octet-stream",
+            ];
+            
+            return response()->download($tempFile, 'Orden de viaje de '.$data['nombre_viajero'].'.docx', $headers)->deleteFileAfterSend(true);
     }
 }

@@ -5,9 +5,9 @@
 @endsection
 
 @section('subcontent')
-	@role('admin')
+	<!-- @role('admin')
 		Probando permiso
-	@endrole
+	@endrole -->
         <div class="intro-y mt-8 flex items-center">
     <h2 class="mr-auto text-lg font-medium">Workflow</h2>
 </div>
