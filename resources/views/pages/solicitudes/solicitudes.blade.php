@@ -219,16 +219,17 @@
         </div> -->
         <!-- END: Slide Over Toggle -->
         <!-- BEGIN: Slide Over Content -->
-        <x-base.slideover id="modal_imprimir_ordenes">
+        <x-base.slideover id="modal_imprimir_ordenes" size="lg">
             <x-base.slideover.panel>
                 <x-base.slideover.title class="p-5">
                     <h2 class="mr-auto text-base font-medium">
                         Imprimir Ordenes de Viaje
                     </h2>
                 </x-base.slideover.title>
-                <x-base.slideover.description id="lista_empleados">
                     
-                </x-base.slideover.description>
+                    <x-base.tab.group class="intro-y box col-span-12 lg:col-span-6" id="lista_empleados">
+                    </x-base.tab.group>
+                
             </x-base.slideover.panel>
         </x-base.slideover>
         <!-- END: Slide Over Content -->
@@ -435,9 +436,26 @@
                                             var arreglo_viajeros = viajeros.split(',');
                                             $.each(arreglo_id_viajeros, function(index, value) {
                                                 var url_imprimir = `{{url('/solicitudes/${response.id}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
-                                                $("#lista_empleados").append('<a class="flex items-center mr-3 text-primary" href="'+url_imprimir+'">'+
-                                                    '<i data-lucide="user" class="w-4 h-4 mr-1"></i> '+arreglo_viajeros[index]+' '+
-                                                '</a>');
+                                                $("#lista_empleados").append(`
+                                                                                <div class="p-5">
+                                                                                    <x-base.tab.panels>
+                                                                                        <x-base.tab.panel
+                                                                                            id="latest-tasks-new"
+                                                                                            selected
+                                                                                        >
+                                                                                            <div class="flex items-center">
+                                                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                                                                                    <a
+                                                                                                        class="font-medium"
+                                                                                                        href="${url_imprimir}"
+                                                                                                    >
+                                                                                                    ${arreglo_viajeros[index]}
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </x-base.tab.panel>
+                                                                                    </x-base.tab.panels>
+                                                                                </div>`);
                                             });
                                             const el = document.querySelector("#modal_imprimir_ordenes");
                                             const modal = tailwind.Modal.getOrCreateInstance(el);
