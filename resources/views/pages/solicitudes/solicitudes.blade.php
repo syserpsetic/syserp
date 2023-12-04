@@ -546,26 +546,19 @@
                 var arreglo_viajeros = viajeros.split(",");
                 $.each(arreglo_id_viajeros, function (index, value) {
                     var url_imprimir = `{{url('/solicitudes/${tabulator_id_solicitud}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
-                    $("#lista_empleados").append(`
-                                                                                <div class="p-5">
-                                                                                    <x-base.tab.panels>
-                                                                                        <x-base.tab.panel
-                                                                                            id="latest-tasks-new"
-                                                                                            selected
-                                                                                        >
-                                                                                            <div class="flex items-center">
-                                                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
-                                                                                                    <a
-                                                                                                        class="font-medium"
-                                                                                                        href="${url_imprimir}"
-                                                                                                    >
-                                                                                                    ${arreglo_viajeros[index]}
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </x-base.tab.panel>
-                                                                                    </x-base.tab.panels>
-                                                                                </div>`);
+                    $("#lista_empleados").append(`<div class="p-5">
+                                                    <x-base.tab.panels>
+                                                        <x-base.tab.panel id="latest-tasks-new" selected>
+                                                            <div class="flex items-center">
+                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                                                    <a class="font-medium" href="${url_imprimir}">
+                                                                        ${arreglo_viajeros[index]}
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </x-base.tab.panel>
+                                                    </x-base.tab.panels>
+                                                </div>`);
                     });
                     const el = document.querySelector("#modal_imprimir_ordenes");
                     const modal = tailwind.Modal.getOrCreateInstance(el);
