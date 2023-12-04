@@ -204,19 +204,19 @@
                     <x-base.tab id="btn_id_solicitud" :fullWidth="false">
                         <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-primary sm:mx-2 sm:mb-0 sm:w-20">
                             <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Printer" />
-                            Imprimir
+                            <strong>Imprimir</strong>
                         </x-base.tab.button>
                     </x-base.tab>
                     <x-base.tab id="btn_editar" :fullWidth="false">
                         <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-warning sm:mx-2 sm:mb-0 sm:w-20">
                             <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="CheckSquare" />
-                            Editar
+                            <strong>Editar</strong>
                         </x-base.tab.button>
                     </x-base.tab>
                     <x-base.tab id="btn_modal_eliminar" :fullWidth="false">
                         <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-danger sm:mx-2 sm:mb-0 sm:w-20">
                             <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Trash" />
-                            Eliminar
+                            <strong>Eliminar</strong>
                         </x-base.tab.button>
                     </x-base.tab>
                 </x-base.tab.list>
