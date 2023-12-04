@@ -27,12 +27,12 @@
                             icon="Truck"
                         /> Nueva Orden de Viaje
                     </x-base.menu.item>
-                    <x-base.menu.item>
+                    <!-- <x-base.menu.item>
                         <x-base.lucide
                             class="mr-2 h-4 w-4"
                             icon="Plus"
                         /> Nueva Licitación
-                    </x-base.menu.item>
+                    </x-base.menu.item> -->
                 </x-base.menu.items>
             </x-base.menu>
         </div>
@@ -190,6 +190,38 @@
             </x-base.dialog.panel>
         </x-base.dialog>
         <!-- END: Modal Content -->
+     
+                   
+        <x-base.dialog id="modal_opciones">
+            <x-base.dialog.panel>
+                <x-base.dialog.title>
+                    <h2 class="mr-auto text-base font-medium">
+                        <strong>Opciones</strong>
+                    </h2>
+                </x-base.dialog.title>
+
+                <x-base.tab.list class="flex-col justify-center sm:flex-row p-10 text-center" variant="boxed-tabs">
+                    <x-base.tab id="btn_id_solicitud" :fullWidth="false">
+                        <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-primary sm:mx-2 sm:mb-0 sm:w-20">
+                            <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Printer" />
+                            Imprimir
+                        </x-base.tab.button>
+                    </x-base.tab>
+                    <x-base.tab id="btn_editar" :fullWidth="false">
+                        <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-warning sm:mx-2 sm:mb-0 sm:w-20">
+                            <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="CheckSquare" />
+                            Editar
+                        </x-base.tab.button>
+                    </x-base.tab>
+                    <x-base.tab id="btn_modal_eliminar" :fullWidth="false">
+                        <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-danger sm:mx-2 sm:mb-0 sm:w-20">
+                            <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Trash" />
+                            Eliminar
+                        </x-base.tab.button>
+                    </x-base.tab>
+                </x-base.tab.list>
+            </x-base.dialog.panel>
+        </x-base.dialog>
 
     </div>
         <!-- END: HTML Table Data -->
@@ -211,14 +243,6 @@
         <!-- END: Notification Content -->
     </div>
     <x-base.preview>
-        <!-- BEGIN: Slide Over Toggle -->
-        <!-- <div class="text-center">
-            <x-base.button data-tw-toggle="modal" data-tw-target="#basic-slide-over-preview" href="#" as="a" variant="primary">
-                Show Slide Over
-            </x-base.button>
-        </div> -->
-        <!-- END: Slide Over Toggle -->
-        <!-- BEGIN: Slide Over Content -->
         <x-base.slideover id="modal_imprimir_ordenes" size="lg">
             <x-base.slideover.panel>
                 <x-base.slideover.title class="p-5">
@@ -273,6 +297,10 @@
             var id_unidad_ejecutora = null;
             var id_actividad_obra = null;
             var id_articulo = null;
+            var tabulator_id_solicitud = null;
+            var tabulator_id_viajeros = null;
+            var tabulator_viajeros = null;
+            var tabulator_editar = null;
             var url_solicitudes_data = "{{url('/solicitudes/data')}}";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var titleMsg = null;
@@ -395,73 +423,19 @@
                                     const response = cell.getData();
                                     let a =
                                         $(`<div class="flex items-center lg:justify-center">
-                                    <a class="flex items-center mr-3 print text-primary" href="javascript:;">
-                                        <i data-lucide="printer" class="w-4 h-4 mr-1"></i> Imprimir 
-                                    </a>
-                                    <a class="flex items-center mr-3 edit" href="javascript:;">
-                                        <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar 
-                                    </a>
-                                    <a class="flex items-center delete text-danger" href="javascript:;">
-                                        <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
-                                    </a>
-                                    </div>`);
+                                            <a class="flex items-center mr-3 opciones href="javascript:;">
+                                                <i data-lucide="settings" class="w-4 h-4 mr-1"></i> <strong>Opciones </strong>
+                                            </a>
+                                        </div>`);
                                     $(a)
-                                        .find(".edit")
+                                        .find(".opciones")
                                         .on("click", function () {
-                                            // var nuevaVentana = window.open("{{url('/viaticos/editar/')}}/"+response.id, "_blank");
-                                            // nuevaVentana.focus();
-                                            window.location.href = ("{{url('/viaticos/editar/')}}/"+response.id);
-                                            //myModal.show();
-                                        });
-
-                                    $(a)
-                                        .find(".delete")
-                                        .on("click", function () {
-                                            $("#id_registro").html('Regsitro: '+response.id)
-                                            accion = 3;
-                                            id = response.id;
-                                            const el = document.querySelector("#modal_eliminar");
+                                            tabulator_id_viajeros = response.id_viajeros
+                                            tabulator_viajeros = response.viajeros
+                                            tabulator_id_solicitud = response.id;
+                                            const el = document.querySelector("#modal_opciones");
                                             const modal = tailwind.Modal.getOrCreateInstance(el);
                                             modal.show();
-                                            //guardar_viaticos()
-                                            
-                                        });
-                                    $(a)
-                                        .find(".print")
-                                        .on("click", function () {
-                                            $("#lista_empleados").html('');
-                                            var id_viajeros = response.id_viajeros
-                                            var arreglo_id_viajeros = id_viajeros.split(',');
-                                            var viajeros = response.viajeros
-                                            var arreglo_viajeros = viajeros.split(',');
-                                            $.each(arreglo_id_viajeros, function(index, value) {
-                                                var url_imprimir = `{{url('/solicitudes/${response.id}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
-                                                $("#lista_empleados").append(`
-                                                                                <div class="p-5">
-                                                                                    <x-base.tab.panels>
-                                                                                        <x-base.tab.panel
-                                                                                            id="latest-tasks-new"
-                                                                                            selected
-                                                                                        >
-                                                                                            <div class="flex items-center">
-                                                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
-                                                                                                    <a
-                                                                                                        class="font-medium"
-                                                                                                        href="${url_imprimir}"
-                                                                                                    >
-                                                                                                    ${arreglo_viajeros[index]}
-                                                                                                    </a>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </x-base.tab.panel>
-                                                                                    </x-base.tab.panels>
-                                                                                </div>`);
-                                            });
-                                            const el = document.querySelector("#modal_imprimir_ordenes");
-                                            const modal = tailwind.Modal.getOrCreateInstance(el);
-                                            modal.show();
-                                            //guardar_viaticos()
-                                            
                                         });
                                     return a[0];
                                 },
@@ -561,8 +535,58 @@
                 }
             })();
 
+            });
+
+            
+            $("#btn_id_solicitud").on("click", function (event) {
+                $("#lista_empleados").html("");
+                var id_viajeros = tabulator_id_viajeros;
+                var arreglo_id_viajeros = id_viajeros.split(",");
+                var viajeros = tabulator_viajeros;
+                var arreglo_viajeros = viajeros.split(",");
+                $.each(arreglo_id_viajeros, function (index, value) {
+                    var url_imprimir = `{{url('/solicitudes/${tabulator_id_solicitud}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
+                    $("#lista_empleados").append(`
+                                                                                <div class="p-5">
+                                                                                    <x-base.tab.panels>
+                                                                                        <x-base.tab.panel
+                                                                                            id="latest-tasks-new"
+                                                                                            selected
+                                                                                        >
+                                                                                            <div class="flex items-center">
+                                                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                                                                                    <a
+                                                                                                        class="font-medium"
+                                                                                                        href="${url_imprimir}"
+                                                                                                    >
+                                                                                                    ${arreglo_viajeros[index]}
+                                                                                                    </a>
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        </x-base.tab.panel>
+                                                                                    </x-base.tab.panels>
+                                                                                </div>`);
+                    });
+                    const el = document.querySelector("#modal_imprimir_ordenes");
+                    const modal = tailwind.Modal.getOrCreateInstance(el);
+                    modal.show();
 
             });
+
+            $("#btn_editar").on("click", function (event) {
+                window.location.href = ("{{url('/viaticos/editar/')}}/"+tabulator_id_solicitud);
+            });
+
+            $("#btn_modal_eliminar").on("click", function (event) {
+                $("#id_registro").html("Regsitro: " + tabulator_id_solicitud);
+                accion = 3;
+                id = tabulator_id_solicitud;
+                const el = document.querySelector("#modal_eliminar");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+
+            });
+
             $("#btn_registrar").on("click", function () {
                 // var nuevaVentana = window.open("{{url('/viaticos/agregar')}}", "_blank");
                 // nuevaVentana.focus();
