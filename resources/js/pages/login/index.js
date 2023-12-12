@@ -26,6 +26,7 @@
                 location.href = "/";
             })
             .catch((err) => {
+                console.log(err.response.data.message)
                 $("#btn-login").html("Ingresar");
                 if (err.response.data.message != "Usuario o contraseña invalidos.") {
                     for (const [key, val] of Object.entries(

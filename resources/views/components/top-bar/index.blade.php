@@ -208,7 +208,6 @@
             >
                 <img id="imagen-perfil"
                     src="{{ Vite::asset($faker['photos'][0]) }}"
-                    onerror="this.src='{{ Vite::asset('resources/images/fakers/user2.png') }}'"
                     alt="Midone Tailwind HTML Admin Template"
                 />
             </x-base.menu.button>

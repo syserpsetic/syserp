@@ -207,8 +207,8 @@
                             <strong>Imprimir</strong>
                         </x-base.tab.button>
                     </x-base.tab>
-                    <x-base.tab id="btn_editar" :fullWidth="false">
-                        <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-warning sm:mx-2 sm:mb-0 sm:w-20">
+                    <x-base.tab :fullWidth="false">
+                        <x-base.tab.button id="btn_editar"  href="" class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-warning sm:mx-2 sm:mb-0 sm:w-20">
                             <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="CheckSquare" />
                             <strong>Editar</strong>
                         </x-base.tab.button>
@@ -272,7 +272,7 @@
     @push('scripts')
         @vite('resources/js/pages/slideover/index.js')
         @vite('resources/js/pages/modal/index.js')
-        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @vite('resources/js/pages/modal/index.js')
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
@@ -433,6 +433,9 @@
                                             tabulator_id_viajeros = response.id_viajeros
                                             tabulator_viajeros = response.viajeros
                                             tabulator_id_solicitud = response.id;
+
+                                            $("#btn_editar").attr("href", ("{{url('/viaticos/editar/')}}/"+tabulator_id_solicitud));
+
                                             const el = document.querySelector("#modal_opciones");
                                             const modal = tailwind.Modal.getOrCreateInstance(el);
                                             modal.show();
@@ -564,10 +567,6 @@
                     const modal = tailwind.Modal.getOrCreateInstance(el);
                     modal.show();
 
-            });
-
-            $("#btn_editar").on("click", function (event) {
-                window.location.href = ("{{url('/viaticos/editar/')}}/"+tabulator_id_solicitud);
             });
 
             $("#btn_modal_eliminar").on("click", function (event) {

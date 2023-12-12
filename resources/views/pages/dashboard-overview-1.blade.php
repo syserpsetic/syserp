@@ -397,7 +397,7 @@
 @once
     @push('scripts')
         
-        @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
         @vite('resources/js/pages/modal/index.js')
         <script type="module">
             var clave_actual = null;

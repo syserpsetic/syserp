@@ -16,6 +16,7 @@ export default defineConfig({
             input: [
                 // General
                 "resources/css/app.css",
+                //"resources/sass/app.scss",
                 "resources/js/app.js",
 
                 // Vendor
@@ -118,4 +119,9 @@ export default defineConfig({
             '$': 'jQuery'
         },
     },
+    /*server: { 
+        hmr: {
+            host: 'zeta.unag.edu.hn' 
+        }
+    },*/
 });

@@ -41,7 +41,12 @@ class FakerComposer
         }
 
         $photos = [];
-        $photos[] = 'resources/images/fakers/'.$username.'.jpg';
+        if (file_exists(base_path('resources/images/fakers/'.$username.'.jpg'))) {
+            $photos[] = 'resources/images/fakers/'.$username.'.jpg';
+        }else{
+            $photos[] = 'resources/images/fakers/user2.png';
+        }
+        //throw new \Exception('No Existe');
         //throw new \Exception($photos[0]);
         // for ($i = 0; $i < 15; $i++) {
         //     $photos[] = 'resources/images/fakers/profile-' . rand(1, 15) . '.jpg';

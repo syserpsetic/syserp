@@ -100,14 +100,14 @@
                             >
                                 Ingresar
                             </x-base.button>
-                            <x-base.button
+                            <!-- <x-base.button
                                 class="w-full px-4 py-3 align-top xl:mr-3 xl:w-32"
                                 href="{{ url('/auth/redirect/google') }}"
                                 as="a"
                                 variant="secondary"
                             >
                                 Google
-                            </x-base.button>
+                            </x-base.button> -->
                             <!-- <x-base.button
                                 class="mt-3 w-full px-4 py-3 align-top xl:mt-0 xl:w-32"
                                 variant="outline-secondary"

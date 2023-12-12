@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Http;
 use App\Models\User;
 use Session;
 use Illuminate\Support\Facades\Auth;
+use Exception;
 
 class ApiAuthController extends Controller
 {
@@ -34,6 +35,41 @@ class ApiAuthController extends Controller
             'password' => $request->input('password'),
         ]);
 
+      
+
+
+        //$response = Http::acceptJson()->get('https://api.unag.edu.hn/api/auth/login?username=chmatute&password=123456');
+
+
+
+        // $response = $client->request('POST', 'http://httpbin.org/post', [
+        //     'multipart' => [
+        //         [
+        //             'name'     => 'field_name',
+        //             'contents' => 'abc'
+        //         ],
+        //         [
+        //             'name'     => 'file_name',
+        //             'contents' => Psr7\Utils::tryFopen('/path/to/file', 'r')
+        //         ],
+        //         [
+        //             'name'     => 'other_file',
+        //             'contents' => 'hello',
+        //             'filename' => 'filename.txt',
+        //             'headers'  => [
+        //                 'X-Foo' => 'this is an extra header to include'
+        //             ]
+        //         ]
+        //     ]
+        // ]);
+
+
+        
+        //$response = Http::withBasicAuth( $request->input('email'), $request->input('password'))->post(env('API_BASE_URL_ZETA').'/api/auth/login');
+
+
+        //throw new Exception($response->status());
+
         if ($response->status() === 200) {
             // Autenticación exitosa con la API externa
             // Obtener los datos del usuario de la respuesta de la API
@@ -51,7 +87,8 @@ class ApiAuthController extends Controller
             return redirect('/');
         } else {
             // Autenticación fallida
-            throw new \Exception('Usuario o contraseña invalidos.');
+            //throw new Exception($response->body());
+            throw new Exception('Usuario o contraseña invalidos.');
             //return redirect()->route('login')->withErrors(['email' => 'Credenciales incorrectas']);
         }
     }

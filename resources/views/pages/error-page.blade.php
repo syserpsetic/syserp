@@ -53,7 +53,7 @@
 @endsection
 @once
     @push('scripts')
-    @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
         <script type="module">
             $(document).ready(function () {
                 $.ajaxSetup({
