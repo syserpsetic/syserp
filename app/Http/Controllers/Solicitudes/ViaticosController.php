@@ -119,7 +119,7 @@ class ViaticosController extends Controller
     public function guardar_viaticos(Request $request){
         $msgSuccess = null;
         $msgError = null;
-
+        //throw new Exception($request->itinerario);
         try {
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
@@ -142,9 +142,10 @@ class ViaticosController extends Controller
                 'id_unidad_ejecutora' => $request->id_unidad_ejecutora,
                 'id_actividad_obra' => $request->id_actividad_obra,
                 'id_articulo' => $request->id_articulo,
-                'id_firma_jefatura' => $request->id_firma_jefatura
+                'id_firma_jefatura' => $request->id_firma_jefatura,
+                'enviar_correo' => $request->enviar_correo
             ]);
-
+            
             $data = $response->json();
             if(!$data["estatus"]){
                 $msgError = "Desde backend: ".$data["msgError"];

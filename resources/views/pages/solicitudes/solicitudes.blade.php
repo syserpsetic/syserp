@@ -21,7 +21,8 @@
                 </x-base.menu.button>
                 <x-base.menu.items class="w-60">
                     <x-base.menu.item
-                            id="btn_registrar">
+                            id="btn_registrar"
+                            href="{{url('/viaticos/agregar')}}">
                         <x-base.lucide
                             class="mr-2 h-4 w-4"
                             icon="Truck"
@@ -301,6 +302,7 @@
             var tabulator_id_viajeros = null;
             var tabulator_viajeros = null;
             var tabulator_editar = null;
+            var enviar_correo = null;
             var url_solicitudes_data = "{{url('/solicitudes/data')}}";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var titleMsg = null;
@@ -579,28 +581,33 @@
 
             });
 
-            $("#btn_registrar").on("click", function () {
-                // var nuevaVentana = window.open("{{url('/viaticos/agregar')}}", "_blank");
-                // nuevaVentana.focus();
-                window.location.href = ("{{url('/viaticos/agregar')}}");
-            });
+            // $("#btn_registrar").on("click", function () {
+            //     // var nuevaVentana = window.open("{{url('/viaticos/agregar')}}", "_blank");
+            //     // nuevaVentana.focus();
+            //     window.location.href = ("{{url('/viaticos/agregar')}}");
+            // });
 
             $("#btn_eliminar").on("click", function () {
-                guardar_viaticos()
+                guardar_viaticos();
                 const el = document.querySelector("#modal_eliminar");
                 const modal = tailwind.Modal.getOrCreateInstance(el);
                 modal.hide();
+
+                const el2 = document.querySelector("#modal_opciones");
+                const modal2 = tailwind.Modal.getOrCreateInstance(el2);
+                modal2.hide();
             });
 
             function guardar_viaticos() {
                 accion_guardar = true;
+                alert(accion+' '+id)
                 $.ajax({
                     type: "post",
                     url: url_guardar_viaticos,
                     data: {
                         'accion': accion,
                         'id': id,
-                        'numero_empleado': JSON.stringify(numero_empleado),
+                        'numero_empleado': numero_empleado,
                         'vehiculo_placa': vehiculo_placa,
                         'vehiculo_tipo': vehiculo_tipo,
                         'fecha_salida': fecha_salida,
@@ -616,7 +623,8 @@
                         'id_programa': id_programa,
                         'id_unidad_ejecutora': id_unidad_ejecutora,
                         'id_actividad_obra': id_actividad_obra,
-                        'id_articulo': JSON.stringify(id_articulo),
+                        'id_articulo': id_articulo,
+                        'enviar_correo': enviar_correo
                     },
                     success: function (data) {
                         if (data.msgError != null) {

@@ -276,6 +276,20 @@
         </div>
 
         <div class="p-5">
+            <div class="mt-3">
+                <label>Notificar</label>
+                <div class="mt-2">
+                    <x-base.form-switch>
+                         <x-base.form-switch.input id="checkbox_enviar_correo" type="checkbox"/>
+                        <x-base.form-switch.label for="checkbox_enviar_correo">
+                            Enviar correo de notificación a los viajeros
+                        </x-base.form-switch.label>
+                    </x-base.form-switch>
+                </div>
+            </div>
+        </div>
+
+        <div class="p-5">
             <x-base.button id="btn_guardar" class="w-40" type="button" variant="primary">
             
             <x-base.loading-icon
@@ -343,6 +357,7 @@
             var id_actividad_obra = null;
             var id_articulo = null;
             var id_firma_jefatura = null;
+            var enviar_correo = null;
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var titleMsg = null;
             var textMsg = null;
@@ -461,6 +476,7 @@
                 id_actividad_obra = $("#input_actividad").val();
                 id_articulo = $("#input_articulos").val();
                 id_firma_jefatura = $("#input_firma_jefatura").val();
+                enviar_correo = $("#checkbox_enviar_correo").is(':checked') ? 1 : null;
                 accion = 1;
                 if(id_viatico.length != 0){
                     accion = 2;
@@ -565,7 +581,7 @@
                 //     return false;
                 // }
                 
-                //alert("Enviando...");
+                //alert(id);
                 if(!accion_guardar){
                     guardar_viaticos()
                 }
@@ -602,7 +618,8 @@
                         'id_unidad_ejecutora': id_unidad_ejecutora,
                         'id_actividad_obra': id_actividad_obra,
                         'id_articulo': JSON.stringify(id_articulo),
-                        'id_firma_jefatura': id_firma_jefatura
+                        'id_firma_jefatura': id_firma_jefatura,
+                        'enviar_correo': enviar_correo
                     },
                     success: function (data) {
                         if (data.msgError != null) {
