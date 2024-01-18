@@ -114,6 +114,8 @@ Route::middleware('auth:api')->group(function () {
     Route::post('mi-perfil-cambiar-clave', [PerfilController::class, 'cambiar_clave']);
     Route::get('solicitudes', [SolicitudesController::class, 'view_solicitudes'])->name('solicitudes');
     Route::get('solicitudes/data', [SolicitudesController::class, 'data_solicitudes']);
+    Route::get('/solicitudes/{id_solicitud}/viaticos/imprimir', [SolicitudesController::class, 'imprimir_viaticos_view']);
+    Route::get('/solicitudes/{id_solicitud}/viaticos/imprimir/viajeros', [SolicitudesController::class, 'imprimir_viaticos_view_viajeros']);
     Route::get('/viaticos/agregar', [ViaticosController::class, 'agregar_viaticos']);
     Route::get('/viaticos/editar/{id_viatico}', [ViaticosController::class, 'editar_viaticos']);
     Route::post('/viaticos/guardar', [ViaticosController::class, 'guardar_viaticos']);

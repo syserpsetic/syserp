@@ -196,6 +196,46 @@ create table administracion.via_articulos(
     INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 41','Por este acto, se deroga el Reglamento de Viáticos y Gastos de viaje anterior al presente',8);
     INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 42','El presente Reglamento entrará en vigencia después de su publicación en el Diario Oficial',8);
 
+create table administracion.tipos_solicitudes(
+	id serial primary key,
+	nombre text,
+	descripcion text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone
+);
+
+INSERT INTO administracion.tipos_solicitudes(nombre, descripcion) VALUES ('Viáticos', 'Solicitud de Viáticos');
+
+create table administracion.solicitudes(
+	id serial primary key,
+	id_tipo_solicitud integer,
+	username_creador text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone,
+	CONSTRAINT solicitudes_fk_001 FOREIGN KEY (id_tipo_solicitud)
+        REFERENCES administracion.tipos_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+
+create table administracion.via_firmas_jefaturas(
+	id serial primary key,
+	nombre text,
+	descripcion text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone
+);
+
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('RECTOR', 'Jefe de Rectoría');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('VICERECTOR ACADÉMICO', 'Jefe de Vicerectoría Académica');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('SECRETARIO GENERAL', 'Jefe de Secretaría General');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('DECANO', 'Jefe de Decanatura');
+INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('FIRMA DEL JEFE DE DEPARTAMENTO', 'Jefe de Departamento');
+
 
 create table administracion.via_ordenes_viajes (
 	id serial primary key,
@@ -205,6 +245,7 @@ create table administracion.via_ordenes_viajes (
 	fecha_retorno timestamp without time zone not null,
 	numero_empleado_conductor bigint,
 	proposito text,
+	id_solicitud bigint,
 	id_institucion bigint,
 	id_fuente bigint,
 	id_gerencia_administrativa bigint,
@@ -225,6 +266,11 @@ create table administracion.via_ordenes_viajes (
         ON DELETE NO ACTION,
     CONSTRAINT via_ordenes_viajes_fk_006 FOREIGN KEY (id_gerencia_administrativa)
         REFERENCES administracion.pre_gerencias_administrativas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	
+	CONSTRAINT via_ordenes_viajes_fk_003 FOREIGN KEY (id_solicitud)
+        REFERENCES administracion.solicitudes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION,
     
@@ -323,7 +369,7 @@ create table administracion.via_ordenes_viajes_empleados(
         ON DELETE NO ACTION
 );
 
-create table administracion.via_firmas_jefaturas(
+create table administracion.estados_solicitudes(
 	id serial primary key,
 	nombre text,
 	descripcion text,
@@ -332,13 +378,103 @@ create table administracion.via_firmas_jefaturas(
 	deleted_at timestamp without time zone
 );
 
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('RECTOR', 'Jefe de Rectoría');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('VICERECTOR ACADÉMICO', 'Jefe de Vicerectoría Académica');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('SECRETARIO GENERAL', 'Jefe de Secretaría General');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('DECANO', 'Jefe de Decanatura');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('FIRMA DEL JEFE DE DEPARTAMENTO', 'Jefe de Departamento');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Solicitud Creada', 'Etapa de solicitudes creadas');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Esperando Aprobación', 'Etapa de aprobacón por el jefe del área');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 3', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 4', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 5', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 6', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 7', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 8', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 9', 'Etapa temporal');
+INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 10', 'Etapa temporal');
 
---selecT * from information_schema.tables where table_name like 'via_%'
+
+create table administracion.estados_tipos_solicitudes(
+	id serial primary key,
+	id_estado_solicitud integer,
+	id_tipo_solicitud integer,
+	orden numeric,
+	arbol_permiso text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone,
+	CONSTRAINT etapas_tipos_solicitudes_fk_001 FOREIGN KEY (id_estado_solicitud)
+        REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT etapas_tipos_solicitudes_fk_002 FOREIGN KEY (id_tipo_solicitud)
+        REFERENCES administracion.tipos_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (1, 1, 1, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (2, 1, 2, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (3, 1, 3, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (4, 1, 4, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (5, 1, 5, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (6, 1, 6, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (7, 1, 7, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (8, 1, 8, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (9, 1, 9, 'zeta_escribir_solicitudes');
+INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (10, 1, 10, 'zeta_escribir_solicitudes');
 
 
---selecT * from cities limit 1
+create table administracion.estados_tipos_solicitudes_destinos(
+	id serial primary key,
+	id_estado_solicitud integer,
+	id_tipo_solicitud integer,
+	id_estado_solicitud_destino integer,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone,
+	CONSTRAINT estados_tipos_solicitudes_destinos_fk_001 FOREIGN KEY (id_estado_solicitud)
+        REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT estados_tipos_solicitudes_destinos_fk_002 FOREIGN KEY (id_tipo_solicitud)
+        REFERENCES administracion.tipos_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+        CONSTRAINT estados_tipos_solicitudes_destinos_fk_003 FOREIGN KEY (id_estado_solicitud_destino)
+        REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (1, 1, 2);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (2, 1, 3);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (2, 1, 4);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (3, 1, 4);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (4, 1, 5);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (4, 1, 3);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (5, 1, 6);
+INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+VALUES (6, 1, 1);
+
+create table administracion.solicitudes_estados(
+	id serial primary key,
+	id_solicitud integer,
+     id_estado_solicitud integer,
+	firma_aprobacion text,
+	observacion text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone,
+	CONSTRAINT solicitudes_estados_fk_001 FOREIGN KEY (id_solicitud)
+        REFERENCES administracion.solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+        CONSTRAINT solicitudes_estados_fk_002 FOREIGN KEY (id_estado_solicitud)
+        REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);

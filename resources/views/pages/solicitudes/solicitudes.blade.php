@@ -45,7 +45,7 @@
                 class="sm:mr-auto xl:flex"
                 id="tabulator-html-filter-form"
             >
-                <div class="items-center sm:mr-4 sm:flex">
+                <!-- <div class="items-center sm:mr-4 sm:flex">
                     <label class="mr-2 w-12 flex-none xl:w-auto xl:flex-initial">
                         Field
                     </label>
@@ -53,8 +53,8 @@
                         class="mt-2 w-full sm:mt-0 sm:w-auto 2xl:w-full"
                         id="tabulator-html-filter-field"
                     >
-                        <option value="name">Name</option>
-                        <option value="category">Category</option>
+                        <option value="id">id</option>
+                        <option value="viajeros">Viajeros</option>
                         <option value="remaining_stock">Remaining Stock</option>
                     </x-base.form-select>
                 </div>
@@ -103,9 +103,9 @@
                     >
                         Reset
                     </x-base.button>
-                </div>
-            </form>
-            <div class="mt-5 flex sm:mt-0">
+                </div> -->
+            </form> 
+            <!-- <div class="mt-5 flex sm:mt-0">
                 <x-base.button
                     class="mr-2 w-1/2 sm:w-auto"
                     id="tabulator-print"
@@ -161,7 +161,7 @@
                         </x-base.menu.item>
                     </x-base.menu.items>
                 </x-base.menu>
-            </div>
+            </div> -->
         </div>
         <div class="scrollbar-hidden overflow-x-auto">
             <div
@@ -303,6 +303,7 @@
             var tabulator_viajeros = null;
             var tabulator_editar = null;
             var enviar_correo = null;
+            var tabulator = null;
             var url_solicitudes_data = "{{url('/solicitudes/data')}}";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var titleMsg = null;
@@ -319,6 +320,8 @@
 
                 $("#div_imprimir_orden_viaje").hide();
 
+                //console.log(navigator.userAgent)
+
                 (function () {
                 "use strict";
 
@@ -326,14 +329,16 @@
                 // Tabulator
                 if ($("#tabulator").length) {
                     // Setup Tabulator
-                    const tabulator = new Tabulator("#tabulator", {
+                    tabulator = new Tabulator("#tabulator", {
                         ajaxURL: url_solicitudes_data,
                         paginationMode: "local",
-                        filterMode: "remote",
-                        sortMode: "remote",
+                        filterMode: "local",
+                        sortMode: "local",
+                        fitColumns:true,
                         printAsHtml: true,
                         printStyled: true,
                         pagination: true,
+                        groupBy:"solicitud",
                         paginationSize: 10,
                         paginationSizeSelector: [10, 20, 30, 40],
                         layout: "fitColumns",
@@ -353,12 +358,14 @@
                             // For HTML table
                             {
                                 title: "ID",
-                                width: 70,
+                                width: 100,
                                 minWidth: 30,
                                 field: "id",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
+                                headerFilter:"number",
+                                headerFilterPlaceholder:"Buscar",
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
@@ -367,47 +374,87 @@
                                 },
                             },
                             {
-                                title: "PROPÓSITO DE VIAJE",
+                                title: "SOLICITUD",
                                 minWidth: 200,
                                 responsive: 0,
-                                field: "name",
+                                field: "solicitud",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
+                                headerFilter:"input",
+                                headerFilterPlaceholder:"Buscar",
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.proposito}</div>
+                                    <div class="font-medium whitespace-nowrap">${response.solicitud}</div>
                                 </div>`;
                                 },
                             },
                             {
-                                title: "VIAJEROS",
+                                title: "USUARIO REGISTRÓ",
                                 minWidth: 250,
                                 responsive: 0,
-                                field: "name",
+                                field: "usuario_registro",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
+                                headerFilter:"input",
+                                headerFilterPlaceholder:"Buscar",
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.viajeros}</div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.usuario_registro}</div>
                                 </div>`;
                                 },
                             },
                             {
-                                title: "FECHA Y HORA DE SALIDA Y REGRESO",
+                                title: "ETAPA",
                                 minWidth: 150,
                                 responsive: 0,
-                                field: "fechas",
+                                field: "etapa",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
+                                headerFilter:"input",
+                                headerFilterPlaceholder:"Buscar",
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.fecha_hora_salida} - ${response.fecha_hora_retorno}</div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap"><span class="mr-1 rounded-full bg-primary px-1 text-xs text-white">${response.etapa}</span></div>
+                                </div>`;
+                                },
+                            },
+                            // {
+                            //     title: "ESTADO",
+                            //     minWidth: 150,
+                            //     responsive: 0,
+                            //     field: "estado",
+                            //     vertAlign: "middle",
+                            //     print: false,
+                            //     download: false,
+                            //     headerFilter:"input",
+                            //     headerFilterPlaceholder:"Buscar",
+                            //     formatter(cell) {
+                            //         const response = cell.getData();
+                            //         return `<div>
+                            //         <div class="text-xs text-slate-500 whitespace-nowrap"><span class="mr-1 rounded-full bg-primary px-1 text-xs text-white">${response.estado}</span></div>
+                            //     </div>`;
+                            //     },
+                            // },
+                            {
+                                title: "FECHA REGISTRO",
+                                minWidth: 150,
+                                responsive: 0,
+                                field: "fechas_registro",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                headerFilter:"input",
+                                headerFilterPlaceholder:"Buscar",
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.fechas_registro}</div>
                                 </div>`;
                                 },
                             },
@@ -451,6 +498,13 @@
                             {
                                 title: "ID",
                                 field: "id",
+                                visible: false,
+                                print: true,
+                                download: true,
+                            },
+                            {
+                                title: "VIAJEROS",
+                                field: "viajeros",
                                 visible: false,
                                 print: true,
                                 download: true,
@@ -506,7 +560,7 @@
 
                     // On reset filter form
                     $("#tabulator-html-filter-reset").on("click", function (event) {
-                        $("#tabulator-html-filter-field").val("name");
+                        $("#tabulator-html-filter-field").val("id");
                         $("#tabulator-html-filter-type").val("like");
                         $("#tabulator-html-filter-value").val("");
                         filterHTMLForm();
@@ -544,7 +598,8 @@
 
             
             $("#btn_id_solicitud").on("click", function (event) {
-                $("#lista_empleados").html("");
+                window.location.href = (`{{url('/solicitudes/${tabulator_id_solicitud}/viaticos/imprimir')}}`);
+                /*$("#lista_empleados").html("");
                 var id_viajeros = tabulator_id_viajeros;
                 var arreglo_id_viajeros = id_viajeros.split(",");
                 var viajeros = tabulator_viajeros;
@@ -567,7 +622,7 @@
                     });
                     const el = document.querySelector("#modal_imprimir_ordenes");
                     const modal = tailwind.Modal.getOrCreateInstance(el);
-                    modal.show();
+                    modal.show();*/
 
             });
 
@@ -600,7 +655,7 @@
 
             function guardar_viaticos() {
                 accion_guardar = true;
-                alert(accion+' '+id)
+                //alert(accion+' '+id)
                 $.ajax({
                     type: "post",
                     url: url_guardar_viaticos,
@@ -639,6 +694,7 @@
                             typeMsg = "success";
                             notificacion()
                             accion_guardar = false;
+                            tabulator.replaceData()
                             $('#tabulator-html-filter-reset').trigger("click");
                         }
                     },

@@ -21,75 +21,35 @@ class ApiAuthController extends Controller
 
     public function login(Request $request)
     {
-
-        
-        // Validar las credenciales del formulario
         $request->validate([
             'email' => 'required',
             'password' => 'required',
         ]);
 
-        // Realizar una solicitud a la API externa para autenticar al usuario
-        $response = Http::post(env('API_BASE_URL_ZETA').'/api/auth/login', [
-            'username' => $request->input('email'),
-            'password' => $request->input('password'),
-        ]);
-
-      
-
-
-        //$response = Http::acceptJson()->get('https://api.unag.edu.hn/api/auth/login?username=chmatute&password=123456');
-
-
-
-        // $response = $client->request('POST', 'http://httpbin.org/post', [
-        //     'multipart' => [
-        //         [
-        //             'name'     => 'field_name',
-        //             'contents' => 'abc'
-        //         ],
-        //         [
-        //             'name'     => 'file_name',
-        //             'contents' => Psr7\Utils::tryFopen('/path/to/file', 'r')
-        //         ],
-        //         [
-        //             'name'     => 'other_file',
-        //             'contents' => 'hello',
-        //             'filename' => 'filename.txt',
-        //             'headers'  => [
-        //                 'X-Foo' => 'this is an extra header to include'
-        //             ]
-        //         ]
-        //     ]
-        // ]);
-
-
-        
-        //$response = Http::withBasicAuth( $request->input('email'), $request->input('password'))->post(env('API_BASE_URL_ZETA').'/api/auth/login');
-
-
-        //throw new Exception($response->status());
+        // if ($request->coordenadas){
+            $response = Http::post(env('API_BASE_URL_ZETA').'/api/auth/login', [
+                'username' => $request->input('email'),
+                'password' => $request->input('password'),
+                'coordenadas' => $request->coordenadas
+            ]);
+        // } else {
+        //     throw new Exception('¡Acceso al sistema denegado! Debe Permitir la Ubicación.');
+        // }
 
         if ($response->status() === 200) {
-            // Autenticación exitosa con la API externa
-            // Obtener los datos del usuario de la respuesta de la API
             $userData = $response->json();
-
             $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
-
             $user = User::firstOrNew([$fieldType => $request->input('email')]);
             $user->name = $userData['name'];
             $user->password = '0';
             $user->save();
             Session::put('token', $userData['token']);
             auth()->login($user);
-
             return redirect('/');
+        } elseif($response->status() === 403) {
+            throw new Exception('¡Acceso al sistema denegado!');
         } else {
-            // Autenticación fallida
-            //throw new Exception($response->body());
-            throw new Exception('Usuario o contraseña invalidos.');
-            //return redirect()->route('login')->withErrors(['email' => 'Credenciales incorrectas']);
+            throw new Exception('¡Usuario o contraseña incorrectos!');
         }
     }
 

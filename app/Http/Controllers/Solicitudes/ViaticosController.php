@@ -63,16 +63,16 @@ class ViaticosController extends Controller
             return $this->ver_viaticos($request, $id_viatico);                                        
     }
 
-    private function ver_viaticos(Request $request, $id_viatico){
+    private function ver_viaticos(Request $request, $id_solicitud){
         $data = [];
         $estatus = True;
 
-        if(!empty($id_viatico)){
+        if(!empty($id_solicitud)){
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
             ])->post(env('API_BASE_URL_ZETA').'/api/token/viaticos/editar', [
-                'id_solicitud' => $id_viatico
+                'id_solicitud' => $id_solicitud
             ]);
 
             $data = $response->json();
@@ -85,33 +85,38 @@ class ViaticosController extends Controller
         ])->get(env('API_BASE_URL_ZETA').'/api/token/viaticos');
 
         //throw new Exception($data['estatus']);
+        if($response->status() === 403){
+            return view('pages.error-page-403');
+        }
         if(!$estatus){
-            return view('pages.error-page');
+            return view('pages.error-page-404');
         }
         
-        $empleados = ($id_viatico == null || $id_viatico == '') ? $response['empleados'] : $data['empleados'];
-        $empleado_conductor = ($id_viatico == null || $id_viatico == '') ? $response['empleados'] : $data['empleado_conductor'];
+        $estados_disponibles = ($id_solicitud == null || $id_solicitud == '') ? $response['estados_disponibles'] : $data['estados_disponibles'];
+        $empleados = ($id_solicitud == null || $id_solicitud == '') ? $response['empleados'] : $data['empleados'];
+        $empleado_conductor = ($id_solicitud == null || $id_solicitud == '') ? $response['empleados'] : $data['empleado_conductor'];
         $departamentos = $response['departamentos'];
         $ciudades = $response['ciudades'];
-        $ciudades_elegidas = ($id_viatico == null || $id_viatico == '') ? [] : $data['ciudades_elegidas'];
-        $fuentes = ($id_viatico == null || $id_viatico == '') ? $response['fuentes'] : $data['fuentes'];
+        $ciudades_elegidas = ($id_solicitud == null || $id_solicitud == '') ? [] : $data['ciudades_elegidas'];
+        $fuentes = ($id_solicitud == null || $id_solicitud == '') ? $response['fuentes'] : $data['fuentes'];
         $gerencia_administrativa = $response['gerencia_administrativa'];
-        $programas = ($id_viatico == null || $id_viatico == '') ? $response['programas'] : $data['programas'];
-        $ue = ($id_viatico == null || $id_viatico == '') ? $response['ue'] : $data['ue'];
-        $act = ($id_viatico == null || $id_viatico == '') ? $response['act'] : $data['act'];
-        $articulos = ($id_viatico == null || $id_viatico == '') ? $response['articulos'] : $data['articulos'];
-        $firmas_jefaturas = ($id_viatico == null || $id_viatico == '') ? $response['firmas_jefaturas'] : $data['firmas_jefaturas'];
-        $detalle_viatico = ($id_viatico == null || $id_viatico == '') ? $response['detalle_viatico'] : $data['detalle_viatico'];
+        $programas = ($id_solicitud == null || $id_solicitud == '') ? $response['programas'] : $data['programas'];
+        $ue = ($id_solicitud == null || $id_solicitud == '') ? $response['ue'] : $data['ue'];
+        $act = ($id_solicitud == null || $id_solicitud == '') ? $response['act'] : $data['act'];
+        $articulos = ($id_solicitud == null || $id_solicitud == '') ? $response['articulos'] : $data['articulos'];
+        $firmas_jefaturas = ($id_solicitud == null || $id_solicitud == '') ? $response['firmas_jefaturas'] : $data['firmas_jefaturas'];
+        $detalle_viatico = ($id_solicitud == null || $id_solicitud == '') ? $response['detalle_viatico'] : $data['detalle_viatico'];
         //throw new Exception($detalle_viatico['vehiculo_placa']);
 
         return view('pages.solicitudes.viaticos')
+                ->with('estados_disponibles', $estados_disponibles)
                 ->with('empleados', $empleados)->with('empleado_conductor', $empleado_conductor)
                 ->with('departamentos', $departamentos)->with('ciudades_elegidas', $ciudades_elegidas)
                 ->with('ciudades', $ciudades)->with('fuentes', $fuentes)
                 ->with('gerencia_administrativa', $gerencia_administrativa)
                 ->with('programas', $programas)->with('ue', $ue)->with('act', $act)
                 ->with('articulos', $articulos)->with('firmas_jefaturas', $firmas_jefaturas)
-                ->with('detalle_viatico', $detalle_viatico)->with("id_viatico", $id_viatico);
+                ->with('detalle_viatico', $detalle_viatico)->with("id_solicitud", $id_solicitud);
         
     }
     
@@ -119,7 +124,7 @@ class ViaticosController extends Controller
     public function guardar_viaticos(Request $request){
         $msgSuccess = null;
         $msgError = null;
-        //throw new Exception($request->itinerario);
+
         try {
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
@@ -143,7 +148,10 @@ class ViaticosController extends Controller
                 'id_actividad_obra' => $request->id_actividad_obra,
                 'id_articulo' => $request->id_articulo,
                 'id_firma_jefatura' => $request->id_firma_jefatura,
-                'enviar_correo' => $request->enviar_correo
+                'enviar_correo' => $request->enviar_correo,
+                'id_solicitud_estado' => $request->id_solicitud_estado,
+                'estado' => $request->estado,
+                'observacion_estado' => $request->observacion_estado
             ]);
             
             $data = $response->json();
@@ -151,7 +159,6 @@ class ViaticosController extends Controller
                 $msgError = "Desde backend: ".$data["msgError"];
             }
             $msgSuccess = $data["msgSuccess"];
-            
         } catch (Exception $e) {
             $msgError = $e->getMessage();
         }

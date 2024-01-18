@@ -30,6 +30,8 @@ class SolicitudesController extends Controller
     }
 
     public function imprimir_solicitudes($id_solicitud, $id_empleado){
+
+       // throw new Exception($id_solicitud.' '. $id_empleado);
       
         $response = Http::withHeaders([
             'Authorization' => session('token'),
@@ -77,5 +79,33 @@ class SolicitudesController extends Controller
             ];
             
             return response()->download($tempFile, 'Orden de viaje de '.$data['nombre_viajero'].'.docx', $headers)->deleteFileAfterSend(true);
+    }
+
+    public function imprimir_viaticos_view($id_solicitud){
+
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+            'Content-Type' => 'application/json',
+        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/viaticos/imprimir', [
+            'id_solicitud' => $id_solicitud
+        ]);
+
+        $orden_viaje = $response['orden_viaje'];
+        return view('pages.solicitudes.reportesviaticos')->with("orden_viaje", $orden_viaje);
+    }
+
+    public function imprimir_viaticos_view_viajeros($id_solicitud){
+
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+            'Content-Type' => 'application/json',
+        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/viaticos/imprimir/viajeros', [
+            'id_solicitud' => $id_solicitud
+        ]);
+
+        $viajeros = $response['viajeros'];
+        //throw new \Exception($viajeros);
+
+        return $viajeros;
     }
 }

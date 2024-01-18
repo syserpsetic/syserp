@@ -10,14 +10,64 @@
             <div class="p-5">
                 <x-base.preview>
                     <div>
-                        <h1 class="text-4xl font-medium leading-none">
-                            Ordenes de Viaje
-                        </h1>
+                        <div class="flex flex-col text-center sm:text-center lg:flex-row">
+                            <div class="w-6/12">
+                                <h1 class="text-4xl lg:text-left font-medium leading-none">
+                                    Ordenes de Viaje
+                                </h1>
+                            </div>
+                            <!-- <div class="w-6/12">
+                                <div class="text-2xl text-warning lg:text-right font-sm leading-none">
+                                    <strong>
+                                        <span class="inline-block align-middle">{{$detalle_viatico['estado']}}
+                                    </strong>
+                                </div>
+                            </div> -->
+                        </div>
                         <br>
                         <div class="w-full border-t border-dashed border-slate-200/60 dark:border-darkmode-400"></div>
-                        <x-base.lucide icon="Truck" class="w-6 h-6 inline-block align-middle" />
-                        <span class="inline-block align-middle text-sm">&nbsp; Módulo de registro y gestión de ordenes de viajes.</span>
-                                            
+                        <br>
+                        <div class="flex flex-col items-center sm:flex-row">
+                            <x-base.lucide icon="Truck" class="w-6 h-6 inline-block align-middle" />
+                            <span class="inline-block align-middle text-sm">&nbsp; Módulo de registro y gestión de ordenes de viajes.</span>
+                            @if($detalle_viatico['estado'] != null)
+                            <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
+                                <x-base.preview>
+                                    <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                                        <strong>
+                                            {{$detalle_viatico['estado']}}
+                                        </strong>
+                                    </div>
+                                    <br>
+                                    <div class="flex flex-wrap">
+                                        <x-base.button
+                                            class="mb-2 mr-2 w-32"
+                                            variant="danger"
+                                            size="sm"
+                                            id="btn_rechazar"
+                                        >
+                                            <x-base.lucide
+                                                class="mr-2 h-4 w-4"
+                                                icon="ArrowLeft"
+                                            /> Rechazar
+                                        </x-base.button>
+                                        <x-base.button
+                                            class="mb-2 mr-2 w-32"
+                                            variant="primary"
+                                            size="sm"
+                                            id="btn_enviar"
+                                        > &nbsp;&nbsp;Enviar &nbsp;
+                                        <x-base.lucide
+                                                class="mr-2 h-4 w-4"
+                                                icon="ArrowRight"
+                                            />
+                                        </x-base.button>
+                                    </div>
+                                </x-base.preview>
+                            </x-base.form-switch>
+                            @endif
+                        </div>
+                                 
                     </div>
                 </x-base.preview>
             </div>
@@ -324,7 +374,47 @@
     <!-- END: Notification Content -->
 </div>
 
-
+        <!-- BEGIN: Modal Content -->
+        <x-base.dialog id="modal_estado">
+            <x-base.dialog.panel>
+                <div class="p-5 text-center">
+                    <x-base.lucide id="modal_icono_rechazar" class="mx-auto mt-3 h-0 w-0 text-danger" icon="ArrowLeftCircle"/>
+                    <x-base.lucide id="modal_icono_enviar" class="mx-auto mt-3 h-0 w-0 text-primary" icon="ArrowRightCircle"/>
+                    <div class="mt-5 text-3xl" id="modal_encabezado_texto"></div>
+                    <div class="mt-2 text-slate-500">
+                        ¿A dónde desea enviar esta solicitud?<br />
+                        <div class="p-5 text-left">
+                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                            <x-base.tom-select id="input_estado" class="w-full" data-placeholder="Selección de estado">
+                                @foreach($estados_disponibles as $row)
+                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                                @endforeach
+                            </x-base.tom-select>
+                        </div>
+                        <div class="p-5">
+                            <div class="input-form mt-3">
+                                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_observacion_estado">
+                                    Observación
+                                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0" id="text_observacion">
+                                        
+                                    </span>
+                                </x-base.form-label>
+                                <x-base.form-textarea rows="5" class="form-control" id="input_observacion_estado" name="comment" placeholder="Escriba sus observaciones..."></x-base.form-textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-5 pb-8 text-center">
+                    <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                        Cancelar
+                    </x-base.button>
+                    <x-base.button class="w-24" type="button" variant="primary" id="btn_guardar_estado">
+                        Guardar
+                    </x-base.button>
+                </div>
+            </x-base.dialog.panel>
+        </x-base.dialog>
+        <!-- END: Modal Content -->
 
 @endsection
 @once
@@ -337,8 +427,11 @@
         <script type="module">
             var accion_guardar = false;            
             var accion = null;
-            var id_viatico = "{{$id_viatico}}";
-            var id = (id_viatico.length != 0) ? "{{$id_viatico}}" : null;
+            var id_solicitud = "{{$id_solicitud}}";
+            var id = (id_solicitud.length != 0) ? "{{$id_solicitud}}" : null;
+            var estado = null
+            var observacion_estado = null;
+            var id_solicitud_estado = null;
             var numero_empleado = null;
             var vehiculo_placa = null;
             var vehiculo_tipo = null;
@@ -366,6 +459,7 @@
             var objeto = {};
             var orden_pos = 0;
             var n = 0;
+            var estado_enviar = null;
 
             $(document).ready(function () {
                 $.ajaxSetup({
@@ -400,7 +494,7 @@
 
 
                     //Iterar itinerario para editar
-                    if(id_viatico.length != 0){
+                    if(id_solicitud.length != 0){
                         @foreach($ciudades_elegidas as $row)
                             agregarSeleccion("{{$row['ciudad']}}", "{{$row['id_ciudad']}}", "{{$row['orden']}}");
                         @endforeach
@@ -449,6 +543,24 @@
 
             });
 
+            $("#btn_rechazar").on("click", function (event) {
+                estado_enviar = false;
+                $("#modal_icono_rechazar").addClass('h-16 w-16')
+                $("#modal_icono_enviar").removeClass('h-16 w-16')
+                $("#modal_encabezado_texto").html('¡Rechazar Solicitud!');
+                $("#text_observacion").html('Requerido');
+                modal_estado_accion();
+            });
+
+            $("#btn_enviar").on("click", function (event) {
+                estado_enviar = true;
+                $("#modal_icono_rechazar").removeClass('h-16 w-16')
+                $("#modal_icono_enviar").addClass('h-16 w-16')
+                $("#modal_encabezado_texto").html('¡Enviar Solicitud!');
+                $("#text_observacion").html('Opcional');
+                modal_estado_accion();
+            });
+
             //Llenar los inputs para editar
             $("#input_fecha_salida").val("{{$detalle_viatico['fecha_salida']}}");
             $("#input_hora_salida").val("{{$detalle_viatico['hora_salida']}}");
@@ -478,7 +590,7 @@
                 id_firma_jefatura = $("#input_firma_jefatura").val();
                 enviar_correo = $("#checkbox_enviar_correo").is(':checked') ? 1 : null;
                 accion = 1;
-                if(id_viatico.length != 0){
+                if(id_solicitud.length != 0){
                     accion = 2;
                 }
                 
@@ -525,21 +637,21 @@
                 fecha_salida = fecha_salida+" "+hora_salida+":00.000000-00";
                 fecha_retorno = fecha_retorno+" "+hora_retorno+":00.000000-00";
 
-                if(vehiculo_placa == null || vehiculo_placa == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Vehículo placa No.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
+                // if(vehiculo_placa == null || vehiculo_placa == ''){
+                //     titleMsg = 'Valor Requerido'
+                //     textMsg = 'Debe especificar un valor para Vehículo placa No.';
+                //     typeMsg = 'error';
+                //     notificacion()
+                //     return false;
+                // }
 
-                if(vehiculo_tipo == null || vehiculo_tipo == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Tipo de Vehículo.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
+                // if(vehiculo_tipo == null || vehiculo_tipo == ''){
+                //     titleMsg = 'Valor Requerido'
+                //     textMsg = 'Debe especificar un valor para Tipo de Vehículo.';
+                //     typeMsg = 'error';
+                //     notificacion()
+                //     return false;
+                // }
 
                 if(numero_empleado_conductor == null || numero_empleado_conductor == ''){
                     titleMsg = 'Valor Requerido'
@@ -591,6 +703,60 @@
                 
             });
 
+            $("#btn_guardar_estado").on("click", function () {
+                accion = 4;
+                numero_empleado = $("#input_empleados").val();
+                fecha_salida = $("#input_fecha_salida").val();
+                hora_salida = $("#input_hora_salida").val();
+                fecha_retorno = $("#input_fecha_regreso").val();
+                hora_retorno = $("#input_hora_regreso").val();
+                vehiculo_placa = $("#input_vehiculo_placa").val();
+                vehiculo_tipo = $("#input_vehiculo_tipo").val();
+                numero_empleado_conductor = $("#input_numero_empleado_conductor").val();
+                proposito = $("#input_proposito").val();
+                id_fuente = $("#input_fuente").val();
+                id_gerencia_administrativa = $("#input_ga").val();
+                id_programa = $("#input_programa").val();
+                id_unidad_ejecutora = $("#input_ue").val();
+                id_actividad_obra = $("#input_actividad").val();
+                id_articulo = $("#input_articulos").val();
+                id_firma_jefatura = $("#input_firma_jefatura").val();
+                enviar_correo = $("#checkbox_enviar_correo").is(':checked') ? 1 : null;
+                id_solicitud_estado = "{{$detalle_viatico['id_solicitud_estado']}}";
+                id_solicitud_estado = (id_solicitud_estado.length != 0) ? id_solicitud_estado : null;
+                estado = $("#input_estado").val();
+                observacion_estado = $("#input_observacion_estado").val();
+
+                fecha_salida = fecha_salida+" "+hora_salida+":00.000000-00";
+                fecha_retorno = fecha_retorno+" "+hora_retorno+":00.000000-00";
+
+                if(estado == null || estado == ''){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Estado.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+
+                if((observacion_estado == null || observacion_estado == '') && estado_enviar != true){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Observación.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+
+                //alert(id_solicitud_estado+' '+estado+' '+observacion_estado)
+                guardar_viaticos();
+            });
+
+            function modal_estado_accion(){
+                $("#"+typeMsg+"-notification").html('<div class="font-medium">' + titleMsg + "</div>" + '<div class="mt-1 text-slate-500">' + textMsg + "</div>");
+                const el = document.querySelector("#modal_estado");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+            }
+
             function guardar_viaticos() {
                 accion_guardar = true;
                 $("#icon_guardando").addClass('w-8 h-8')
@@ -619,7 +785,10 @@
                         'id_actividad_obra': id_actividad_obra,
                         'id_articulo': JSON.stringify(id_articulo),
                         'id_firma_jefatura': id_firma_jefatura,
-                        'enviar_correo': enviar_correo
+                        'enviar_correo': enviar_correo,
+                        'id_solicitud_estado': id_solicitud_estado,
+                        'estado': estado,
+                        'observacion_estado': observacion_estado,
                     },
                     success: function (data) {
                         if (data.msgError != null) {
