@@ -93,6 +93,7 @@ class ViaticosController extends Controller
         }
         
         $estados_disponibles = ($id_solicitud == null || $id_solicitud == '') ? $response['estados_disponibles'] : $data['estados_disponibles'];
+        $estados_disponibles_rechazar = ($id_solicitud == null || $id_solicitud == '') ? $response['estados_disponibles_rechazar'] : $data['estados_disponibles_rechazar'];
         $empleados = ($id_solicitud == null || $id_solicitud == '') ? $response['empleados'] : $data['empleados'];
         $empleado_conductor = ($id_solicitud == null || $id_solicitud == '') ? $response['empleados'] : $data['empleado_conductor'];
         $departamentos = $response['departamentos'];
@@ -110,6 +111,7 @@ class ViaticosController extends Controller
 
         return view('pages.solicitudes.viaticos')
                 ->with('estados_disponibles', $estados_disponibles)
+                ->with('estados_disponibles_rechazar', $estados_disponibles_rechazar)
                 ->with('empleados', $empleados)->with('empleado_conductor', $empleado_conductor)
                 ->with('departamentos', $departamentos)->with('ciudades_elegidas', $ciudades_elegidas)
                 ->with('ciudades', $ciudades)->with('fuentes', $fuentes)

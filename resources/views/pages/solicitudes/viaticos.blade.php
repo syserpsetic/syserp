@@ -382,11 +382,25 @@
                     <x-base.lucide id="modal_icono_enviar" class="mx-auto mt-3 h-0 w-0 text-primary" icon="ArrowRightCircle"/>
                     <div class="mt-5 text-3xl" id="modal_encabezado_texto"></div>
                     <div class="mt-2 text-slate-500">
-                        ¿A dónde desea enviar esta solicitud?<br />
-                        <div class="p-5 text-left">
+                        ¿A dónde desea enviar esta solicitud?<br/><br/>
+                        <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                            Estado Actual: 
+                            <strong>
+                                {{$detalle_viatico['estado']}}
+                            </strong>
+                        </div>
+                        <div class="p-5 text-left" id="div_estados_disponibles">
                             <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
-                            <x-base.tom-select id="input_estado" class="w-full" data-placeholder="Selección de estado">
+                            <x-base.tom-select id="input_estado_enviar" class="w-full" data-placeholder="Selección de estado">
                                 @foreach($estados_disponibles as $row)
+                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                                @endforeach
+                            </x-base.tom-select>
+                        </div>
+                        <div class="p-5 text-left" id="estados_disponibles_rechazar">
+                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                            <x-base.tom-select id="input_estado_rechazar" class="w-full" data-placeholder="Selección de estado">
+                                @foreach($estados_disponibles_rechazar as $row)
                                     <option value="{{$row['id']}}">{{$row['nombre']}}</option>
                                 @endforeach
                             </x-base.tom-select>
@@ -545,6 +559,8 @@
 
             $("#btn_rechazar").on("click", function (event) {
                 estado_enviar = false;
+                $("#div_estados_disponibles").hide();
+                $("#estados_disponibles_rechazar").show();
                 $("#modal_icono_rechazar").addClass('h-16 w-16')
                 $("#modal_icono_enviar").removeClass('h-16 w-16')
                 $("#modal_encabezado_texto").html('¡Rechazar Solicitud!');
@@ -554,6 +570,8 @@
 
             $("#btn_enviar").on("click", function (event) {
                 estado_enviar = true;
+                $("#div_estados_disponibles").show();
+                $("#estados_disponibles_rechazar").hide();
                 $("#modal_icono_rechazar").removeClass('h-16 w-16')
                 $("#modal_icono_enviar").addClass('h-16 w-16')
                 $("#modal_encabezado_texto").html('¡Enviar Solicitud!');
@@ -724,7 +742,7 @@
                 enviar_correo = $("#checkbox_enviar_correo").is(':checked') ? 1 : null;
                 id_solicitud_estado = "{{$detalle_viatico['id_solicitud_estado']}}";
                 id_solicitud_estado = (id_solicitud_estado.length != 0) ? id_solicitud_estado : null;
-                estado = $("#input_estado").val();
+                estado = (estado_enviar) ? $("#input_estado_enviar").val() : $("#input_estado_rechazar").val();;
                 observacion_estado = $("#input_observacion_estado").val();
 
                 fecha_salida = fecha_salida+" "+hora_salida+":00.000000-00";
@@ -747,7 +765,9 @@
                 }
 
                 //alert(id_solicitud_estado+' '+estado+' '+observacion_estado)
-                guardar_viaticos();
+                if(!accion_guardar){
+                    guardar_viaticos()
+                }
             });
 
             function modal_estado_accion(){
@@ -761,6 +781,7 @@
                 accion_guardar = true;
                 $("#icon_guardando").addClass('w-8 h-8')
                 $("#btn_guardar").prop("disabled", true);
+                $("#btn_guardar_estado").prop("disabled", true);
                 $.ajax({
                     type: "post",
                     url: url_guardar_viaticos,

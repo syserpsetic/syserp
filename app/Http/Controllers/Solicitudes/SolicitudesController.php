@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use DB;
 Use Session;
 use Exception;
+use PhpOffice\PhpWord\IOFactory;
+use Dompdf\Dompdf;
+use Illuminate\Http\Response;
 
 class SolicitudesController extends Controller
 {
@@ -73,6 +76,29 @@ class SolicitudesController extends Controller
             
             $tempFile = tempnam(sys_get_temp_dir(), 'PHPWord');
             $template->saveAs($tempFile);
+
+            // // Crea un objeto PhpWord para leer el archivo de Word
+            // $phpWord = IOFactory::load($tempFile);
+
+            // // Crea un objeto Dompdf
+            // $dompdf = new Dompdf();
+
+            // // Convierte el contenido de PhpWord a HTML
+            // $html = IOFactory::createWriter($phpWord, 'HTML')->save('php://output');
+            
+            // // Carga el HTML en Dompdf
+            // $dompdf->loadHtml($html);
+            
+            // // Renderiza el PDF
+            // $dompdf->render();
+            
+            // // Guarda el PDF en el sistema de archivos (en la carpeta storage)
+            // $pdfPath = storage_path('app/documento.pdf');
+            // file_put_contents($pdfPath, $dompdf->output());
+            
+            // // Descarga el PDF
+            // return response()->download($pdfPath, 'documento.pdf')->deleteFileAfterSend(true);
+
             //dd(sys_get_temp_dir());
             $headers = [
                 "Content-Type: application/octet-stream",
