@@ -5,41 +5,76 @@
 @endsection
 
 @section('subcontent')
-    <div class="intro-y mt-8 flex flex-col items-center sm:flex-row">
-        <h2 class="mr-auto text-lg font-medium">Lista de solicitudes</h2>
-        <div class="mt-4 flex w-full sm:mt-0 sm:w-auto">
-            <x-base.menu class="ml-auto sm:ml-0">
-                <x-base.menu.button
-                    class="mr-2 shadow-md"
-                    as="x-base.button"
-                    variant="primary"
-                ><x-base.lucide
-                            class="h-4 w-4"
-                            icon="FilePlus"
-                        />&nbsp; Registrar Nueva Solicitud
-                    
-                </x-base.menu.button>
-                <x-base.menu.items class="w-60">
-                    <x-base.menu.item
-                            id="btn_registrar"
-                            href="{{url('/viaticos/agregar')}}">
-                        <x-base.lucide
-                            class="mr-2 h-4 w-4"
-                            icon="Truck"
-                        /> Nueva Orden de Viaje
-                    </x-base.menu.item>
-                    <!-- <x-base.menu.item>
-                        <x-base.lucide
-                            class="mr-2 h-4 w-4"
-                            icon="Plus"
-                        /> Nueva Licitación
-                    </x-base.menu.item> -->
-                </x-base.menu.items>
-            </x-base.menu>
+<!-- BEGIN: Profile Info -->
+<div class="intro-y box mt-5 px-5 pt-5">
+            <div class="-mx-5 flex flex-col border-b border-slate-200/60 pb-5 dark:border-darkmode-400 lg:flex-row">
+                <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
+                   
+                   
+                            <x-base.lucide
+                                class="h-40 w-40"
+                                icon="file"
+                            />
+                        
+                
+                    <div class="ml-5">
+                        <div class="w-240 truncate text-lg font-medium sm:w-80 sm:whitespace-normal">
+                            
+                            <h1 class="text-5xl font-medium leading-none">SOLICITUDES</h1>
+                        </div>
+                        <div class="text-slate-500">Pantalla de administración de solicitudes.</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+        <!-- END: Profile Info -->
+
     <!-- BEGIN: HTML Table Data -->
     <div class="intro-y box mt-5 p-5">
+    <div class="grid grid-cols-12 gap-6">
+            <div class="intro-y col-span-6 lg:col-span-6">
+                <div class="p-5">
+                    <h3 class="text-2xl font-medium leading-none"><div class="flex items-center">
+                        <i data-lucide="List" class="w-6 h-6 mr-1"></i>
+                            <span class="text-white-700"> Lista de Solicitudes</span>
+                        </div></h3>
+                </div>
+            </div>
+            <div class="intro-y col-span-6 lg:col-span-6 text-right">
+                <div class="p-5">
+
+                            <x-base.menu class="ml-auto sm:ml-0">
+                                <x-base.menu.button
+                                    class="mr-2 shadow-md"
+                                    as="x-base.button"
+                                    variant="primary"
+                                ><x-base.lucide
+                                            class="h-4 w-4"
+                                            icon="FilePlus"
+                                        />&nbsp; Registrar Nueva Solicitud
+                                    
+                                </x-base.menu.button>
+                                <x-base.menu.items class="w-60">
+                                    <x-base.menu.item
+                                            id="btn_registrar"
+                                            href="{{url('/viaticos/agregar')}}">
+                                        <x-base.lucide
+                                            class="mr-2 h-4 w-4"
+                                            icon="Truck"
+                                        /> Nueva Orden de Viaje
+                                    </x-base.menu.item>
+                                    <!-- <x-base.menu.item>
+                                        <x-base.lucide
+                                            class="mr-2 h-4 w-4"
+                                            icon="Plus"
+                                        /> Nueva Licitación
+                                    </x-base.menu.item> -->
+                                </x-base.menu.items>
+                            </x-base.menu>
+                     
+                </div>
+            </div>
+        </div>
         <div class="flex flex-col sm:flex-row sm:items-end xl:items-start">
             <form
                 class="sm:mr-auto xl:flex"

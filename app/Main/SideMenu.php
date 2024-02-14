@@ -190,6 +190,20 @@ class SideMenu
                 ],
                 'title' => 'Solicitudes'
             ],
+            'configuracion' => [
+                'icon' => 'settings',
+                'title' => 'Configuración',
+                'sub_menu' => [
+                    'configuracion_estados' => [
+                        'icon' => 'crosshair',
+                        'route_name' => 'configuracion_estados',
+                        'params' => [
+                            'layout' => 'side-menu',
+                        ],
+                        'title' => 'Estados'
+                    ],
+                ]
+            ],
             // 'inbox' => [
             //     'icon' => 'inbox',
             //     'route_name' => 'inbox',
