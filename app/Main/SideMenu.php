@@ -202,6 +202,14 @@ class SideMenu
                         ],
                         'title' => 'Estados'
                     ],
+                    'configuracion_tipos_solicitudes' => [
+                        'icon' => 'file-text',
+                        'route_name' => 'configuracion_tipos_solicitudes',
+                        'params' => [
+                            'layout' => 'side-menu',
+                        ],
+                        'title' => 'Tipos Solicitudes'
+                    ],
                 ]
             ],
             // 'inbox' => [

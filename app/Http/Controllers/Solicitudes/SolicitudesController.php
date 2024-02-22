@@ -57,6 +57,7 @@ class SolicitudesController extends Controller
             $template->setValue('departamento', $data['departamento']);
             $template->setValue('vehiculo_placa', $data['vehiculo_placa']);
             $template->setValue('vehiculo_tipo', $data['vehiculo_tipo']);
+            $template->setValue('monto_diario_asignado_formato', $data['monto_diario_asignado_formato']);
             $template->setValue('fecha_salida', $data['fecha_salida']);
             $template->setValue('hora_salida', $data['hora_salida']);
             $template->setValue('fecha_retorno', $data['fecha_retorno']);

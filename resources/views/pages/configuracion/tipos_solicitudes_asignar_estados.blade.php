@@ -1,7 +1,7 @@
 @extends('../layouts/' . $layout)
 
 @section('subhead')
-    <title>Estados</title>
+    <title>Tipos de Solicitudes</title>
 @endsection
 
 @section('subcontent')
@@ -9,13 +9,17 @@
 <div class="intro-y box mt-5 px-5 pt-5">
     <div class="-mx-5 flex flex-col border-b border-slate-200/60 pb-5 dark:border-darkmode-400 lg:flex-row">
         <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
-            <x-base.lucide class="h-40 w-40" icon="crosshair" />
+            <x-base.lucide class="h-40 w-40" icon="disc" />
 
             <div class="ml-5">
-                <div class="w-240 truncate text-lg font-medium sm:w-80 sm:whitespace-normal">
-                    <h1 class="text-5xl font-medium leading-none">ESTADOS</h1>
+                <div class="w-440 truncate text-lg font-medium sm:w-100 sm:whitespace-normal">
+                    <h1 class="text-5xl font-medium leading-none">ASIGNAR ESTADOS</h1>
                 </div>
-                <div class="text-slate-500">Pantalla de administración de estados.</div>
+                <div class="text-slate-500">Pantalla de asignación de estados de los tipos de solicitudes.</div><br>
+                @foreach($tipos_solicitudes as $row)
+                    <div class="text-slate-500"><strong>Tipo de Solicitud:</strong> {{$row['nombre']}}.</div>
+                    <div class="text-slate-500"><strong>Descripción del tipo de solicitud:</strong> {{$row['descripcion']}}.</div>
+                @endforeach
             </div>
         </div>
     </div>
@@ -29,16 +33,16 @@
                 <h3 class="text-2xl font-medium leading-none">
                     <div class="flex items-center">
                         <i data-lucide="List" class="w-6 h-6 mr-1"></i>
-                        <span class="text-white-700"> Lista de Estados</span>
+                        <span class="text-white-700"> Lista de Estados Asignados</span>
                     </div>
                 </h3>
             </div>
         </div>
         <div class="intro-y col-span-6 lg:col-span-6 text-right">
             <div class="p-5">
-                <x-base.button class="mb-2 mr-1" variant="primary" id="btn_nuevo_estado">
+                <x-base.button class="mb-2 mr-1" variant="primary" id="btn_nuevo_tipos_solicitudes">
                     <i data-lucide="Plus" class="w-4 h-4 mr-1"></i>
-                    Nuevo Estado
+                    Asignar Estado
                 </x-base.button>
             </div>
         </div>
@@ -47,35 +51,35 @@
         <div class="mt-5" id="tabulator"></div>
     </div>
     <!-- BEGIN: Modal Content -->
-    <x-base.dialog id="modal_nuevo_estado">
+    <x-base.dialog id="modal_nuevo_tipo_solicitud">
         <x-base.dialog.panel>
             <x-base.dialog.title class="bg-primary">
                 <h2 class="mr-auto text-white font-medium">
                     <div class="flex items-center">
                         <i data-lucide="Plus" class="w-4 h-4 mr-1"></i>
-                        <span class="text-white-700"> Nuevo Estado</span>
+                        <span class="text-white-700"> Nuevo Tipo de Solicitud</span>
                     </div>
                 </h2>
             </x-base.dialog.title>
             <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
                 <div class="col-span-12 sm:col-span-12">
-                    <x-base.form-label class="font-extrabold" for="modal_input_nombre_estado">
+                    <x-base.form-label class="font-extrabold" for="modal_input_nombre_tipo_solicitud">
                         Nombre
                     </x-base.form-label>
-                    <x-base.form-input id="modal_input_nombre_estado" type="text" placeholder="Nombre del estado" />
+                    <x-base.form-input id="modal_input_nombre_tipo_solicitud" type="text" placeholder="Nombre del tipo de solicitud" />
                 </div>
                 <div class="col-span-12 sm:col-span-12">
-                    <x-base.form-label class="font-extrabold" for="modal_input_descripcion_estado">
+                    <x-base.form-label class="font-extrabold" for="modal_input_descripcion_tipos_solicitud">
                         Descripción
                     </x-base.form-label>
-                    <x-base.form-input id="modal_input_descripcion_estado" type="text" placeholder="Describa el estado" />
+                    <x-base.form-input id="modal_input_descripcion_tipos_solicitud" type="text" placeholder="Describa el tipo de solicitud" />
                 </div>
             </x-base.dialog.description>
             <x-base.dialog.footer class="bg-dark">
                 <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
                     Cancelar
                 </x-base.button>
-                <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_estado">
+                <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_tipo_solicitud">
                     Guardar
                 </x-base.button>
             </x-base.dialog.footer>
@@ -85,29 +89,32 @@
 
     <x-base.dialog id="modal_opciones">
         <x-base.dialog.panel>
-            <x-base.dialog.title>
-                <h2 class="mr-auto text-base font-medium">
-                    <strong>Opciones</strong>
+            <x-base.dialog.title class="bg-primary">
+                <h2 class="mr-auto text-white font-medium">
+                    <div class="flex items-center">
+                        <i data-lucide="Crosshair" class="w-4 h-4 mr-1"></i>
+                        <span class="text-white-700"> Opciones Estados</span>
+                    </div>
                 </h2>
             </x-base.dialog.title>
 
             <x-base.tab.list class="flex-col justify-center sm:flex-row p-10 text-center" variant="boxed-tabs">
-                <x-base.tab id="btn_id_solicitud" :fullWidth="false">
+                <!-- <x-base.tab id="btn_id_solicitud" :fullWidth="false">
                     <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-primary sm:mx-2 sm:mb-0 sm:w-20">
                         <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Printer" />
                         <strong>Imprimir</strong>
                     </x-base.tab.button>
-                </x-base.tab>
+                </x-base.tab> -->
                 <x-base.tab :fullWidth="false">
-                    <x-base.tab.button id="btn_editar" href="" class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-warning sm:mx-2 sm:mb-0 sm:w-20">
-                        <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="CheckSquare" />
-                        <strong>Editar</strong>
+                    <x-base.tab.button id="btn_asignar_estado" href="" class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-base sm:mx-4 sm:mb-0 sm:w-40">
+                        <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Disc" />
+                        <strong>Asignar Estados</strong>
                     </x-base.tab.button>
                 </x-base.tab>
                 <x-base.tab id="btn_modal_eliminar" :fullWidth="false">
-                    <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-danger sm:mx-2 sm:mb-0 sm:w-20">
-                        <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="Trash" />
-                        <strong>Eliminar</strong>
+                    <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-base sm:mx-4 sm:mb-0 sm:w-40">
+                        <x-base.lucide class="mx-auto mb-2 block h-6 w-6" icon="GitMerge" />
+                        <strong>Configurar Estados</strong>
                     </x-base.tab.button>
                 </x-base.tab>
             </x-base.tab.list>
@@ -121,7 +128,7 @@
                 <x-base.lucide class="mx-auto mt-3 h-16 w-16 text-danger" icon="XCircle" />
                 <div class="mt-5 text-3xl">¡Advertencia!</div>
                 <div class="mt-2 text-slate-500">
-                    ¿Realmente desea eliminar este estado?<br />
+                    ¿Realmente desea eliminar este tipo de solicitud?<br />
                     <div id="id_registro"></div>
                 </div>
             </div>
@@ -151,7 +158,7 @@
     </div>
     <!-- END: Notification Content -->
 </div>
-
+  
 @endsection
 @once
     @push('vendors')
@@ -180,8 +187,8 @@
             var tabulator_editar = null;
             var enviar_correo = null;
             var tabulator = null;
-            var url_estados_data = "{{url('configuracion/estados/data')}}";
-            var url_guardar_estados = "{{url('/configuracion/estados/guardar')}}";
+            var url_tipos_solicitudes_asignar_estados_data = "{{url('configuracion/tipos_solicitudes/1/asignar_estados/data')}}";
+            var url_guardar_tipos_solicitudes = "{{url('/configuracion/tipos_solicitudes/guardar')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
@@ -206,7 +213,7 @@
                 if ($("#tabulator").length) {
                     // Setup Tabulator
                     tabulator = new Tabulator("#tabulator", {
-                        ajaxURL: url_estados_data,
+                        ajaxURL: url_tipos_solicitudes_asignar_estados_data,
                         paginationMode: "local",
                         filterMode: "local",
                         sortMode: "local",
@@ -235,7 +242,7 @@
                                 title: "ID",
                                 width: 100,
                                 minWidth: 30,
-                                field: "id",
+                                field: "id_estado_tipo_solicitud",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
@@ -244,7 +251,7 @@
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.id}</div>
+                                    <div class="font-medium whitespace-nowrap">${response.id_estado_tipo_solicitud}</div>
                                 </div>`;
                                 },
                             },
@@ -266,10 +273,10 @@
                                 },
                             },
                             {
-                                title: "DESCRIPCIÓN",
+                                title: "PERMISO",
                                 minWidth: 250,
                                 responsive: 0,
-                                field: "descripcion",
+                                field: "descripcion_permiso",
                                 vertAlign: "middle",
                                 print: false,
                                 download: false,
@@ -278,7 +285,24 @@
                                 formatter(cell) {
                                     const response = cell.getData();
                                     return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.descripcion}</div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.descripcion_permiso}</div>
+                                </div>`;
+                                },
+                            },
+                            {
+                                title: "ORDEN",
+                                width: 100,
+                                minWidth: 30,
+                                field: "orden",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                headerFilter:"number",
+                                headerFilterPlaceholder:"Buscar",
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.orden}</div>
                                 </div>`;
                                 },
                             },
@@ -300,7 +324,7 @@
                                                 <i data-lucide="check-square" class="w-4 h-4 mr-1"></i> Editar
                                             </a>
                                             <a class="flex items-center eliminar text-danger" href="javascript:;">
-                                                <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar
+                                                <i data-lucide="trash-2" class="w-4 h-4 mr-1"></i> Eliminar &nbsp;
                                             </a>
                                         </div>`);
                                     $(a)
@@ -308,16 +332,16 @@
                                         .on("click", function () {
                                             accion = 2;
                                             id = response.id;
-                                            $("#modal_input_nombre_estado").val(response.nombre);
-                                            $("#modal_input_descripcion_estado").val(response.descripcion);
-                                            const el = document.querySelector("#modal_nuevo_estado");
+                                            $("#modal_input_nombre_tipo_solicitud").val(response.nombre);
+                                            $("#modal_input_descripcion_tipos_solicitud").val(response.descripcion);
+                                            const el = document.querySelector("#modal_nuevo_tipo_solicitud");
                                             const modal = tailwind.Modal.getOrCreateInstance(el);
                                             modal.show();
                                         });
-                                        $(a)
+                                    $(a)
                                         .find(".eliminar")
                                         .on("click", function () {
-                                            $("#id_registro").html("Estado: " + response.nombre);
+                                            $("#id_registro").html("Tipo Solicitud: " + response.nombre);
                                             accion = 3;
                                             id = response.id;
                                             const el = document.querySelector("#modal_eliminar");
@@ -394,19 +418,19 @@
             });
 
 
-            $("#btn_nuevo_estado").on("click", function (event) {
-                $("#modal_input_nombre_estado").val('');
-                $("#modal_input_descripcion_estado").val('');
+            $("#btn_nuevo_tipos_solicitudes").on("click", function (event) {
+                $("#modal_input_nombre_tipo_solicitud").val('');
+                $("#modal_input_descripcion_tipos_solicitud").val('');
                 accion = 1;
-                const el = document.querySelector("#modal_nuevo_estado");
+                const el = document.querySelector("#modal_nuevo_tipo_solicitud");
                 const modal = tailwind.Modal.getOrCreateInstance(el);
                 modal.show();
 
             });
 
-            $("#modal_btn_guardar_estado").on("click", function () {
-                nombre = $("#modal_input_nombre_estado").val();
-                descripcion = $("#modal_input_descripcion_estado").val();
+            $("#modal_btn_guardar_tipo_solicitud").on("click", function () {
+                nombre = $("#modal_input_nombre_tipo_solicitud").val();
+                descripcion = $("#modal_input_descripcion_tipos_solicitud").val();
                 
                 if(nombre == null || nombre == ''){
                     titleMsg = 'Valor Requerido'
@@ -425,24 +449,24 @@
                 }
                 
                 if(!accion_guardar){
-                    guardar_estados()
+                    guardar_tipos_solicitudes()
                 }
                 
             });
 
             $("#btn_eliminar").on("click", function () {
-                guardar_estados();
+                guardar_tipos_solicitudes();
                 const el = document.querySelector("#modal_eliminar");
                 const modal = tailwind.Modal.getOrCreateInstance(el);
                 modal.hide();
             });
 
-            function guardar_estados() {
+            function guardar_tipos_solicitudes() {
                 accion_guardar = true;
                 //alert(accion+' '+id)
                 $.ajax({
                     type: "post",
-                    url: url_guardar_estados,
+                    url: url_guardar_tipos_solicitudes,
                     data: {
                         'accion': accion,
                         'id': id,
@@ -464,7 +488,7 @@
                             accion_guardar = false;
                             tabulator.replaceData()
                             $('#tabulator-html-filter-reset').trigger("click");
-                            const el = document.querySelector("#modal_nuevo_estado");
+                            const el = document.querySelector("#modal_nuevo_tipo_solicitud");
                             const modal = tailwind.Modal.getOrCreateInstance(el);
                             modal.hide()
                         }

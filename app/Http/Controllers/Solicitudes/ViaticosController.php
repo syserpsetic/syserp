@@ -170,4 +170,32 @@ class ViaticosController extends Controller
         //throw new \Exception($data);
         return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
     }
+
+    public function guardar_viaticos_monto(Request $request){
+        $msgSuccess = null;
+        $msgError = null;
+        
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/token/viaticos/asignar_monto', [
+                'id' => $request->id,
+                'monto' => $request->monto,
+            ]);
+            
+            $data = $response->json();
+            if(!$data["estatus"]){
+                $msgError = "Desde backend: ".$data["msgError"];
+            }
+            $msgSuccess = $data["msgSuccess"];
+        } catch (Exception $e) {
+            $msgError = $e->getMessage();
+        }
+
+        
+        // //return response()->json($data);
+        //throw new \Exception($data);
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
+    }
 }

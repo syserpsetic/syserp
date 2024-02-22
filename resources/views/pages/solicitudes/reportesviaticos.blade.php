@@ -18,7 +18,7 @@
             </div>
         </div>
         <div class="flex flex-col border-b px-5 pt-0 pb-10 text-center sm:px-20 sm:pb-20 sm:text-left lg:flex-row">
-            <div class="w-10/12">
+            <div class="w-8/12">
                 <div class="text-base text-slate-500">Detalles de viaje</div>
                 <div class="mt-2 text-lg font-medium text-primary">
                     {{$orden_viaje['fecha_viaje']}}
@@ -28,7 +28,7 @@
                 <br>
                 <div class="mt-1 text-justify"><strong>Itinerario de viaje:</strong> {{$orden_viaje['itinerario']}}</div>
             </div>
-            <div class="w-2/12">
+            <div class="w-4/12">
                 <div class="mt-10 lg:mt-0 lg:ml-20 lg:text-right">
                     <div class="text-base text-slate-500">Vehículo</div>
                     <div class="mt-2 text-lg font-medium text-primary">
@@ -50,8 +50,53 @@
             </div>
         </div>
     </div>
-    <!-- END: Invoice -->
 
+
+    <x-base.dialog id="modal_asignar_monto">
+        <x-base.dialog.panel>
+            <x-base.dialog.title class="bg-primary">
+                <h2 class="mr-auto text-white font-medium">
+                    <div class="flex items-center">
+                        <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i>
+                        <span class="text-white-700"> Asignar Monto</span>
+                    </div>
+                </h2>
+            </x-base.dialog.title>
+            <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
+                <div class="col-span-12 sm:col-span-12">
+                <div class="text-3x1" id="modal_text_viajero"></div>
+                <div class="text-3x1" id="modal_text_tipo"></div><br>
+                    <x-base.form-label class="font-extrabold" for="modal_input_monto">
+                        Monto
+                    </x-base.form-label>
+                    <x-base.form-input id="modal_input_monto" type="number" placeholder="1234.56" />
+                </div>
+            </x-base.dialog.description>
+            <x-base.dialog.footer class="bg-dark">
+                <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
+                    Cancelar
+                </x-base.button>
+                <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_monto">
+                    Guardar
+                </x-base.button>
+            </x-base.dialog.footer>
+        </x-base.dialog.panel>
+    </x-base.dialog>
+<!-- END: Invoice -->
+
+<div class="text-center">
+    <!-- BEGIN: Notification Content -->
+    <div id="success-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
+        <i data-lucide="check-circle" width="24" height="24" class="stroke-1.5 text-success text-success"></i>
+        <div id="success-notification" class="ml-4 mr-4"></div>
+    </div>
+
+    <div id="danger-notification-content" class="py-5 pl-5 pr-14 bg-white border border-slate-200/60 rounded-lg shadow-xl dark:bg-darkmode-600 dark:text-slate-300 dark:border-darkmode-600 hidden flex flex flex">
+        <i data-lucide="x-circle" width="24" height="24" class="stroke-1.5 text-danger text-danger"></i>
+        <div id="danger-notification" class="ml-4 mr-4"></div>
+    </div>
+    <!-- END: Notification Content -->
+</div>
 @endsection
 @once
     @push('vendors')
@@ -73,6 +118,8 @@
             var accion = null;
             var id = null;
             var id_solicitud = "{{$orden_viaje['id']}}";
+            var id_ove = null;
+            var monto = null;
             var numero_empleado = null;
             var vehiculo_placa = null;
             var vehiculo_tipo = null;
@@ -98,6 +145,7 @@
             var tabulator = null;
             var url_solicitud_viaticos_data = "{{url('/solicitudes/')}}/{{$orden_viaje['id']}}/viaticos/imprimir/viajeros";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
+            var url_guardar_monto = "{{url('/viaticos/guardar_monto')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
@@ -149,7 +197,7 @@
                             // For HTML table
                             {
                                 title: "NUMERO EMPLEADO",
-                                width: 150,
+                                width: 100,
                                 minWidth: 30,
                                 field: "numero_empleado",
                                 vertAlign: "middle",
@@ -166,7 +214,7 @@
                             },
                             {
                                 title: "VIAJERO",
-                                minWidth: 500,
+                                minWidth: 400,
                                 responsive: 0,
                                 field: "viajeros",
                                 vertAlign: "middle",
@@ -183,7 +231,7 @@
                             },
                             {
                                 title: "TIPO",
-                                minWidth: 100,
+                                minWidth: 50,
                                 responsive: 0,
                                 field: "tipo",
                                 vertAlign: "middle",
@@ -199,8 +247,25 @@
                                 },
                             },
                             {
+                                title: "MONTO ASIGNADO",
+                                minWidth: 80,
+                                responsive: 0,
+                                field: "monto_diario_asignado_formato",
+                                vertAlign: "middle",
+                                print: false,
+                                download: false,
+                                headerFilter:"input",
+                                headerFilterPlaceholder:"Buscar",
+                                formatter(cell) {
+                                    const response = cell.getData();
+                                    return `<div>
+                                    <div class="font-medium whitespace-nowrap">${response.monto_diario_asignado_formato}</div>
+                                </div>`;
+                                },
+                            },
+                            {
                                 title: "ACCIONES",
-                                minWidth: 100,
+                                minWidth: 120,
                                 field: "actions",
                                 responsive: 1,
                                 hozAlign: "center",
@@ -211,16 +276,30 @@
                                 formatter(cell) {
                                     const response = cell.getData();
                                     let a =
-                                        $(`<div class="flex text-primary items-center lg:justify-center">
+                                        $(`<div class="flex items-center lg:justify-center">
                                             <a class="flex items-center mr-3 opciones href="javascript:;">
                                                 <i data-lucide="file" class="w-4 h-4 mr-1"></i> <strong>Imprimir </strong>
+                                            </a>
+                                            <a class="flex text-success items-center mr-3 asignar_monto href="javascript:;">
+                                                <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> <strong>Asignar Monto </strong>
                                             </a>
                                         </div>`);
                                     $(a)
                                         .find(".opciones")
                                         .on("click", function () {
                                             window.location.href = (`{{url('/solicitudes/${id_solicitud}/empleado/${response.numero_empleado}/imprimir')}}`);
-                                        });
+                                    });
+                                    $(a)
+                                        .find(".asignar_monto")
+                                        .on("click", function () {
+                                            id_ove = response.id_ove;
+                                            $("#modal_input_monto").val(response.monto_diario_asignado);
+                                            $("#modal_text_viajero").html(`<strong>Asignar monto diario a:</strong> ${response.viajeros}`)
+                                            $("#modal_text_tipo").html(`<strong>Tipo:</strong> ${response.tipo}`)
+                                            const el = document.querySelector("#modal_asignar_monto");
+                                            const modal = tailwind.Modal.getOrCreateInstance(el);
+                                            modal.show();
+                                    });
                                     return a[0];
                                 },
                             },
@@ -306,60 +385,20 @@
 
             });
 
-            
-            $("#btn_id_solicitud").on("click", function (event) {
-                $("#lista_empleados").html("");
-                var id_viajeros = tabulator_id_viajeros;
-                var arreglo_id_viajeros = id_viajeros.split(",");
-                var viajeros = tabulator_viajeros;
-                var arreglo_viajeros = viajeros.split(",");
-                $.each(arreglo_id_viajeros, function (index, value) {
-                    var url_imprimir = `{{url('/solicitudes/${tabulator_id_solicitud}/empleado/${arreglo_id_viajeros[index]}/imprimir')}}`;
-                    $("#lista_empleados").append(`<div class="p-5">
-                                                    <x-base.tab.panels>
-                                                        <x-base.tab.panel id="latest-tasks-new" selected>
-                                                            <div class="flex items-center">
-                                                                <div class="border-l-2 border-primary pl-4 dark:border-primary">
-                                                                    <a class="font-medium" href="${url_imprimir}">
-                                                                        ${arreglo_viajeros[index]}
-                                                                    </a>
-                                                                </div>
-                                                            </div>
-                                                        </x-base.tab.panel>
-                                                    </x-base.tab.panels>
-                                                </div>`);
-                    });
-                    const el = document.querySelector("#modal_imprimir_ordenes");
-                    const modal = tailwind.Modal.getOrCreateInstance(el);
-                    modal.show();
+            $("#modal_btn_guardar_monto").on("click", function () {
+                monto = $("#modal_input_monto").val();
+                
+                if(monto == null || monto == '' || monto <= 0){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor adecuado para Monto.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
 
-            });
-
-            $("#btn_modal_eliminar").on("click", function (event) {
-                $("#id_registro").html("Regsitro: " + tabulator_id_solicitud);
-                accion = 3;
-                id = tabulator_id_solicitud;
-                const el = document.querySelector("#modal_eliminar");
-                const modal = tailwind.Modal.getOrCreateInstance(el);
-                modal.show();
-
-            });
-
-            // $("#btn_registrar").on("click", function () {
-            //     // var nuevaVentana = window.open("{{url('/viaticos/agregar')}}", "_blank");
-            //     // nuevaVentana.focus();
-            //     window.location.href = ("{{url('/viaticos/agregar')}}");
-            // });
-
-            $("#btn_eliminar").on("click", function () {
-                guardar_viaticos();
-                const el = document.querySelector("#modal_eliminar");
-                const modal = tailwind.Modal.getOrCreateInstance(el);
-                modal.hide();
-
-                const el2 = document.querySelector("#modal_opciones");
-                const modal2 = tailwind.Modal.getOrCreateInstance(el2);
-                modal2.hide();
+                if(!accion_guardar){
+                    guardar_monto();
+                }
             });
 
             function guardar_viaticos() {
@@ -405,6 +444,38 @@
                             accion_guardar = false;
                             tabulator.replaceData()
                             $('#tabulator-html-filter-reset').trigger("click");
+                        }
+                    },
+                });
+            }
+
+            function guardar_monto() {
+                accion_guardar = true;
+                $.ajax({
+                    type: "post",
+                    url: url_guardar_monto,
+                    data: {
+                        'monto': monto,
+                        'id': id_ove
+                    },
+                    success: function (data) {
+                        if (data.msgError != null) {
+                            titleMsg = "Error al Guardar";
+                            textMsg = data.msgError;
+                            typeMsg = "error";
+                            notificacion()
+                            accion_guardar = false;
+                        } else {
+                            titleMsg = "Datos Guardados";
+                            textMsg = data.msgSuccess;
+                            typeMsg = "success";
+                            notificacion()
+                            accion_guardar = false;
+                            tabulator.replaceData()
+                            $('#tabulator-html-filter-reset').trigger("click");
+                            const el = document.querySelector("#modal_asignar_monto");
+                            const modal = tailwind.Modal.getOrCreateInstance(el);
+                            modal.hide();
                         }
                     },
                 });
