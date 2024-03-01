@@ -39,6 +39,7 @@
                                         </strong>
                                     </div>
                                     <br>
+                                    @if($cambiar_estado == 1)
                                     <div class="flex flex-wrap">
                                         <x-base.button
                                             class="mb-2 mr-2 w-32"
@@ -63,6 +64,7 @@
                                             />
                                         </x-base.button>
                                     </div>
+                                    @endif
                                 </x-base.preview>
                             </x-base.form-switch>
                             @endif
@@ -439,13 +441,14 @@
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
         <script type="module">
-            var accion_guardar = false;            
+            var accion_guardar = false;   
+            var accion_guardar_estado = false;            
             var accion = null;
             var id_solicitud = "{{$id_solicitud}}";
             var id = (id_solicitud.length != 0) ? "{{$id_solicitud}}" : null;
             var estado = null
             var observacion_estado = null;
-            var id_solicitud_estado = null;
+            var id_solicitud_estado = "{{$detalle_viatico['id_solicitud_estado']}}";
             var numero_empleado = null;
             var vehiculo_placa = null;
             var vehiculo_tipo = null;
@@ -466,6 +469,7 @@
             var id_firma_jefatura = null;
             var enviar_correo = null;
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
+            var url_guardar_cambiar_estados = "{{url('/cambiar_estados')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
@@ -722,31 +726,8 @@
             });
 
             $("#btn_guardar_estado").on("click", function () {
-                accion = 4;
-                numero_empleado = $("#input_empleados").val();
-                fecha_salida = $("#input_fecha_salida").val();
-                hora_salida = $("#input_hora_salida").val();
-                fecha_retorno = $("#input_fecha_regreso").val();
-                hora_retorno = $("#input_hora_regreso").val();
-                vehiculo_placa = $("#input_vehiculo_placa").val();
-                vehiculo_tipo = $("#input_vehiculo_tipo").val();
-                numero_empleado_conductor = $("#input_numero_empleado_conductor").val();
-                proposito = $("#input_proposito").val();
-                id_fuente = $("#input_fuente").val();
-                id_gerencia_administrativa = $("#input_ga").val();
-                id_programa = $("#input_programa").val();
-                id_unidad_ejecutora = $("#input_ue").val();
-                id_actividad_obra = $("#input_actividad").val();
-                id_articulo = $("#input_articulos").val();
-                id_firma_jefatura = $("#input_firma_jefatura").val();
-                enviar_correo = $("#checkbox_enviar_correo").is(':checked') ? 1 : null;
-                id_solicitud_estado = "{{$detalle_viatico['id_solicitud_estado']}}";
-                id_solicitud_estado = (id_solicitud_estado.length != 0) ? id_solicitud_estado : null;
                 estado = (estado_enviar) ? $("#input_estado_enviar").val() : $("#input_estado_rechazar").val();;
                 observacion_estado = $("#input_observacion_estado").val();
-
-                fecha_salida = fecha_salida+" "+hora_salida+":00.000000-00";
-                fecha_retorno = fecha_retorno+" "+hora_retorno+":00.000000-00";
 
                 if(estado == null || estado == ''){
                     titleMsg = 'Valor Requerido'
@@ -765,8 +746,8 @@
                 }
 
                 //alert(id_solicitud_estado+' '+estado+' '+observacion_estado)
-                if(!accion_guardar){
-                    guardar_viaticos()
+                if(!accion_guardar_estado){
+                    cambiar_estados()
                 }
             });
 
@@ -820,6 +801,41 @@
                             accion_guardar = false;
                             $("#btn_guardar").prop("disabled", false);
                             $("#icon_guardando").removeClass('w-8 h-8')
+                        } else {
+                            titleMsg = "Datos Guardados";
+                            textMsg = data.msgSuccess;
+                            typeMsg = "success";
+                            notificacion()
+                            setTimeout(function() {
+                                window.location.href = ("{{url('/solicitudes')}}");
+                            }, 1000);
+                            // accion_guardar = false;
+                            // $("#btn_guardar").prop("disabled", false);
+                            // $("#icon_guardando").removeClass('w-8 h-8')
+                        }
+                    },
+                });
+            }
+
+            function cambiar_estados() {
+                accion_guardar_estado = true;
+                $("#btn_guardar_estado").prop("disabled", true);
+                $.ajax({
+                    type: "post",
+                    url: url_guardar_cambiar_estados,
+                    data: {
+                        'id': id,
+                        'id_solicitud_estado': id_solicitud_estado,
+                        'estado': estado,
+                        'observacion_estado': observacion_estado,
+                    },
+                    success: function (data) {
+                        if (data.msgError != null) {
+                            titleMsg = "Error al Guardar";
+                            textMsg = data.msgError;
+                            typeMsg = "error";
+                            notificacion()
+                            accion_guardar_estado = false;
                         } else {
                             titleMsg = "Datos Guardados";
                             textMsg = data.msgSuccess;

@@ -75,9 +75,11 @@ class ViaticosController extends Controller
                 'id_solicitud' => $id_solicitud
             ]);
 
-            $data = $response->json();
-            $estatus = $data['estatus'];
-            //throw new Exception($data['empleados']);
+            if($response->status() === 200){
+                $data = $response->json();
+                $estatus = $data['estatus'];
+                //throw new Exception($data['empleados']);
+            }
         }
         
         $response = Http::withHeaders([
@@ -92,6 +94,7 @@ class ViaticosController extends Controller
             return view('pages.error-page-404');
         }
         
+        $cambiar_estado = ($id_solicitud == null || $id_solicitud == '') ? $response['cambiar_estado'] : $data['cambiar_estado'];
         $estados_disponibles = ($id_solicitud == null || $id_solicitud == '') ? $response['estados_disponibles'] : $data['estados_disponibles'];
         $estados_disponibles_rechazar = ($id_solicitud == null || $id_solicitud == '') ? $response['estados_disponibles_rechazar'] : $data['estados_disponibles_rechazar'];
         $empleados = ($id_solicitud == null || $id_solicitud == '') ? $response['empleados'] : $data['empleados'];
@@ -110,6 +113,7 @@ class ViaticosController extends Controller
         //throw new Exception($detalle_viatico['vehiculo_placa']);
 
         return view('pages.solicitudes.viaticos')
+                ->with('cambiar_estado', $cambiar_estado)
                 ->with('estados_disponibles', $estados_disponibles)
                 ->with('estados_disponibles_rechazar', $estados_disponibles_rechazar)
                 ->with('empleados', $empleados)->with('empleado_conductor', $empleado_conductor)
@@ -157,10 +161,15 @@ class ViaticosController extends Controller
             ]);
             
             $data = $response->json();
-            if(!$data["estatus"]){
-                $msgError = "Desde backend: ".$data["msgError"];
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
+
+                $msgSuccess = $data["msgSuccess"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
             }
-            $msgSuccess = $data["msgSuccess"];
         } catch (Exception $e) {
             $msgError = $e->getMessage();
         }

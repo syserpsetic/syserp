@@ -12,7 +12,43 @@
         <div class="flex flex-col px-5 pt-10 text-center sm:px-20 sm:pt-20 sm:text-left lg:flex-row lg:pb-10">
             <div class="text-3xl font-semibold text-primary">{{$orden_viaje['solicitud']}}</div>
             <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
-                <div class="text-xl font-medium text-primary">{{$orden_viaje['etapa']}}</div>
+                <!-- <div class="text-xl font-medium text-primary">{{$orden_viaje['etapa']}}</div> -->
+                <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
+                                <x-base.preview>
+                                    <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                                        <strong>
+                                            {{$orden_viaje['etapa']}}
+                                        </strong>
+                                    </div>
+                                    <br>
+                                    @if($cambiar_estado == 1)
+                                    <div class="flex flex-wrap">
+                                        <x-base.button
+                                            class="mb-2 mr-2 w-32"
+                                            variant="danger"
+                                            size="sm"
+                                            id="btn_rechazar"
+                                        >
+                                            <x-base.lucide
+                                                class="mr-2 h-4 w-4"
+                                                icon="ArrowLeft"
+                                            /> Rechazar
+                                        </x-base.button>
+                                        <x-base.button
+                                            class="mb-2 mr-2 w-32"
+                                            variant="primary"
+                                            size="sm"
+                                            id="btn_enviar"
+                                        > &nbsp;&nbsp;Enviar &nbsp;
+                                        <x-base.lucide
+                                                class="mr-2 h-4 w-4"
+                                                icon="ArrowRight"
+                                            />
+                                        </x-base.button>
+                                    </div>
+                                    @endif
+                                </x-base.preview>
+                            </x-base.form-switch>
                 <div class="mt-1">{{$orden_viaje['usuario_registro']}}</div>
                 <div class="mt-1">{{$orden_viaje['fechas_registro']}}</div>
             </div>
@@ -97,6 +133,60 @@
     </div>
     <!-- END: Notification Content -->
 </div>
+
+        <x-base.dialog id="modal_estado">
+            <x-base.dialog.panel>
+                <div class="p-5 text-center">
+                    <x-base.lucide id="modal_icono_rechazar" class="mx-auto mt-3 h-0 w-0 text-danger" icon="ArrowLeftCircle"/>
+                    <x-base.lucide id="modal_icono_enviar" class="mx-auto mt-3 h-0 w-0 text-primary" icon="ArrowRightCircle"/>
+                    <div class="mt-5 text-3xl" id="modal_encabezado_texto"></div>
+                    <div class="mt-2 text-slate-500">
+                        ¿A dónde desea enviar esta solicitud?<br/><br/>
+                        <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                            Estado Actual: 
+                            <strong>
+                                {{$orden_viaje['etapa']}}
+                            </strong>
+                        </div>
+                        <div class="p-5 text-left" id="div_estados_disponibles">
+                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                            <x-base.tom-select id="input_estado_enviar" class="w-full" data-placeholder="Selección de estado">
+                                @foreach($estados_disponibles as $row)
+                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                                @endforeach
+                            </x-base.tom-select>
+                        </div>
+                        <div class="p-5 text-left" id="estados_disponibles_rechazar">
+                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                            <x-base.tom-select id="input_estado_rechazar" class="w-full" data-placeholder="Selección de estado">
+                                @foreach($estados_disponibles_rechazar as $row)
+                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                                @endforeach
+                            </x-base.tom-select>
+                        </div>
+                        <div class="p-5">
+                            <div class="input-form mt-3">
+                                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_observacion_estado">
+                                    Observación
+                                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0" id="text_observacion">
+                                        
+                                    </span>
+                                </x-base.form-label>
+                                <x-base.form-textarea rows="5" class="form-control" id="input_observacion_estado" name="comment" placeholder="Escriba sus observaciones..."></x-base.form-textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-5 pb-8 text-center">
+                    <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                        Cancelar
+                    </x-base.button>
+                    <x-base.button class="w-24" type="button" variant="primary" id="btn_guardar_estado">
+                        Guardar
+                    </x-base.button>
+                </div>
+            </x-base.dialog.panel>
+        </x-base.dialog>
 @endsection
 @once
     @push('vendors')
@@ -115,9 +205,14 @@
         @vite('resources/js/pages/notification/index.js')
         <script type="module">
             var accion_guardar = false;
+            var accion_guardar_estado = false;  
+            var id_solicitud_estado = "{{$orden_viaje['id_solicitud_estado']}}";
             var accion = null;
             var id = null;
             var id_solicitud = "{{$orden_viaje['id']}}";
+            var id = (id_solicitud.length != 0) ? "{{$orden_viaje['id']}}" : null;
+            var estado = null
+            var observacion_estado = null;
             var id_ove = null;
             var monto = null;
             var numero_empleado = null;
@@ -146,9 +241,11 @@
             var url_solicitud_viaticos_data = "{{url('/solicitudes/')}}/{{$orden_viaje['id']}}/viaticos/imprimir/viajeros";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var url_guardar_monto = "{{url('/viaticos/guardar_monto')}}";
+            var url_guardar_cambiar_estados = "{{url('/cambiar_estados')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
+            var estado_enviar = null;
 
             $(document).ready(function () {
                 $.ajaxSetup({
@@ -385,6 +482,28 @@
 
             });
 
+            $("#btn_rechazar").on("click", function (event) {
+                estado_enviar = false;
+                $("#div_estados_disponibles").hide();
+                $("#estados_disponibles_rechazar").show();
+                $("#modal_icono_rechazar").addClass('h-16 w-16')
+                $("#modal_icono_enviar").removeClass('h-16 w-16')
+                $("#modal_encabezado_texto").html('¡Rechazar Solicitud!');
+                $("#text_observacion").html('Requerido');
+                modal_estado_accion();
+            });
+
+            $("#btn_enviar").on("click", function (event) {
+                estado_enviar = true;
+                $("#div_estados_disponibles").show();
+                $("#estados_disponibles_rechazar").hide();
+                $("#modal_icono_rechazar").removeClass('h-16 w-16')
+                $("#modal_icono_enviar").addClass('h-16 w-16')
+                $("#modal_encabezado_texto").html('¡Enviar Solicitud!');
+                $("#text_observacion").html('Opcional');
+                modal_estado_accion();
+            });
+
             $("#modal_btn_guardar_monto").on("click", function () {
                 monto = $("#modal_input_monto").val();
                 
@@ -400,6 +519,39 @@
                     guardar_monto();
                 }
             });
+
+            $("#btn_guardar_estado").on("click", function () {
+                estado = (estado_enviar) ? $("#input_estado_enviar").val() : $("#input_estado_rechazar").val();;
+                observacion_estado = $("#input_observacion_estado").val();
+
+                if(estado == null || estado == ''){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Estado.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+
+                if((observacion_estado == null || observacion_estado == '') && estado_enviar != true){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Observación.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+
+                //alert(id_solicitud_estado+' '+estado+' '+observacion_estado)
+                if(!accion_guardar_estado){
+                    cambiar_estados()
+                }
+            });
+
+            function modal_estado_accion(){
+                $("#"+typeMsg+"-notification").html('<div class="font-medium">' + titleMsg + "</div>" + '<div class="mt-1 text-slate-500">' + textMsg + "</div>");
+                const el = document.querySelector("#modal_estado");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+            }
 
             function guardar_viaticos() {
                 accion_guardar = true;
@@ -476,6 +628,41 @@
                             const el = document.querySelector("#modal_asignar_monto");
                             const modal = tailwind.Modal.getOrCreateInstance(el);
                             modal.hide();
+                        }
+                    },
+                });
+            }
+
+            function cambiar_estados() {
+                accion_guardar_estado = true;
+                $("#btn_guardar_estado").prop("disabled", true);
+                $.ajax({
+                    type: "post",
+                    url: url_guardar_cambiar_estados,
+                    data: {
+                        'id': id,
+                        'id_solicitud_estado': id_solicitud_estado,
+                        'estado': estado,
+                        'observacion_estado': observacion_estado,
+                    },
+                    success: function (data) {
+                        if (data.msgError != null) {
+                            titleMsg = "Error al Guardar";
+                            textMsg = data.msgError;
+                            typeMsg = "error";
+                            notificacion()
+                            accion_guardar_estado = false;
+                        } else {
+                            titleMsg = "Datos Guardados";
+                            textMsg = data.msgSuccess;
+                            typeMsg = "success";
+                            notificacion()
+                            setTimeout(function() {
+                                window.location.href = ("{{url('/solicitudes')}}");
+                            }, 1000);
+                            // accion_guardar = false;
+                            // $("#btn_guardar").prop("disabled", false);
+                            // $("#icon_guardando").removeClass('w-8 h-8')
                         }
                     },
                 });

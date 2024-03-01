@@ -122,6 +122,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/viaticos/editar/{id_viatico}', [ViaticosController::class, 'editar_viaticos']);
     Route::post('/viaticos/guardar', [ViaticosController::class, 'guardar_viaticos']);
     Route::post('/viaticos/guardar_monto', [ViaticosController::class, 'guardar_viaticos_monto']);
+    Route::post('/cambiar_estados', [EstadosController::class, 'cambiar_estados']);
     Route::get('configuracion/estados', [EstadosController::class, 'view_estados'])->name('configuracion_estados');
     Route::get('configuracion/estados/data', [EstadosController::class, 'data_estados']);
     Route::post('configuracion/estados/guardar', [EstadosController::class, 'guardar_estados']);

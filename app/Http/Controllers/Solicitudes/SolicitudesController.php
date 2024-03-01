@@ -118,7 +118,13 @@ class SolicitudesController extends Controller
         ]);
 
         $orden_viaje = $response['orden_viaje'];
-        return view('pages.solicitudes.reportesviaticos')->with("orden_viaje", $orden_viaje);
+        $cambiar_estado = $response['cambiar_estado'];
+        $estados_disponibles = $response['estados_disponibles'];
+        $estados_disponibles_rechazar = $response['estados_disponibles_rechazar'];
+        return view('pages.solicitudes.reportesviaticos')->with("orden_viaje", $orden_viaje)
+                                                        ->with("cambiar_estado", $cambiar_estado)
+                                                        ->with("estados_disponibles", $estados_disponibles)
+                                                        ->with("estados_disponibles_rechazar", $estados_disponibles_rechazar);
     }
 
     public function imprimir_viaticos_view_viajeros($id_solicitud){

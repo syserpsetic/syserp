@@ -46,14 +46,52 @@ class EstadosController extends Controller
             ]);
             
             $data = $response->json();
-            if(!$data["estatus"]){
-                $msgError = "Desde backend: ".$data["msgError"];
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
+
+                $msgSuccess = $data["msgSuccess"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
             }
-            $msgSuccess = $data["msgSuccess"];
         } catch (Exception $e) {
             $msgError = $e->getMessage();
         }
 
         return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
    }
+
+   public function cambiar_estados(Request $request){
+        $msgSuccess = null;
+        $msgError = null;
+
+        try {
+            //throw new Exception('Epa', true);
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/token/cambiar_estados', [
+                'id' => $request->id,
+                'id_solicitud_estado' => $request->id_solicitud_estado,
+                'estado' => $request->estado,
+                'observacion_estado' => $request->observacion_estado,
+            ]);
+            
+            $data = $response->json();
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
+
+                $msgSuccess = $data["msgSuccess"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
+            }
+        } catch (Exception $e) {
+            $msgError = $e->getMessage();
+        }
+
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
+    }
 }
