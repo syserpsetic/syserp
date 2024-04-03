@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\View\View;
 use DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
+use Exception;
+use App\Http\Controllers\ControladorPermisos;
 
 class PageController extends Controller
 {
@@ -14,13 +17,9 @@ class PageController extends Controller
      */
     public function dashboardOverview1(): View
     {
-        return view('pages/dashboard-overview-1', [
-            // Specify the base layout.
-            // Eg: 'side-menu', 'simple-menu', 'top-menu', 'login'
-            // The default value is 'side-menu'
-
-            // 'layout' => 'side-menu'
-        ]);
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
+        return view('pages/dashboard-overview-1')->with('scopes', $scopes);
     }
 
     /**

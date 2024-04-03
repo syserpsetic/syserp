@@ -9,6 +9,7 @@ use Illuminate\View\View;
 use DB;
 Use Session;
 use Exception;
+use App\Http\Controllers\ControladorPermisos;
 
 class ViaticosController extends Controller
 {
@@ -17,7 +18,7 @@ class ViaticosController extends Controller
 
         /*$response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/viaticos');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/viaticos');
 
         $empleados = $response['empleados'];
         $departamentos = $response['departamentos'];
@@ -41,7 +42,7 @@ class ViaticosController extends Controller
         $id_viatico = $request->id_viatico;
        /* $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/viaticos');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/viaticos');
 
         $empleados = $response['empleados'];
         $departamentos = $response['departamentos'];
@@ -67,11 +68,14 @@ class ViaticosController extends Controller
         $data = [];
         $estatus = True;
 
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
+
         if(!empty($id_solicitud)){
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/viaticos/editar', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/editar', [
                 'id_solicitud' => $id_solicitud
             ]);
 
@@ -84,7 +88,7 @@ class ViaticosController extends Controller
         
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/viaticos');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/viaticos');
 
         //throw new Exception($data['estatus']);
         if($response->status() === 403){
@@ -122,7 +126,8 @@ class ViaticosController extends Controller
                 ->with('gerencia_administrativa', $gerencia_administrativa)
                 ->with('programas', $programas)->with('ue', $ue)->with('act', $act)
                 ->with('articulos', $articulos)->with('firmas_jefaturas', $firmas_jefaturas)
-                ->with('detalle_viatico', $detalle_viatico)->with("id_solicitud", $id_solicitud);
+                ->with('detalle_viatico', $detalle_viatico)->with("id_solicitud", $id_solicitud)
+                ->with('scopes', $scopes);
         
     }
     
@@ -135,7 +140,7 @@ class ViaticosController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/viaticos/guardar', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/guardar', [
                 'id' => $request->id,
                 'accion' => $request->accion,
                 'numero_empleado' => $request->numero_empleado,
@@ -188,7 +193,7 @@ class ViaticosController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/viaticos/asignar_monto', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/asignar_monto', [
                 'id' => $request->id,
                 'monto' => $request->monto,
             ]);

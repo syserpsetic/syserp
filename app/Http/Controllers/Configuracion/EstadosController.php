@@ -14,22 +14,41 @@ class EstadosController extends Controller
 {
     public function view_estados(Request $request){
 
-        return view('pages.configuracion.estados');
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/configuracion/estados');
+
+        if($response->status() === 403){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
+        $estados = $response['estados'];
+        $scopes = $response['scopes'];
+
+        return view('pages.configuracion.estados')->with('estados', $estados)->with('scopes', $scopes);
     }
  
     public function data_estados(Request $request){
  
          $response = Http::withHeaders([
              'Authorization' => session('token'),
-         ])->get(env('API_BASE_URL_ZETA').'/api/token/configuracion/estados');
+         ])->get(env('API_BASE_URL_ZETA').'/api/auth/configuracion/estados');
  
          $estados = $response['estados'];
-         //throw new \Exception($estados);
- 
-         return $estados;
+         
+          $recordsTotal = count($estados);
+        $recordsFiltered = $recordsTotal;
+    
+        return response()->json([
+            "draw" => intval($request->input('draw', 0)),
+            "recordsTotal" => $recordsTotal,
+            "recordsFiltered" => $recordsFiltered,
+            "data" => $estados
+        ]);  //*/
     }
 
     public function guardar_estados(Request $request){
+        $estados_list = null;
         $msgSuccess = null;
         $msgError = null;
 
@@ -38,7 +57,7 @@ class EstadosController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/configuracion/estados/guardar', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/configuracion/estados/guardar', [
                 'id' => $request->id,
                 'accion' => $request->accion,
                 'nombre' => $request->nombre,
@@ -52,6 +71,8 @@ class EstadosController extends Controller
                 }
 
                 $msgSuccess = $data["msgSuccess"];
+                $estados_list = $data["estados_list"];
+                //throw New Exception($estados_list, true);
             }elseif($response->status() === 403){
                 $msgError = "No tiene permisos para realizar esta acción";
             }
@@ -59,7 +80,7 @@ class EstadosController extends Controller
             $msgError = $e->getMessage();
         }
 
-        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError, 'estados_list' => $estados_list]);
    }
 
    public function cambiar_estados(Request $request){
@@ -71,7 +92,7 @@ class EstadosController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/cambiar_estados', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/cambiar_estados', [
                 'id' => $request->id,
                 'id_solicitud_estado' => $request->id_solicitud_estado,
                 'estado' => $request->estado,

@@ -54,7 +54,8 @@ class SideMenu
                 'params' => [
                     'layout' => 'side-menu',
                 ],
-                'title' => 'Inicio'
+                'title' => 'Inicio',
+                'permiso' => 'zeta_login'
             ],
             // 'menu-layout' => [
             //     'icon' => 'box',
@@ -188,11 +189,13 @@ class SideMenu
                 'params' => [
                     'layout' => 'side-menu'
                 ],
-                'title' => 'Solicitudes'
+                'title' => 'Solicitudes',
+                'permiso' => 'zeta_leer_solicitudes'
             ],
             'configuracion' => [
                 'icon' => 'settings',
                 'title' => 'Configuración',
+                'permiso' => 'zeta_configuraciones',
                 'sub_menu' => [
                     'configuracion_estados' => [
                         'icon' => 'crosshair',
@@ -200,7 +203,8 @@ class SideMenu
                         'params' => [
                             'layout' => 'side-menu',
                         ],
-                        'title' => 'Estados'
+                        'title' => 'Estados',
+                        'permiso' => 'zeta_leer_estados'
                     ],
                     'configuracion_tipos_solicitudes' => [
                         'icon' => 'file-text',
@@ -208,7 +212,8 @@ class SideMenu
                         'params' => [
                             'layout' => 'side-menu',
                         ],
-                        'title' => 'Tipos Solicitudes'
+                        'title' => 'Tipos Solicitudes',
+                        'permiso' => 'zeta_leer_tipos_solicitudes'
                     ],
                 ]
             ],

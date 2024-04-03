@@ -28,14 +28,14 @@ class ApiAuthController extends Controller
 
         // if ($request->coordenadas){
             $response = Http::post(env('API_BASE_URL_ZETA').'/api/auth/login', [
-                'username' => $request->input('email'),
+                'email' => $request->input('email'),
                 'password' => $request->input('password'),
-                'coordenadas' => $request->coordenadas
+                //'coordenadas' => $request->coordenadas
             ]);
         // } else {
         //     throw new Exception('¡Acceso al sistema denegado! Debe Permitir la Ubicación.');
         // }
-
+        
         if ($response->status() === 200) {
             $userData = $response->json();
             $fieldType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'username';
@@ -45,7 +45,7 @@ class ApiAuthController extends Controller
             $user->save();
             Session::put('token', $userData['token']);
             auth()->login($user);
-            return redirect('/');
+            //return redirect('/');
         } elseif($response->status() === 403) {
             throw new Exception('¡Acceso al sistema denegado!');
         } else {
@@ -57,7 +57,7 @@ class ApiAuthController extends Controller
     {
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->post(env('API_BASE_URL_ZETA').'/api/token/logout');
+        ])->post(env('API_BASE_URL_ZETA').'/api/auth/logout');
 
 
         if($response->status() === 200){

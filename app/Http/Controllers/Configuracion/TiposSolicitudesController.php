@@ -9,19 +9,25 @@ use Illuminate\View\View;
 use DB;
 Use Session;
 use Exception;
+use App\Http\Controllers\ControladorPermisos;
 
 class TiposSolicitudesController extends Controller
 {
     public function view_tipos_solicitudes(Request $request){
-
-        return view('pages.configuracion.tipos_solicitudes');
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
+        
+        if(!in_array('zeta_leer_tipos_solicitudes', $scopes)){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+        return view('pages.configuracion.tipos_solicitudes')->with('scopes', $scopes);
     }
 
     public function data_tipos_solicitudes(Request $request){
  
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/configuracion/tipos_solicitudes');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/configuracion/tipos_solicitudes');
 
         $tipos_solicitudes = $response['tipos_solicitudes'];
 
@@ -36,7 +42,7 @@ class TiposSolicitudesController extends Controller
             $response = Http::withHeaders([
                 'Authorization' => session('token'),
                 'Content-Type' => 'application/json',
-            ])->post(env('API_BASE_URL_ZETA').'/api/token/configuracion/tipos_solicitudes/guardar', [
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/configuracion/tipos_solicitudes/guardar', [
                 'id' => $request->id,
                 'accion' => $request->accion,
                 'nombre' => $request->nombre,
@@ -56,10 +62,16 @@ class TiposSolicitudesController extends Controller
     }
 
     public function view_tipos_solicitudes_asignar_estados(Request $request, $id_tipo_solicitud){
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
+
+        if(!in_array('zeta_leer_tipos_solicitudes_asignar_estados', $scopes)){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
 
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/configuracion/tipos_solicitudes', [
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/configuracion/tipos_solicitudes', [
             'id' => $id_tipo_solicitud,
         ]);
 
@@ -67,13 +79,14 @@ class TiposSolicitudesController extends Controller
 
         return view('pages.configuracion.tipos_solicitudes_asignar_estados')
                 ->with("tipos_solicitudes", $tipos_solicitudes)
-                ->with("id_tipo_solicitud", $id_tipo_solicitud);
+                ->with("id_tipo_solicitud", $id_tipo_solicitud)
+                ->with('scopes', $scopes);
     }
 
     public function data_tipos_solicitudes_asignar_estados(Request $request, $id_tipo_solicitud){
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/configuracion/tipos_solicitudes_asignar_estados', [
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/configuracion/tipos_solicitudes_asignar_estados', [
             'id' => $id_tipo_solicitud,
         ]);
 

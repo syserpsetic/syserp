@@ -12,19 +12,21 @@ use Exception;
 use PhpOffice\PhpWord\IOFactory;
 use Dompdf\Dompdf;
 use Illuminate\Http\Response;
+use App\Http\Controllers\ControladorPermisos;
 
 class SolicitudesController extends Controller
 {
     public function view_solicitudes(Request $request){
-
-       return view('pages.solicitudes.solicitudes');
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
+        return view('pages.solicitudes.solicitudes')->with('scopes', $scopes);
     }
 
     public function data_solicitudes(Request $request){
 
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/solicitudes');
 
         $ordenes_viajes = $response['data'];
         //throw new \Exception($ordenes_viajes);
@@ -39,7 +41,7 @@ class SolicitudesController extends Controller
         $response = Http::withHeaders([
             'Authorization' => session('token'),
             'Content-Type' => 'application/json',
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/empleado/imprimir', [
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/solicitudes/empleado/imprimir', [
             'id_solicitud' => $id_solicitud,
             'id_empleado' => $id_empleado
         ]);
@@ -109,11 +111,13 @@ class SolicitudesController extends Controller
     }
 
     public function imprimir_viaticos_view($id_solicitud){
+        $scopes = new ControladorPermisos();
+        $scopes = $scopes->ver_permisos();
 
         $response = Http::withHeaders([
             'Authorization' => session('token'),
             'Content-Type' => 'application/json',
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/viaticos/imprimir', [
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/solicitudes/viaticos/imprimir', [
             'id_solicitud' => $id_solicitud
         ]);
 
@@ -124,7 +128,8 @@ class SolicitudesController extends Controller
         return view('pages.solicitudes.reportesviaticos')->with("orden_viaje", $orden_viaje)
                                                         ->with("cambiar_estado", $cambiar_estado)
                                                         ->with("estados_disponibles", $estados_disponibles)
-                                                        ->with("estados_disponibles_rechazar", $estados_disponibles_rechazar);
+                                                        ->with("estados_disponibles_rechazar", $estados_disponibles_rechazar)
+                                                        ->with('scopes', $scopes);
     }
 
     public function imprimir_viaticos_view_viajeros($id_solicitud){
@@ -132,7 +137,7 @@ class SolicitudesController extends Controller
         $response = Http::withHeaders([
             'Authorization' => session('token'),
             'Content-Type' => 'application/json',
-        ])->get(env('API_BASE_URL_ZETA').'/api/token/solicitudes/viaticos/imprimir/viajeros', [
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/solicitudes/viaticos/imprimir/viajeros', [
             'id_solicitud' => $id_solicitud
         ]);
 

@@ -9,7 +9,7 @@
         // Post form
         let email = $("#email").val();
         let password = $("#password").val();
-        let coordenadas = null;
+        //let coordenadas = null;
         // if ("geolocation" in navigator) {
         //     navigator.geolocation.getCurrentPosition(function(position) {
         //         coordenadas = position.coords.latitude+','+position.coords.longitude;
@@ -26,7 +26,7 @@
             .post(`login`, {
                 email: email,
                 password: password,
-                coordenadas: coordenadas
+                //coordenadas: coordenadas
             })
             .then((res) => {
                 location.href = "/";
