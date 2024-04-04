@@ -92,10 +92,10 @@ class ViaticosController extends Controller
 
         //throw new Exception($data['estatus']);
         if($response->status() === 403){
-            return view('pages.error-page-403');
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
         }
         if(!$estatus){
-            return view('pages.error-page-404');
+            return view('pages.error-page-404')->with('scopes', $scopes = array());
         }
         
         $cambiar_estado = ($id_solicitud == null || $id_solicitud == '') ? $response['cambiar_estado'] : $data['cambiar_estado'];
