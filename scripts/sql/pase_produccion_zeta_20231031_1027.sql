@@ -19,7 +19,7 @@ WITH (
 );
 GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas TO erpunag;
 GRANT SELECT ON TABLE administracion.via_zonas TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
-GRANT USAGE ON administracion.via_zonas_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_zonas_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
 
 Insert into administracion.via_zonas (nombre, descripcion) values 
 ('ZONA I', 'D.1- VIÁTICOS Y GASTOS DE VIAJE DENTRO DEL PAÍS POR ZONAS. VALORES EN LEMPIRAS'),
@@ -50,7 +50,7 @@ WITH (
 );
 GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_categorias TO erpunag;
 GRANT SELECT ON TABLE administracion.via_categorias TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
-GRANT USAGE ON administracion.via_categorias_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_categorias_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
 
 Insert into administracion.via_categorias (nombre, descripcion) values 
 ('I', 'CATEGORIA I'),
@@ -96,7 +96,7 @@ WITH (
 );
 GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas_categorias TO erpunag;
 GRANT SELECT ON TABLE administracion.via_zonas_categorias TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
-GRANT USAGE ON administracion.via_zonas_categorias_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_zonas_categorias_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
 
 Insert into administracion.via_zonas_categorias (id_zona, id_categoria, id_tipo_moneda, hospedaje, alimentacion, gastos_varios) values 
 (1,1,1,1100,700,300),
@@ -132,7 +132,16 @@ create table administracion.via_capitulos(
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_capitulos TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_capitulos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_capitulos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
     INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo I');
     INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo II');
     INSERT INTO administracion.via_capitulos(nombre) VALUES ('Capítulo III');
@@ -151,7 +160,15 @@ create table administracion.via_articulos(
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone,
 	constraint via_articulos_fk_001 foreign key (id_capitulo) references administracion.via_articulos
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_articulos TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_articulos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_articulos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
     INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 1','Elpresente reglamento define y establece las normas y procedimientos a aplicar para el otorgamiento de Viáticos y Gastos de viaje',1);
     INSERT INTO administracion.via_articulos(nombre,descripcion,id_capitulo) VALUES ('Artículo 2','La UNAG reconocerá y pagará viáticos y gastos de viaje a sus funcionarios y empleados ',1);
@@ -203,7 +220,15 @@ create table administracion.tipos_solicitudes(
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.tipos_solicitudes TO erpunag;
+        GRANT SELECT ON TABLE administracion.tipos_solicitudes TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.tipos_solicitudes_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
 INSERT INTO administracion.tipos_solicitudes(nombre, descripcion) VALUES ('Viáticos', 'Solicitud de Viáticos');
 
@@ -218,7 +243,15 @@ create table administracion.solicitudes(
         REFERENCES administracion.tipos_solicitudes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.solicitudes TO erpunag;
+        GRANT SELECT ON TABLE administracion.solicitudes TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.solicitudes_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
 
 create table administracion.via_firmas_jefaturas(
@@ -228,13 +261,21 @@ create table administracion.via_firmas_jefaturas(
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone
-);
+)
 
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('RECTOR', 'Jefe de Rectoría');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('VICERECTOR ACADÉMICO', 'Jefe de Vicerectoría Académica');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('SECRETARIO GENERAL', 'Jefe de Secretaría General');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('DECANO', 'Jefe de Decanatura');
-INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('FIRMA DEL JEFE DE DEPARTAMENTO', 'Jefe de Departamento');
+WITH (
+    OIDS = FALSE
+);
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_firmas_jefaturas TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_firmas_jefaturas TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_firmas_jefaturas_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
+-- INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('RECTOR', 'Jefe de Rectoría');
+-- INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('VICERECTOR ACADÉMICO', 'Jefe de Vicerectoría Académica');
+-- INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('SECRETARIO GENERAL', 'Jefe de Secretaría General');
+-- INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('DECANO', 'Jefe de Decanatura');
+-- INSERT INTO administracion.via_firmas_jefaturas(nombre, descripcion) VALUES ('FIRMA DEL JEFE DE DEPARTAMENTO', 'Jefe de Departamento');
 
 
 create table administracion.via_ordenes_viajes (
@@ -293,7 +334,14 @@ create table administracion.via_ordenes_viajes (
         REFERENCES administracion.via_firmas_jefaturas (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_ordenes_viajes TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_ordenes_viajes TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_ordenes_viajes_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
 
 
 create table administracion.via_itinerarios(
@@ -322,7 +370,15 @@ create table administracion.via_itinerarios(
         REFERENCES administracion.via_ordenes_viajes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_itinerarios TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_itinerarios TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_itinerarios_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
 create table administracion.via_ordenes_viajes_articulos(
 	id serial primary key,
@@ -339,7 +395,15 @@ create table administracion.via_ordenes_viajes_articulos(
         REFERENCES administracion.via_ordenes_viajes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_ordenes_viajes_articulos TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_ordenes_viajes_articulos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_ordenes_viajes_articulos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
 
 create table administracion.via_ordenes_viajes_empleados(
@@ -368,7 +432,15 @@ create table administracion.via_ordenes_viajes_empleados(
         REFERENCES public.per_cargo (id_cargo) MATCH SIMPLE
 	 ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_ordenes_viajes_empleados TO erpunag;
+        GRANT SELECT ON TABLE administracion.via_ordenes_viajes_empleados TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.via_ordenes_viajes_empleados_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
 
 create table administracion.estados_solicitudes(
 	id serial primary key,
@@ -377,18 +449,26 @@ create table administracion.estados_solicitudes(
 	created_at timestamp without time zone default now(),
 	updated_at timestamp without time zone,
 	deleted_at timestamp without time zone
-);
+)
 
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Solicitud Creada', 'Etapa de solicitudes creadas');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Esperando Aprobación', 'Etapa de aprobacón por el jefe del área');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 3', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 4', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 5', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 6', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 7', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 8', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 9', 'Etapa temporal');
-INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 10', 'Etapa temporal');
+WITH (
+    OIDS = FALSE
+);
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.estados_solicitudes TO erpunag;
+        GRANT SELECT ON TABLE administracion.estados_solicitudes TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.estados_solicitudes_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Solicitud Creada', 'Etapa de solicitudes creadas');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Esperando Aprobación', 'Etapa de aprobacón por el jefe del área');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 3', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 4', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 5', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 6', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 7', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 8', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 9', 'Etapa temporal');
+-- INSERT INTO administracion.estados_solicitudes(nombre, descripcion) VALUES ('Estado 10', 'Etapa temporal');
 
 
 create table administracion.estados_tipos_solicitudes(
@@ -408,18 +488,26 @@ create table administracion.estados_tipos_solicitudes(
         REFERENCES administracion.tipos_solicitudes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-);
+)
 
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (1, 1, 1, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (2, 1, 2, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (3, 1, 3, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (4, 1, 4, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (5, 1, 5, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (6, 1, 6, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (7, 1, 7, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (8, 1, 8, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (9, 1, 9, 'zeta_escribir_solicitudes');
-INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (10, 1, 10, 'zeta_escribir_solicitudes');
+WITH (
+    OIDS = FALSE
+);
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.estados_tipos_solicitudes TO erpunag;
+        GRANT SELECT ON TABLE administracion.estados_tipos_solicitudes TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.estados_tipos_solicitudes_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (1, 1, 1, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (2, 1, 2, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (3, 1, 3, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (4, 1, 4, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (5, 1, 5, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (6, 1, 6, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (7, 1, 7, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (8, 1, 8, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (9, 1, 9, 'zeta_escribir_solicitudes');
+-- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (10, 1, 10, 'zeta_escribir_solicitudes');
 
 
 create table administracion.estados_tipos_solicitudes_destinos(
@@ -442,24 +530,32 @@ create table administracion.estados_tipos_solicitudes_destinos(
         REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-);
+)
 
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (1, 1, 2);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (2, 1, 3);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (2, 1, 4);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (3, 1, 4);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (4, 1, 5);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (4, 1, 3);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (5, 1, 6);
-INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
-VALUES (6, 1, 1);
+WITH (
+    OIDS = FALSE
+);
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.estados_tipos_solicitudes_destinos TO erpunag;
+        GRANT SELECT ON TABLE administracion.estados_tipos_solicitudes_destinos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.estados_tipos_solicitudes_destinos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (1, 1, 2);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (2, 1, 3);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (2, 1, 4);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (3, 1, 4);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (4, 1, 5);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (4, 1, 3);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (5, 1, 6);
+-- INSERT INTO administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) 
+-- VALUES (6, 1, 1);
 
 create table administracion.solicitudes_estados(
 	id serial primary key,
@@ -478,4 +574,15 @@ create table administracion.solicitudes_estados(
         REFERENCES administracion.estados_solicitudes (id) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
+)
+
+WITH (
+    OIDS = FALSE
 );
+        GRANT UPDATE, INSERT, SELECT ON TABLE administracion.solicitudes_estados TO erpunag;
+        GRANT SELECT ON TABLE administracion.solicitudes_estados TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+        GRANT USAGE ON SEQUENCE administracion.solicitudes_estados_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+
+
+----------------------------hasta aqui enviado a produccion-----------------------------------------------------------------
