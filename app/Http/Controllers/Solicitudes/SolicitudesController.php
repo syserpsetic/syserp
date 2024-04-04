@@ -114,6 +114,10 @@ class SolicitudesController extends Controller
         $scopes = new ControladorPermisos();
         $scopes = $scopes->ver_permisos();
 
+        if(!in_array('zeta_leer_viaticos', $scopes)){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
         $response = Http::withHeaders([
             'Authorization' => session('token'),
             'Content-Type' => 'application/json',
