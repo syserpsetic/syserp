@@ -30,6 +30,7 @@ class ApiAuthController extends Controller
             $response = Http::post(env('API_BASE_URL_ZETA').'/api/auth/login', [
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
+                'platform' => 'ZETA'
                 //'coordenadas' => $request->coordenadas
             ]);
         // } else {

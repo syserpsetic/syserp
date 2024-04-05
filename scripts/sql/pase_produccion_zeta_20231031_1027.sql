@@ -509,6 +509,16 @@ WITH (
 -- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (9, 1, 9, 'zeta_escribir_solicitudes');
 -- INSERT INTO administracion.estados_tipos_solicitudes (id_estado_solicitud, id_tipo_solicitud, orden, arbol_permiso) VALUES (10, 1, 10, 'zeta_escribir_solicitudes');
 
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '1';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-13' where id = '2';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-6' where id = '3';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-13' where id = '4';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-2' where id = '5';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '6';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '7';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '8';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '9';
+-- update administracion.estados_tipos_solicitudes set arbol_permiso = '27-1-3' where id = '10';
 
 create table administracion.estados_tipos_solicitudes_destinos(
 	id serial primary key,
