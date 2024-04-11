@@ -21,7 +21,7 @@
                     >
                         <img
                             class="w-100"
-                            src="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_NEGRO_2.png') }}"
+                            src="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_NEGRO.gif') }}"
                             alt="Midone Tailwind HTML Admin Template"
                         />
                        
