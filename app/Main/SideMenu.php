@@ -215,6 +215,33 @@ class SideMenu
                         'title' => 'Tipos Solicitudes',
                         'permiso' => 'zeta_leer_tipos_solicitudes'
                     ],
+                    'configuracion_zonas' => [
+                        'icon' => 'compass',
+                        'route_name' => 'configuracion_zonas',
+                        'params' => [
+                            'layout' => 'side-menu',
+                        ],
+                        'title' => 'Zonas',
+                        'permiso' => 'zeta_leer_zonas'
+                    ],
+                    'configuracion_capitulos' => [
+                        'icon' => 'book-open',
+                        'route_name' => 'configuracion_capitulos',
+                        'params' => [
+                            'layout' => 'side-menu',
+                        ],
+                        'title' => 'Capítulos',
+                        'permiso' => 'zeta_leer_capitulos'
+                    ],
+                    'configuracion_categorias' => [
+                        'icon' => 'book',
+                        'route_name' => 'configuracion_categorias',
+                        'params' => [
+                            'layout' => 'side-menu',
+                        ],
+                        'title' => 'Categorías',
+                        'permiso' => 'zeta_leer_categorias'
+                    ],
                 ]
             ],
             // 'inbox' => [

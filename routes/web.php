@@ -10,6 +10,9 @@ use App\Http\Controllers\Solicitudes\SolicitudesController;
 use App\Http\Controllers\Solicitudes\ViaticosController;
 use App\Http\Controllers\Configuracion\EstadosController;
 use App\Http\Controllers\Configuracion\TiposSolicitudesController;
+use App\Http\Controllers\Configuracion\ZonasController;
+use App\Http\Controllers\Configuracion\CapitulosController;
+use App\Http\Controllers\Configuracion\CategoriasController;
 use App\Http\Controllers\ApiAuthController;
 
 /*
@@ -131,6 +134,12 @@ Route::middleware('auth:api')->group(function () {
     Route::post('configuracion/tipos_solicitudes/guardar', [TiposSolicitudesController::class, 'guardar_tipos_solicitudes']);
     Route::get('configuracion/tipos_solicitudes/{id_tipo_solicitud}/asignar_estados', [TiposSolicitudesController::class, 'view_tipos_solicitudes_asignar_estados']);
     Route::get('configuracion/tipos_solicitudes/{id_tipo_solicitud}/asignar_estados/data', [TiposSolicitudesController::class, 'data_tipos_solicitudes_asignar_estados']);
+    Route::get('configuracion/zonas', [ZonasController::class, 'view_zonas'])->name('configuracion_zonas');
+    Route::post('configuracion/zonas/guardar', [ZonasController::class, 'guardar_zonas']);
+    Route::get('configuracion/capitulos', [CapitulosController::class, 'view_capitulos'])->name('configuracion_capitulos');
+    Route::post('configuracion/capitulos/guardar', [CapitulosController::class, 'guardar_capitulos']);
+    Route::get('configuracion/categorias', [CategoriasController::class, 'view_categorias'])->name('configuracion_categorias');
+    Route::post('configuracion/categorias/guardar', [CategoriasController::class, 'guardar_categorias']);
 });
 
 Route::get('/auth/redirect/google', [AuthController::class, 'redirectToGoogle']);
