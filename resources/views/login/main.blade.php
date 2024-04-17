@@ -123,8 +123,8 @@
                                 src="{{asset('img/LOGO_SETIC.png')}}" alt="SETIC"
                             >
                         </center>
-                        <!-- <div class="intro-x mt-10 text-center text-slate-600 dark:text-slate-500 xl:mt-24 xl:text-left">
-                            By signin up, you agree to our
+                        <div class="intro-x mt-10 text-center text-slate-600 dark:text-slate-500 xl:mt-24 xl:text-center">
+                            <!-- By signin up, you agree to our
                             <a
                                 class="text-primary dark:text-slate-200"
                                 href=""
@@ -137,8 +137,9 @@
                                 href=""
                             >
                                 Privacy Policy
-                            </a>
-                        </div> -->
+                            </a> -->
+                            <p>SETIC UNAG &copy; {{ date('Y') }}. Todos los derechos reservados.</p>
+                        </div>
                     </div>
                 </div>
                 <!-- END: Login Form -->

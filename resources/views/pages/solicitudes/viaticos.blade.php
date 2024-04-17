@@ -82,6 +82,9 @@
             <x-base.form-label for="crud-form-2">Empleados</x-base.form-label>
             <x-base.tom-select id="input_empleados" class="w-full" data-placeholder="Selección de empleados" multiple>
                 @foreach($empleados as $row)
+                @if ($row['numero_empleado'] == 0) 
+                            @continue
+                @endif
                 <option value="{{$row['numero_empleado']}}" {{$row['selected']}}>{{$row['empleado']}} ({{$row['numero_empleado']}})</option>
                 @endforeach
             </x-base.tom-select>
@@ -675,13 +678,13 @@
                 //     return false;
                 // }
 
-                if(numero_empleado_conductor == null || numero_empleado_conductor == ''){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Conductor';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                }
+                // if(numero_empleado_conductor == null || numero_empleado_conductor == ''){
+                //     titleMsg = 'Valor Requerido'
+                //     textMsg = 'Debe especificar un valor para Conductor';
+                //     typeMsg = 'error';
+                //     notificacion()
+                //     return false;
+                // }
 
                 if(proposito == null || proposito == ''){
                     titleMsg = 'Valor Requerido'
