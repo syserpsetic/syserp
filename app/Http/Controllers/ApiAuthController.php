@@ -26,16 +26,16 @@ class ApiAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // if ($request->coordenadas){
+        if ($request->coordenadas){
             $response = Http::post(env('API_BASE_URL_ZETA').'/api/auth/login', [
                 'email' => $request->input('email'),
                 'password' => $request->input('password'),
-                'platform' => 'ZETA'
-                //'coordenadas' => $request->coordenadas
+                'platform' => 'ZETA',
+                'coordenadas' => $request->coordenadas
             ]);
-        // } else {
-        //     throw new Exception('¡Acceso al sistema denegado! Debe Permitir la Ubicación.');
-        // }
+        } else {
+            throw new Exception('¡Acceso al sistema denegado! Debe Permitir la Ubicación.');
+        }
         
         if ($response->status() === 200) {
             $userData = $response->json();

@@ -9,12 +9,12 @@
         // Post form
         let email = $("#email").val();
         let password = $("#password").val();
-        //let coordenadas = null;
-        // if ("geolocation" in navigator) {
-        //     navigator.geolocation.getCurrentPosition(function(position) {
-        //         coordenadas = position.coords.latitude+','+position.coords.longitude;
-        //     });
-        // } 
+        let coordenadas = null;
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function(position) {
+                coordenadas = position.coords.latitude+','+position.coords.longitude;
+            });
+        } 
         // Loading state
         $("#btn-login").html(
             '<i data-loading-icon="oval" data-color="white" class="w-5 h-5 mx-auto"></i>'
@@ -26,7 +26,7 @@
             .post(`login`, {
                 email: email,
                 password: password,
-                //coordenadas: coordenadas
+                coordenadas: coordenadas
             })
             .then((res) => {
                 location.href = "/";
