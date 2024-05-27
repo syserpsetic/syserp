@@ -793,6 +793,4 @@ CONSTRAINT via_ordenes_viajes_empleados_via_zonas_categorias_fkey FOREIGN KEY (c
 
 alter table tbl_utic_empleados add column categoria_id integer;
 alter table tbl_utic_empleados add CONSTRAINT tbl_utic_empleados_via_categorias_fkey FOREIGN KEY (categoria_id)
-        REFERENCES administracion.via_categorias (id) MATCH SIMPLE
-        ON UPDATE NO ACTION
-        ON DELETE NO ACTION;
+        REFERENCES administracion.via_categorias (id) MATCH SIMPLE;
