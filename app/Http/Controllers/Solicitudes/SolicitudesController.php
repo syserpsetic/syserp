@@ -129,10 +129,12 @@ class SolicitudesController extends Controller
         $cambiar_estado = $response['cambiar_estado'];
         $estados_disponibles = $response['estados_disponibles'];
         $estados_disponibles_rechazar = $response['estados_disponibles_rechazar'];
+        $viajeros = $response['viajeros'];
         return view('pages.solicitudes.reportesviaticos')->with("orden_viaje", $orden_viaje)
                                                         ->with("cambiar_estado", $cambiar_estado)
                                                         ->with("estados_disponibles", $estados_disponibles)
                                                         ->with("estados_disponibles_rechazar", $estados_disponibles_rechazar)
+                                                        ->with("viajeros", $viajeros)
                                                         ->with('scopes', $scopes);
     }
 

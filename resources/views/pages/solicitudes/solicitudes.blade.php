@@ -230,12 +230,14 @@
                    
         <x-base.dialog id="modal_opciones">
             <x-base.dialog.panel>
-                <x-base.dialog.title>
-                    <h2 class="mr-auto text-base font-medium">
-                        <strong>Opciones</strong>
+                <x-base.dialog.title class="bg-primary">
+                    <h2 class="mr-auto text-white font-medium">
+                        <div class="flex items-center">
+                            <i data-lucide="Settings" class="w-4 h-4 mr-1"></i>
+                            <span class="text-white-700"> Opciones</span>
+                        </div>
                     </h2>
                 </x-base.dialog.title>
-
                 <x-base.tab.list class="flex-col justify-center sm:flex-row p-10 text-center" variant="boxed-tabs">
                     <x-base.tab id="btn_id_solicitud" :fullWidth="false">
                         <x-base.tab.button class="mb-2 w-full cursor-pointer px-0 py-2 text-center text-primary sm:mx-2 sm:mb-0 sm:w-20">
@@ -256,6 +258,11 @@
                         </x-base.tab.button>
                     </x-base.tab>
                 </x-base.tab.list>
+                <x-base.dialog.footer class="bg-dark">
+                    <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
+                        Cancelar
+                    </x-base.button>
+                </x-base.dialog.footer>
             </x-base.dialog.panel>
         </x-base.dialog>
 

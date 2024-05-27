@@ -11,7 +11,7 @@ Use Session;
 use Exception;
 use App\Http\Controllers\ControladorPermisos;
 
-class ViaticosController extends Controller
+class ControladorViatico extends Controller
 {
     public function agregar_viaticos(Request $request){
         $id_viatico = null;
@@ -186,6 +186,7 @@ class ViaticosController extends Controller
     }
 
     public function guardar_viaticos_monto(Request $request){
+        $viajerosList = null;
         $msgSuccess = null;
         $msgError = null;
         
@@ -196,6 +197,94 @@ class ViaticosController extends Controller
             ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/asignar_monto', [
                 'id' => $request->id,
                 'monto' => $request->monto,
+            ]);
+            
+            $data = $response->json();
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
+
+                $msgSuccess = $data["msgSuccess"];
+                $viajerosList = $data["viajerosList"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
+            }
+        } catch (Exception $e) {
+            $msgError = $e->getMessage();
+        }
+
+        
+        // //return response()->json($data);
+        //throw new \Exception($data);
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError,"viajerosList" => $viajerosList]);
+    }
+
+    public function verCalculos($id_solicitud, $numero_empleado){
+        $msgSuccess = null;
+        $msgError = null;
+
+        //throw New Exception($numero_empleado);
+
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->post(env('API_BASE_URL_ZETA').'/api/auth/solicitud_viaticos/ver_calculos/viajero', [
+            'id_solicitud' => $id_solicitud,
+            'numero_empleado' => $numero_empleado,
+        ]);
+
+        if($response->status() === 403 || $response['estatus'] == false){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
+        $diasJornadas = $response['diasJornadas'];
+        $detalleViaje = $response['detalleViaje'];
+        $viajerosLista = $response['viajerosLista'];
+        $zonasDisponibles = $response['zonasDisponibles'];
+        $categorias = $response['categorias'];
+        $zonasCalculadas = $response['zonasCalculadas'];
+        $tasaCambioAsignada = $response['tasaCambioAsignada'];
+        $detalleCalculo = $response['detalleCalculo'];
+        $tasaCambio = $response['tasaCambio'];
+        $tasaCambioFormato = $response['tasaCambioFormato'];
+        $scopes = $response['scopes'];
+
+        return view('pages.solicitudes.viaticos.calculo-viatico')
+                ->with('diasJornadas', $diasJornadas)
+                ->with('detalleViaje', $detalleViaje)
+                ->with('viajerosLista', $viajerosLista)
+                ->with('zonasDisponibles', $zonasDisponibles)
+                ->with('categorias', $categorias)
+                ->with('zonasCalculadas', $zonasCalculadas)
+                ->with('tasaCambioAsignada', $tasaCambioAsignada)
+                ->with('detalleCalculo', $detalleCalculo)
+                ->with('tasaCambio', $tasaCambio)
+                ->with('tasaCambioFormato', $tasaCambioFormato)
+                ->with('scopes', $scopes);
+    }
+
+    public function guardarCalculos(Request $request){
+        $zonaId = $request->zonaId;
+        $categoriaId = $request->categoriaId;
+        $solicitudId = $request->solicitudId;
+        $numeroEmpleado = $request->numeroEmpleado;
+        $calculos = $request->calculos;
+        $accion = $request->accion;
+        $msgSuccess = null;
+        $msgError = null;
+
+        //throw New Exception($numeroEmpleado);
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/solicitud_viaticos/guardar_calculos/viajero', [
+                'accion' => $accion,
+                'zonaId' => $zonaId,
+                'categoriaId' => $categoriaId,
+                'solicitudId' => $solicitudId,
+                'numeroEmpleado' => $numeroEmpleado,
+                'calculos' => $calculos,
             ]);
             
             $data = $response->json();
@@ -211,5 +300,6 @@ class ViaticosController extends Controller
         // //return response()->json($data);
         //throw new \Exception($data);
         return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
+        
     }
 }

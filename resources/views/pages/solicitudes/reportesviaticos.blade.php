@@ -5,119 +5,180 @@
 @endsection
 
 @section('subcontent')
-<div class="intro-y mt-8 flex flex-col items-center sm:flex-row">
-    </div>
-    <!-- BEGIN: Invoice -->
-    <div class="intro-y box mt-5 overflow-hidden">
-        <div class="flex flex-col px-5 pt-10 text-center sm:px-20 sm:pt-20 sm:text-left lg:flex-row lg:pb-10">
-            <div class="text-3xl font-semibold text-primary">{{$orden_viaje['solicitud']}}</div>
-            <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
-                <!-- <div class="text-xl font-medium text-primary">{{$orden_viaje['etapa']}}</div> -->
-                <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
-                                <x-base.preview>
-                                    <div class="text-2xl text-primary lg:text-center font-sm leading-none">
-                                        <strong>
-                                            {{$orden_viaje['etapa']}}
-                                        </strong>
-                                    </div>
-                                    <br>
-                                    @if($cambiar_estado == 1)
-                                    <div class="flex flex-wrap">
-                                        <x-base.button
-                                            class="mb-2 mr-2 w-32"
-                                            variant="danger"
-                                            size="sm"
-                                            id="btn_rechazar"
-                                        >
-                                            <x-base.lucide
-                                                class="mr-2 h-4 w-4"
-                                                icon="ArrowLeft"
-                                            /> Rechazar
-                                        </x-base.button>
-                                        <x-base.button
-                                            class="mb-2 mr-2 w-32"
-                                            variant="primary"
-                                            size="sm"
-                                            id="btn_enviar"
-                                        > &nbsp;&nbsp;Enviar &nbsp;
-                                        <x-base.lucide
-                                                class="mr-2 h-4 w-4"
-                                                icon="ArrowRight"
-                                            />
-                                        </x-base.button>
-                                    </div>
-                                    @endif
-                                </x-base.preview>
-                            </x-base.form-switch>
-                <div class="mt-1">{{$orden_viaje['usuario_registro']}}</div>
-                <div class="mt-1">{{$orden_viaje['fechas_registro']}}</div>
-            </div>
+<div class="intro-y mt-8 flex flex-col items-center sm:flex-row"></div>
+<!-- BEGIN: Invoice -->
+<div class="intro-y box mt-5 overflow-hidden">
+    <div class="flex flex-col px-5 pt-10 text-center sm:px-20 sm:pt-20 sm:text-left lg:flex-row lg:pb-10">
+        <div class="text-3xl font-semibold text-primary">{{$orden_viaje['solicitud']}}</div>
+        <div class="mt-20 lg:mt-0 lg:ml-auto lg:text-right">
+            <!-- <div class="text-xl font-medium text-primary">{{$orden_viaje['etapa']}}</div> -->
+            <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
+                <x-base.preview>
+                    <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                        <strong>
+                            {{$orden_viaje['etapa']}}
+                        </strong>
+                    </div>
+                    <br />
+                    @if($cambiar_estado == 1)
+                    <div class="flex flex-wrap">
+                        <x-base.button class="mb-2 mr-2 w-32" variant="danger" size="sm" id="btn_rechazar"> <x-base.lucide class="mr-2 h-4 w-4" icon="ArrowLeft" /> Rechazar </x-base.button>
+                        <x-base.button class="mb-2 mr-2 w-32" variant="primary" size="sm" id="btn_enviar">
+                            &nbsp;&nbsp;Enviar &nbsp;
+                            <x-base.lucide class="mr-2 h-4 w-4" icon="ArrowRight" />
+                        </x-base.button>
+                    </div>
+                    @endif
+                </x-base.preview>
+            </x-base.form-switch>
+            <div class="mt-1">{{$orden_viaje['usuario_registro']}}</div>
+            <div class="mt-1">{{$orden_viaje['fechas_registro']}}</div>
         </div>
-        <div class="flex flex-col border-b px-5 pt-0 pb-10 text-center sm:px-20 sm:pb-20 sm:text-left lg:flex-row">
-            <div class="w-8/12">
-                <div class="text-base text-slate-500">Detalles de viaje</div>
+    </div>
+    <div class="flex flex-col border-b px-5 pt-0 pb-10 text-center sm:px-20 sm:pb-20 sm:text-left lg:flex-row">
+        <div class="w-8/12">
+            <div class="text-base text-slate-500">Detalles de viaje</div>
+            <div class="mt-2 text-lg font-medium text-primary">
+                {{$orden_viaje['fecha_viaje']}}
+            </div>
+            <br />
+            <div class="mt-1 text-justify"><strong>Propósito del viaje:</strong> {{$orden_viaje['proposito']}}</div>
+            <br />
+            <div class="mt-1 text-justify"><strong>Itinerario de viaje:</strong> {{$orden_viaje['itinerario']}}</div>
+        </div>
+        <div class="w-4/12">
+            <div class="mt-10 lg:mt-0 lg:ml-20 lg:text-right">
+                <div class="text-base text-slate-500">Vehículo</div>
                 <div class="mt-2 text-lg font-medium text-primary">
-                    {{$orden_viaje['fecha_viaje']}}
+                    # {{$orden_viaje['vehiculo_placa']}}
                 </div>
-                <br>
-                <div class="mt-1 text-justify"><strong>Propósito del viaje:</strong> {{$orden_viaje['proposito']}}</div>
-                <br>
-                <div class="mt-1 text-justify"><strong>Itinerario de viaje:</strong> {{$orden_viaje['itinerario']}}</div>
-            </div>
-            <div class="w-4/12">
-                <div class="mt-10 lg:mt-0 lg:ml-20 lg:text-right">
-                    <div class="text-base text-slate-500">Vehículo</div>
-                    <div class="mt-2 text-lg font-medium text-primary">
-                        # {{$orden_viaje['vehiculo_placa']}}
-                    </div>
-                    <div class="mt-1">{{$orden_viaje['vehiculo_tipo']}}</div>
-                </div>
-            </div>
-        </div>
-        <div class="px-5 py-10 sm:px-16 sm:py-20">
-        <div class="text-2xl font-semibold text-primary">Lista de viajeros</div>
-            <div class="overflow-x-auto">
-                <div class="scrollbar-hidden overflow-x-auto">
-                    <div
-                        class="mt-5"
-                        id="tabulator"
-                    ></div>
-                </div>
+                <div class="mt-1">{{$orden_viaje['vehiculo_tipo']}}</div>
             </div>
         </div>
     </div>
-
-
-    <x-base.dialog id="modal_asignar_monto">
-        <x-base.dialog.panel>
-            <x-base.dialog.title class="bg-primary">
-                <h2 class="mr-auto text-white font-medium">
-                    <div class="flex items-center">
-                        <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i>
-                        <span class="text-white-700"> Asignar Monto</span>
-                    </div>
-                </h2>
-            </x-base.dialog.title>
-            <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
-                <div class="col-span-12 sm:col-span-12">
-                <div class="text-3x1" id="modal_text_viajero"></div>
-                <div class="text-3x1" id="modal_text_tipo"></div><br>
-                    <x-base.form-label class="font-extrabold" for="modal_input_monto">
-                        Monto
-                    </x-base.form-label>
-                    <x-base.form-input id="modal_input_monto" type="number" placeholder="1234.56" />
+    <!-- <div class="px-5 py-10 sm:px-16 sm:py-20">
+        <div class="text-2xl font-semibold text-primary">Lista de viajeros</div>
+        <div class="overflow-x-auto">
+            <div class="scrollbar-hidden overflow-x-auto">
+                <div class="mt-5" id="tabulator"></div>
+            </div>
+        </div>
+    </div> -->
+    <!-- BEGIN: HTML Table Data -->
+    <div class="intro-y box mt-5 p-5">
+        <div class="grid grid-cols-12 gap-6">
+            <div class="intro-y col-span-6 lg:col-span-6">
+                <div class="p-5">
+                    <h3 class="text-2xl font-medium leading-none"><div class="flex items-center">
+                        <i data-lucide="Users" class="w-6 h-6 mr-1"></i>
+                            <span class="text-white-700"> Lista de Viajeros</span>
+                        </div></h3>
                 </div>
-            </x-base.dialog.description>
-            <x-base.dialog.footer class="bg-dark">
-                <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
-                    Cancelar
-                </x-base.button>
-                <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_monto">
-                    Guardar
-                </x-base.button>
-            </x-base.dialog.footer>
-        </x-base.dialog.panel>
-    </x-base.dialog>
+            </div>
+            <div class="intro-y col-span-6 lg:col-span-6 text-right">
+                <div class="p-5">
+                    @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
+                        <x-base.button
+                            class="mb-2 mr-1"
+                            variant="primary"
+                            id="btn_nueva_zona"
+                        ><i data-lucide="percent" class="w-4 h-4 mr-1"></i>
+                            Calcular Viáticos General
+                        </x-base.button>
+                    @endif
+                </div>
+            </div>
+        </div>
+        <div class="scrollbar-hidden overflow-x-auto">
+            <table id="sdatatable" class="display datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Número Empleado</th>
+                        <th>Viajero</th>
+                        <th>Tipo</th>
+                        <th>Monto Asignado</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($viajeros as $row)
+                    <tr>
+                        <td>{{$row['numero_empleado']}}</td>
+                        <td>{{$row['viajeros']}}</td>
+                        <td>{{$row['tipo']}}</td>
+                        <td>{{$row['monto_diario_asignado_formato']}}</td>
+                        <td>
+                            <x-base.button
+                                href="{{url('/solicitudes/')}}/{{$orden_viaje['id_solicitud']}}/empleado/{{$row['numero_empleado']}}/imprimir"
+                                as="a"
+                                class="mb-2 mr-1 text-dark"
+                                variant="pending"
+                                size="sm"
+                            ><i data-lucide="Printer" class="w-4 h-4 mr-1"></i> Imprimir Orden Viaje
+                            </x-base.button>
+                        @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
+                            <x-base.button
+                                href="{{url('/solicitud_viaticos/')}}/{{$orden_viaje['id_solicitud']}}/ver_calculos/viajero/{{$row['numero_empleado']}}"
+                                as="a"
+                                class="mb-2 mr-1 text-white"
+                                variant="success"
+                                size="sm"
+                            ><i data-lucide="percent" class="w-4 h-4 mr-1"></i> Calcular Viáticos
+                            </x-base.button>
+                        @endif
+                        @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
+                            <x-base.button
+                                class="mb-2 mr-1 text-white btn_asignar_monto"
+                                variant="primary"
+                                size="sm"
+                                data-id_ove="{{$row['id_ove']}}" 
+                                data-viajeros="{{$row['viajeros']}}" 
+                                data-tipo="{{$row['tipo']}}"
+                                data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
+                            ><i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> Asignar Monto
+                            </x-base.button>
+                        @endif
+                        
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<x-base.dialog id="modal_asignar_monto">
+    <x-base.dialog.panel>
+        <x-base.dialog.title class="bg-primary">
+            <h2 class="mr-auto text-white font-medium">
+                <div class="flex items-center">
+                    <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i>
+                    <span class="text-white-700"> Asignar Monto</span>
+                </div>
+            </h2>
+        </x-base.dialog.title>
+        <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
+            <div class="col-span-12 sm:col-span-12">
+                <div class="text-3x1" id="modal_text_viajero"></div>
+                <div class="text-3x1" id="modal_text_tipo"></div>
+                <br />
+                <x-base.form-label class="font-extrabold" for="modal_input_monto">
+                    Monto
+                </x-base.form-label>
+                <x-base.form-input id="modal_input_monto" type="number" placeholder="1234.56" />
+            </div>
+        </x-base.dialog.description>
+        <x-base.dialog.footer class="bg-dark">
+            <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
+                Cancelar
+            </x-base.button>
+            <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_monto">
+                Guardar
+            </x-base.button>
+        </x-base.dialog.footer>
+    </x-base.dialog.panel>
+</x-base.dialog>
 <!-- END: Invoice -->
 
 <div class="text-center">
@@ -134,59 +195,59 @@
     <!-- END: Notification Content -->
 </div>
 
-        <x-base.dialog id="modal_estado">
-            <x-base.dialog.panel>
-                <div class="p-5 text-center">
-                    <x-base.lucide id="modal_icono_rechazar" class="mx-auto mt-3 h-0 w-0 text-danger" icon="ArrowLeftCircle"/>
-                    <x-base.lucide id="modal_icono_enviar" class="mx-auto mt-3 h-0 w-0 text-primary" icon="ArrowRightCircle"/>
-                    <div class="mt-5 text-3xl" id="modal_encabezado_texto"></div>
-                    <div class="mt-2 text-slate-500">
-                        ¿A dónde desea enviar esta solicitud?<br/><br/>
-                        <div class="text-2xl text-primary lg:text-center font-sm leading-none">
-                            Estado Actual: 
-                            <strong>
-                                {{$orden_viaje['etapa']}}
-                            </strong>
-                        </div>
-                        <div class="p-5 text-left" id="div_estados_disponibles">
-                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
-                            <x-base.tom-select id="input_estado_enviar" class="w-full" data-placeholder="Selección de estado">
-                                @foreach($estados_disponibles as $row)
-                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
-                                @endforeach
-                            </x-base.tom-select>
-                        </div>
-                        <div class="p-5 text-left" id="estados_disponibles_rechazar">
-                            <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
-                            <x-base.tom-select id="input_estado_rechazar" class="w-full" data-placeholder="Selección de estado">
-                                @foreach($estados_disponibles_rechazar as $row)
-                                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
-                                @endforeach
-                            </x-base.tom-select>
-                        </div>
-                        <div class="p-5">
-                            <div class="input-form mt-3">
-                                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_observacion_estado">
-                                    Observación
-                                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0" id="text_observacion">
-                                        
-                                    </span>
-                                </x-base.form-label>
-                                <x-base.form-textarea rows="5" class="form-control" id="input_observacion_estado" name="comment" placeholder="Escriba sus observaciones..."></x-base.form-textarea>
-                            </div>
-                        </div>
+<x-base.dialog id="modal_estado">
+    <x-base.dialog.panel>
+        <div class="p-5 text-center">
+            <x-base.lucide id="modal_icono_rechazar" class="mx-auto mt-3 h-0 w-0 text-danger" icon="ArrowLeftCircle" />
+            <x-base.lucide id="modal_icono_enviar" class="mx-auto mt-3 h-0 w-0 text-primary" icon="ArrowRightCircle" />
+            <div class="mt-5 text-3xl" id="modal_encabezado_texto"></div>
+            <div class="mt-2 text-slate-500">
+                ¿A dónde desea enviar esta solicitud?<br />
+                <br />
+                <div class="text-2xl text-primary lg:text-center font-sm leading-none">
+                    Estado Actual:
+                    <strong>
+                        {{$orden_viaje['etapa']}}
+                    </strong>
+                </div>
+                <div class="p-5 text-left" id="div_estados_disponibles">
+                    <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                    <x-base.tom-select id="input_estado_enviar" class="w-full" data-placeholder="Selección de estado">
+                        @foreach($estados_disponibles as $row)
+                        <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                        @endforeach
+                    </x-base.tom-select>
+                </div>
+                <div class="p-5 text-left" id="estados_disponibles_rechazar">
+                    <center><x-base.form-label for="regular-form-4">Siguientes Estados Disponibles</x-base.form-label></center>
+                    <x-base.tom-select id="input_estado_rechazar" class="w-full" data-placeholder="Selección de estado">
+                        @foreach($estados_disponibles_rechazar as $row)
+                        <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                        @endforeach
+                    </x-base.tom-select>
+                </div>
+                <div class="p-5">
+                    <div class="input-form mt-3">
+                        <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_observacion_estado">
+                            Observación
+                            <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0" id="text_observacion"> </span>
+                        </x-base.form-label>
+                        <x-base.form-textarea rows="5" class="form-control" id="input_observacion_estado" name="comment" placeholder="Escriba sus observaciones..."></x-base.form-textarea>
                     </div>
                 </div>
-                <div class="px-5 pb-8 text-center">
-                    <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
-                        Cancelar
-                    </x-base.button>
-                    <x-base.button class="w-24" type="button" variant="primary" id="btn_guardar_estado">
-                        Guardar
-                    </x-base.button>
-                </div>
-            </x-base.dialog.panel>
-        </x-base.dialog>
+            </div>
+        </div>
+        <div class="px-5 pb-8 text-center">
+            <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                Cancelar
+            </x-base.button>
+            <x-base.button class="w-24" type="button" variant="primary" id="btn_guardar_estado">
+                Guardar
+            </x-base.button>
+        </div>
+    </x-base.dialog.panel>
+</x-base.dialog>
+
 @endsection
 @once
     @push('vendors')
@@ -209,8 +270,9 @@
             var id_solicitud_estado = "{{$orden_viaje['id_solicitud_estado']}}";
             var accion = null;
             var id = null;
-            var id_solicitud = "{{$orden_viaje['id']}}";
-            var id = (id_solicitud.length != 0) ? "{{$orden_viaje['id']}}" : null;
+            var id_orden_viaje = "{{$orden_viaje['id_orden_viaje']}}";
+            var id_solicitud = "{{$orden_viaje['id_solicitud']}}";
+            var id = (id_solicitud.length != 0) ? "{{$orden_viaje['id_solicitud']}}" : null;
             var estado = null
             var observacion_estado = null;
             var id_ove = null;
@@ -238,7 +300,7 @@
             var tabulator_editar = null;
             var enviar_correo = null;
             var tabulator = null;
-            var url_solicitud_viaticos_data = "{{url('/solicitudes/')}}/{{$orden_viaje['id']}}/viaticos/imprimir/viajeros";
+            var url_solicitud_viaticos_data = "{{url('/solicitudes/')}}/{{$orden_viaje['id_solicitud']}}/viaticos/imprimir/viajeros";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var url_guardar_monto = "{{url('/viaticos/guardar_monto')}}";
             var url_guardar_cambiar_estados = "{{url('/cambiar_estados')}}";
@@ -246,6 +308,10 @@
             var textMsg = null;
             var typeMsg = null;
             var estado_enviar = null;
+            var table = null;
+            var rowNumber = null;
+            var numerofila = null;
+            var id_seleccionar = localStorage.getItem("sdatatable_id_seleccionar");
 
             $(document).ready(function () {
                 $.ajaxSetup({
@@ -257,229 +323,54 @@
 
                 $("#div_imprimir_orden_viaje").hide();
 
-                //console.log(navigator.userAgent)
-
-                (function () {
-                "use strict";
-
-
-                // Tabulator
-                if ($("#tabulator").length) {
-                    // Setup Tabulator
-                    tabulator = new Tabulator("#tabulator", {
-                        ajaxURL: url_solicitud_viaticos_data,
-                        paginationMode: "local",
-                        filterMode: "local",
-                        sortMode: "local",
-                        fitColumns:true,
-                        printAsHtml: true,
-                        printStyled: true,
-                        pagination: true,
-                        paginationSize: 10,
-                        paginationSizeSelector: [10, 20, 30, 40],
-                        layout: "fitColumns",
-                        responsiveLayout: "collapse",
-                        placeholder: "No matching records found",
-                        columns: [
-                            {
-                                title: "",
-                                formatter: "responsiveCollapse",
-                                width: 40,
-                                minWidth: 30,
-                                hozAlign: "center",
-                                resizable: false,
-                                headerSort: false,
-                            },
-
-                            // For HTML table
-                            {
-                                title: "NUMERO EMPLEADO",
-                                width: 100,
-                                minWidth: 30,
-                                field: "numero_empleado",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"number",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.numero_empleado}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "VIAJERO",
-                                minWidth: 400,
-                                responsive: 0,
-                                field: "viajeros",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.viajeros}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "TIPO",
-                                minWidth: 50,
-                                responsive: 0,
-                                field: "tipo",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.tipo}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "MONTO ASIGNADO",
-                                minWidth: 80,
-                                responsive: 0,
-                                field: "monto_diario_asignado_formato",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.monto_diario_asignado_formato}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "ACCIONES",
-                                minWidth: 120,
-                                field: "actions",
-                                responsive: 1,
-                                hozAlign: "center",
-                                headerHozAlign: "center",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    let a =
-                                        $(`<div class="flex items-center lg:justify-center">
-                                            <a class="flex items-center mr-3 opciones href="javascript:;">
-                                                <i data-lucide="file" class="w-4 h-4 mr-1"></i> <strong>Imprimir </strong>
-                                            </a>
-                                            <a class="flex text-success items-center mr-3 asignar_monto href="javascript:;">
-                                                <i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> <strong>Asignar Monto </strong>
-                                            </a>
-                                        </div>`);
-                                    $(a)
-                                        .find(".opciones")
-                                        .on("click", function () {
-                                            window.location.href = (`{{url('/solicitudes/${id_solicitud}/empleado/${response.numero_empleado}/imprimir')}}`);
-                                    });
-                                    $(a)
-                                        .find(".asignar_monto")
-                                        .on("click", function () {
-                                            id_ove = response.id_ove;
-                                            $("#modal_input_monto").val(response.monto_diario_asignado);
-                                            $("#modal_text_viajero").html(`<strong>Asignar monto diario a:</strong> ${response.viajeros}`)
-                                            $("#modal_text_tipo").html(`<strong>Tipo:</strong> ${response.tipo}`)
-                                            const el = document.querySelector("#modal_asignar_monto");
-                                            const modal = tailwind.Modal.getOrCreateInstance(el);
-                                            modal.show();
-                                    });
-                                    return a[0];
-                                },
-                            },
-                            
-
-                            // For print format
-                            {
-                                title: "ID",
-                                field: "id",
-                                visible: false,
-                                print: true,
-                                download: true,
-                            },
-                            {
-                                title: "VIAJEROS",
-                                field: "viajeros",
-                                visible: false,
-                                print: true,
-                                download: true,
-                            },
-                        
-                        ],
+                table = $('#sdatatable').DataTable({
+                        language: { 
+                            "decimal": ",", 
+                            "thousands": ".", 
+                            "lengthMenu": "Mostrar _MENU_ registros", 
+                            "zeroRecords": "No se encontraron resultados", 
+                            "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros", 
+                            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros", 
+                            "infoFiltered": "(filtrado de un total de _MAX_ registros)", 
+                            "sSearch": "Buscar:", 
+                            "oPaginate": { 
+                                "sFirst": "Primero", 
+                                "sLast":"Último", 
+                                "sNext":"Siguiente", 
+                                "sPrevious": "Anterior" 
+                            }, 
+            
+                            "oAria": { 
+                                "sSortAscending": ": Activar para ordenar la columna de manera ascendente", 
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente" 
+                            }, 
+            
+                            "sProcessing":"Cargando..." 
+                        },
+                        "processing": true,
+                        serverSide: false,
                     });
 
-                    tabulator.on("renderComplete", () => {
-                        createIcons({
-                            icons,
-                            attrs: {
-                                "stroke-width": 1.5,
-                            },
-                            nameAttr: "data-lucide",
-                        });
-                    });
+            });
 
-                    // Filter function
-                    function filterHTMLForm() {
-                        let field = $("#tabulator-html-filter-field").val();
-                        let type = $("#tabulator-html-filter-type").val();
-                        let value = $("#tabulator-html-filter-value").val();
-                        tabulator.setFilter(field, type, value);
-                    }
+            $("#sdatatable tbody").on( "click", "tr", function () { 
+                                     rowNumber=parseInt(table.row( this ).index()); 
+                                     table.$('tr.selected').removeClass('selected'); 
+                                     $(this).addClass('selected'); 
+                                     localStorage.setItem("sdatatable_id_seleccionar",table.row( this ).data()[0]); 
+                                     });
 
-                    // On click go button
-                    $("#tabulator-html-filter-go").on("click", function (event) {
-                        filterHTMLForm();
-                    });
-
-                    // On reset filter form
-                    $("#tabulator-html-filter-reset").on("click", function (event) {
-                        $("#tabulator-html-filter-field").val("id");
-                        $("#tabulator-html-filter-type").val("like");
-                        $("#tabulator-html-filter-value").val("");
-                        filterHTMLForm();
-                    });
-
-                    // Export
-                    $("#tabulator-export-csv").on("click", function (event) {
-                        tabulator.download("csv", "data.csv");
-                    });
-
-                    $("#tabulator-export-json").on("click", function (event) {
-                        tabulator.download("json", "data.json");
-                    });
-
-                    $("#tabulator-export-xlsx").on("click", function (event) {
-                        tabulator.download("xlsx", "data.xlsx", {
-                            sheetName: "Products",
-                        });
-                    });
-
-                    $("#tabulator-export-html").on("click", function (event) {
-                        tabulator.download("html", "data.html", {
-                            style: true,
-                        });
-                    });
-
-                    // Print
-                    $("#tabulator-print").on("click", function (event) {
-                        tabulator.print();
-                    });
-                }
-            })();
-
+            $("#sdatatable tbody").on("click", ".btn_asignar_monto", function () {
+                var fila = $('#sdatatable').DataTable().row($(this).parents('tr'));
+                id_ove = $(this).data('id_ove');
+                monto = $(this).data('monto_diario_asignado');
+                $("#modal_input_monto").val(monto);
+                numerofila = fila.index(); 
+                $("#modal_text_viajero").html('<strong>EMPLEADO: </strong>'+$(this).data('viajeros'));
+                $("#modal_text_tipo").html('<strong>TIPO: </strong>'+$(this).data('tipo'));
+                const el = document.querySelector("#modal_asignar_monto");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
             });
 
             $("#btn_rechazar").on("click", function (event) {
@@ -621,10 +512,36 @@
                             titleMsg = "Datos Guardados";
                             textMsg = data.msgSuccess;
                             typeMsg = "success";
+                            var row = data.viajerosList;
+                            var nuevoFila = [
+                                row.numero_empleado, row.viajeros, row.tipo, row.monto_diario_asignado_formato, 
+                                '<a href="https://granja.porcina.unag.edu.hn/solicitudes/'+id_solicitud+'/empleado/'+row.numero_empleado+'/imprimir" class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-pending border-pending dark:border-pending mb-2 mr-1 text-dark">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="Printer" data-lucide="Printer" class="lucide lucide-Printer w-4 h-4 mr-1">'+
+                                    '<polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Orden Viaje'+
+                                '</a>'
+                                @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
+                                +'<a href="https://granja.porcina.unag.edu.hn/solicitud_viaticos/'+id_solicitud+'/ver_calculos/viajero/'+row.numero_empleado+'" class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-success border-success dark:border-success mb-2 mr-1 text-white">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="percent" data-lucide="percent" class="lucide lucide-percent w-4 h-4 mr-1">'+
+                                    '<line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg> Calcular Viáticos'+
+                                '</a>'
+                                @endif
+                                @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
+                                +'<button '+
+                                    'data-id_ove="' + row.id_ove + '" '+
+                                    'data-viajeros="' + row.viajeros + '" '+
+                                    'data-tipo="' + row.tipo + '" '+
+                                    'data-monto_diario_asignado="' + row.monto_diario_asignado + '" '+
+                                    'class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-primary border-primary dark:border-primary btn_asignar_monto mb-2 mr-1 text-white btn_asignar_monto">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="dollar-sign" data-lucide="dollar-sign" class="lucide lucide-dollar-sign w-4 h-4 mr-1">'+
+                                        '<line x1="12" y1="2" x2="12" y2="22"></line>'+
+                                        '<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>'+
+                                    '</svg> Asignar Monto'+
+                                '</button>'
+                                @endif
+                            ]; 
+                            $('#sdatatable').DataTable().row(numerofila).data(nuevoFila);
                             notificacion()
                             accion_guardar = false;
-                            tabulator.replaceData()
-                            $('#tabulator-html-filter-reset').trigger("click");
                             const el = document.querySelector("#modal_asignar_monto");
                             const modal = tailwind.Modal.getOrCreateInstance(el);
                             modal.hide();

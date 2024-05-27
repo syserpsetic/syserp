@@ -596,3 +596,203 @@ WITH (
 
 
 ----------------------------hasta aqui enviado a produccion-----------------------------------------------------------------
+
+-- Table: administracion.via_zonas_tipos_movimientos
+
+-- DROP TABLE administracion.via_zonas_tipos_movimientos;
+
+CREATE TABLE administracion.via_zonas_tipos_movimientos
+(
+    id serial,
+    nombre text,
+    descripcion text,
+    created_at timestamp without time zone DEFAULT now(),
+    update_at timestamp without time zone,
+    deleted_at timestamp without time zone,
+    CONSTRAINT via_zonas_tipos_movimientos_pk PRIMARY KEY (id)
+);
+
+GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO erpunag;
+GRANT SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_zonas_tipos_movimientos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('HOSPEDAJE');
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('ALIMENTACION');
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('GASTOS VARIOS');
+
+
+--DROP TABLE administracion.via_zonas_categorias;
+
+CREATE TABLE administracion.via_zonas_categorias
+(
+    id serial,
+    zona_id integer,
+	categoria_id integer,
+	tipo_moneda_id integer,
+	zona_tipo_movimiento_id integer,
+	monto numeric,
+    created_at timestamp without time zone DEFAULT now(),
+    update_at timestamp without time zone,
+    deleted_at timestamp without time zone,
+    CONSTRAINT via_zonas_categorias_pk PRIMARY KEY (id),
+	CONSTRAINT via_zonas_categorias_via_zonas_fkey FOREIGN KEY (zona_id)
+        REFERENCES administracion.via_zonas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_zonas_categorias_via_categorias_fkey FOREIGN KEY (categoria_id)
+        REFERENCES administracion.via_categorias (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_zonas_categorias_aux_tipo_moneda_fkey FOREIGN KEY (tipo_moneda_id)
+        REFERENCES public.aux_tipo_moneda (id_tipo_moneda) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_zonas_categorias_zonas_tipos_movimientos_fkey FOREIGN KEY (zona_tipo_movimiento_id)
+        REFERENCES administracion.via_zonas_tipos_movimientos (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas_categorias TO erpunag;
+GRANT SELECT ON TABLE administracion.via_zonas_categorias TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_zonas_categorias_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+INSERT INTO administracion.via_zonas_categorias(
+	zona_id, categoria_id, tipo_moneda_id, zona_tipo_movimiento_id, monto)
+	VALUES 
+(1, 1, 1, 1, 1100),
+(1, 1, 1, 2, 700),
+(1, 1, 1, 3, 300),
+(1, 2, 1, 1, 1000),
+(1, 2, 1, 2, 600),
+(1, 2, 1, 3, 300),
+(1, 3, 1, 1, 900),
+(1, 3, 1, 2, 550),
+(1, 3, 1, 3, 300),
+(1, 4, 1, 1, 800),
+(1, 4, 1, 2, 500),
+(1, 4, 1, 3, 300),
+(1, 5, 1, 1, 700),
+(1, 5, 1, 2, 400),
+(1, 5, 1, 3, 300),
+(2, 1, 1, 1, 1000),
+(2, 1, 1, 2, 600),
+(2, 1, 1, 3, 250),
+(2, 2, 1, 1, 900),
+(2, 2, 1, 2, 500),
+(2, 2, 1, 3, 250),
+(2, 3, 1, 1, 800),
+(2, 3, 1, 2, 450),
+(2, 3, 1, 3, 250),
+(2, 4, 1, 1, 700),
+(2, 4, 1, 2, 450),
+(2, 4, 1, 3, 250),
+(2, 5, 1, 1, 600),
+(2, 5, 1, 2, 450),
+(2, 5, 1, 3, 250),
+(3, 1, 2, 1, 90),
+(3, 1, 2, 2, 80),
+(3, 1, 2, 3, 30),
+(3, 2, 2, 1, 80),
+(3, 2, 2, 2, 70),
+(3, 2, 2, 3, 30),
+(3, 3, 2, 1, 70),
+(3, 3, 2, 2, 60),
+(3, 3, 2, 3, 30),
+(3, 4, 2, 1, 70),
+(3, 4, 2, 2, 60),
+(3, 4, 2, 3, 30),
+(3, 5, 2, 1, 70),
+(3, 5, 2, 2, 60),
+(3, 5, 2, 3, 30),
+(4, 1, 2, 1, 100),
+(4, 1, 2, 2, 100),
+(4, 1, 2, 3, 50),
+(4, 2, 2, 1, 90),
+(4, 2, 2, 2, 80),
+(4, 2, 2, 3, 40),
+(4, 3, 2, 1, 80),
+(4, 3, 2, 2, 70),
+(4, 3, 2, 3, 30),
+(4, 4, 2, 1, 70),
+(4, 4, 2, 2, 60),
+(4, 4, 2, 3, 30),
+(4, 5, 2, 1, 70),
+(4, 5, 2, 2, 50),
+(4, 5, 2, 3, 30),
+(5, 1, 2, 1, 150),
+(5, 1, 2, 2, 100),
+(5, 1, 2, 3, 50),
+(5, 2, 2, 1, 120),
+(5, 2, 2, 2, 90),
+(5, 2, 2, 3, 50),
+(5, 3, 2, 1, 100),
+(5, 3, 2, 2, 80),
+(5, 3, 2, 3, 50),
+(5, 4, 2, 1, 90),
+(5, 4, 2, 2, 70),
+(5, 4, 2, 3, 50),
+(5, 5, 2, 1, 80),
+(5, 5, 2, 2, 60),
+(5, 5, 2, 3, 50);
+
+
+create table administracion.via_jornadas  (
+	id serial,
+	nombre text,
+	descripcion text,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone ,
+	deleted_at timestamp without time zone ,
+	CONSTRAINT via_jornadas_pk PRIMARY KEY (id)
+);
+
+insert into administracion.via_jornadas (nombre) values ('DIAS'), ('NOCHES');
+
+create table administracion.via_ordenes_viajes_calculos  (
+	id serial,
+	orden_viaje_id integer,
+	numero_empleado integer,
+	zona_categoria_id integer,
+	monto_asignado numeric,
+	tipo_moneda_id integer,
+	tasa_cambio numeric,
+	numero_jornadas numeric,
+	tipo_jornada_id integer,
+	subtotal_dolares numeric,
+	subtotal_lempiras numeric,
+	es_liquidable boolean,
+	monto_liquidado numeric,
+	monto_liquidar numeric,
+	created_at timestamp without time zone default now(),
+	updated_at timestamp without time zone,
+	deleted_at timestamp without time zone,
+	CONSTRAINT via_ordenes_viajes_calculos_pk PRIMARY KEY (id),
+	CONSTRAINT via_ordenes_viajes_calculos_via_ordenes_viajes_fkey FOREIGN KEY (orden_viaje_id)
+        REFERENCES administracion.via_ordenes_viajes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_ordenes_viajes_calculos_via_zonas_categorias_fkey FOREIGN KEY (zona_categoria_id)
+        REFERENCES administracion.via_zonas_categorias (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_ordenes_viajes_calculos_aux_tipo_moneda_fkey FOREIGN KEY (tipo_moneda_id)
+        REFERENCES public.aux_tipo_moneda (id_tipo_moneda) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+	CONSTRAINT via_ordenes_viajes_calculos_via_jornadas_fkey FOREIGN KEY (tipo_jornada_id)
+        REFERENCES administracion.via_jornadas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+);
+
+alter table administracion.via_ordenes_viajes_empleados add column categoria_id integer;
+alter table administracion.via_ordenes_viajes_empleados add
+CONSTRAINT via_ordenes_viajes_empleados_via_zonas_categorias_fkey FOREIGN KEY (categoria_id)
+        REFERENCES administracion.via_zonas_categorias (id) MATCH SIMPLE;
+
+alter table tbl_utic_empleados add column categoria_id integer;
+alter table tbl_utic_empleados add CONSTRAINT tbl_utic_empleados_via_categorias_fkey FOREIGN KEY (categoria_id)
+        REFERENCES administracion.via_categorias (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION;
