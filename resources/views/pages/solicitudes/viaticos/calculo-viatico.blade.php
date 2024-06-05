@@ -63,7 +63,7 @@
                     <strong>Nombre del Empleado:&nbsp; </strong> {{$detalleViaje['nombre_viajero']}}
                 </div>
             </div>
-            <div class="mt-2 flex items-center justify-center lg:justify-start">
+            <div class="mt flex items-center justify-center lg:justify-start">
                 <div class="flex items-center truncate sm:whitespace-normal">
                     <x-base.lucide class="mr-2 h-4 w-4" icon="Target" />
                     <strong>Categoría del Empleado:&nbsp; </strong> {{$detalleViaje['categoria']}}
