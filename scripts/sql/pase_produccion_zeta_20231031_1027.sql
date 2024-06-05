@@ -597,31 +597,10 @@ WITH (
 
 ----------------------------hasta aqui enviado a produccion-----------------------------------------------------------------
 
--- Table: administracion.via_zonas_tipos_movimientos
-
--- DROP TABLE administracion.via_zonas_tipos_movimientos;
-
-CREATE TABLE administracion.via_zonas_tipos_movimientos
-(
-    id serial,
-    nombre text,
-    descripcion text,
-    created_at timestamp without time zone DEFAULT now(),
-    update_at timestamp without time zone,
-    deleted_at timestamp without time zone,
-    CONSTRAINT via_zonas_tipos_movimientos_pk PRIMARY KEY (id)
-);
-
-GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO erpunag;
-GRANT SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
-GRANT USAGE ON SEQUENCE administracion.via_zonas_tipos_movimientos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
-
-INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('HOSPEDAJE');
-INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('ALIMENTACION');
-INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('GASTOS VARIOS');
 
 
---DROP TABLE administracion.via_zonas_categorias;
+--Inicia lanzamiento a produccion 20240605_1514
+DROP TABLE administracion.via_zonas_categorias CASCADE;
 
 CREATE TABLE administracion.via_zonas_categorias
 (
@@ -736,6 +715,27 @@ INSERT INTO administracion.via_zonas_categorias(
 (5, 5, 2, 2, 60),
 (5, 5, 2, 3, 50);
 
+DROP TABLE administracion.via_zonas_tipos_movimientos CASCADE;
+
+CREATE TABLE administracion.via_zonas_tipos_movimientos
+(
+    id serial,
+    nombre text,
+    descripcion text,
+    created_at timestamp without time zone DEFAULT now(),
+    update_at timestamp without time zone,
+    deleted_at timestamp without time zone,
+    CONSTRAINT via_zonas_tipos_movimientos_pk PRIMARY KEY (id)
+);
+
+GRANT UPDATE, INSERT, SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO erpunag;
+GRANT SELECT ON TABLE administracion.via_zonas_tipos_movimientos TO cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+GRANT USAGE ON SEQUENCE administracion.via_zonas_tipos_movimientos_id_seq TO erpunag, cmatute, erpunag, oacosta, cgarcia, gardonf, gdominguez, nsandoval;
+
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('HOSPEDAJE');
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('ALIMENTACION');
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('GASTOS VARIOS');
+
 
 create table administracion.via_jornadas  (
 	id serial,
@@ -794,3 +794,8 @@ CONSTRAINT via_ordenes_viajes_empleados_via_zonas_categorias_fkey FOREIGN KEY (c
 alter table tbl_utic_empleados add column categoria_id integer;
 alter table tbl_utic_empleados add CONSTRAINT tbl_utic_empleados_via_categorias_fkey FOREIGN KEY (categoria_id)
         REFERENCES administracion.via_categorias (id) MATCH SIMPLE;
+
+
+insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso, unidad, borrado) values ((select max(id_permiso_menu)+1 from seg_permisos_menu),'27-1-23', 'zeta_leer_calculo_viaticos', '27', false);
+insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso, unidad, borrado) values ((select max(id_permiso_menu)+1 from seg_permisos_menu),'27-1-24', 'zeta_escribir_calculo_viaticos', '27', false);
+--Finaliza lanzamiento a produccion

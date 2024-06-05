@@ -265,6 +265,7 @@ class ControladorViatico extends Controller
 
     public function guardarCalculos(Request $request){
         $zonaId = $request->zonaId;
+        $aplicarCategoriaGeneral = $request->aplicarCategoriaGeneral;
         $categoriaId = $request->categoriaId;
         $solicitudId = $request->solicitudId;
         $numeroEmpleado = $request->numeroEmpleado;
@@ -281,6 +282,7 @@ class ControladorViatico extends Controller
             ])->post(env('API_BASE_URL_ZETA').'/api/auth/solicitud_viaticos/guardar_calculos/viajero', [
                 'accion' => $accion,
                 'zonaId' => $zonaId,
+                'aplicarCategoriaGeneral' => $aplicarCategoriaGeneral,
                 'categoriaId' => $categoriaId,
                 'solicitudId' => $solicitudId,
                 'numeroEmpleado' => $numeroEmpleado,

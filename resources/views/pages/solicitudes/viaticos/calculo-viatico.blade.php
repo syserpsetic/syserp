@@ -63,6 +63,12 @@
                     <strong>Nombre del Empleado:&nbsp; </strong> {{$detalleViaje['nombre_viajero']}}
                 </div>
             </div>
+            <div class="mt-2 flex items-center justify-center lg:justify-start">
+                <div class="flex items-center truncate sm:whitespace-normal">
+                    <x-base.lucide class="mr-2 h-4 w-4" icon="Target" />
+                    <strong>Categoría del Empleado:&nbsp; </strong> {{$detalleViaje['categoria']}}
+                </div>
+            </div>
             <div class="flex items-center justify-center lg:justify-start">
                 <div class="flex items-center truncate sm:whitespace-normal">
                     <x-base.lucide class="mr-2 h-4 w-4" icon="Hash" />
@@ -361,10 +367,22 @@
                 <div class="col-span-12 sm:col-span-12">
                     <x-base.form-select class="mt-2 sm:mr-2" aria-label="Default select example" id="modal_select_asignar_categoria">
                         @foreach($categorias as $row)
-                        <option value="{{$row['id']}}">{{$row['descripcion']}}</option>
+                        <option @if($row['id'] == 5) selected @endif value="{{$row['id']}}">{{$row['descripcion']}}</option>
                         @endforeach
                     </x-base.form-select>
                 </div>
+                <div class="mt-2 text-slate-500">
+                    <x-base.form-check class="mr-2">
+                                    <x-base.form-check.input
+                                        id="checkbox_categoria_general"
+                                        type="checkbox"
+                                        value=""
+                                    />
+                                    <x-base.form-check.label for="checkbox_categoria_general">
+                                        ¿Aplicar la misma categoría para todos los empleados de este viaje?
+                                    </x-base.form-check.label>
+                                </x-base.form-check>
+                                </div>
             </div>
         </div>
         <div class="px-5 pb-8 text-center">
@@ -416,6 +434,7 @@
             var descripcion = null;
             var zonaId = null;
             var categoriaId = null;
+            var aplicarCategoriaGeneral = null;
             var numeroEmpleado = {{$detalleViaje['numero_empleado']}};
             var solicitudId = {{$detalleViaje['id_solicitud']}};
             var enviar_correo = null;
@@ -593,6 +612,8 @@
             $("#btn_asignar_categoria").on("click", function () {
                 accion = 2;
                 categoriaId = $("#modal_select_asignar_categoria").val();
+                aplicarCategoriaGeneral = $("#checkbox_categoria_general").prop('checked');
+                //alert(aplicarCategoriaGeneral)
                 if(!accion_guardar){
                     guardarCalculo();
                 }
@@ -617,6 +638,7 @@
                         'accion': accion,
                         'id': id,
                         'zonaId' : zonaId,
+                        'aplicarCategoriaGeneral' : aplicarCategoriaGeneral,
                         'categoriaId' : categoriaId,
                         'solicitudId' : solicitudId,
                         'numeroEmpleado' : numeroEmpleado,

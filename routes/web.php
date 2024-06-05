@@ -14,6 +14,7 @@ use App\Http\Controllers\Configuracion\ZonasController;
 use App\Http\Controllers\Configuracion\CapitulosController;
 use App\Http\Controllers\Configuracion\CategoriasController;
 use App\Http\Controllers\ApiAuthController;
+use App\Http\Controllers\ReporteController;
 
 /*
 |--------------------------------------------------------------------------
@@ -142,6 +143,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('configuracion/capitulos/guardar', [CapitulosController::class, 'guardar_capitulos']);
     Route::get('configuracion/categorias', [CategoriasController::class, 'view_categorias'])->name('configuracion_categorias');
     Route::post('configuracion/categorias/guardar', [CategoriasController::class, 'guardar_categorias']);
+    Route::get('/reportes', [ReporteController::class, 'imprimir_reporte']);
 });
 
 Route::get('/auth/redirect/google', [AuthController::class, 'redirectToGoogle']);
