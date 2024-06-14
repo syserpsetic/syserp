@@ -242,6 +242,7 @@ class ControladorViatico extends Controller
         $viajerosLista = $response['viajerosLista'];
         $zonasDisponibles = $response['zonasDisponibles'];
         $categorias = $response['categorias'];
+        $verificarMonedaDolar = $response['verificarMonedaDolar'];
         $zonasCalculadas = $response['zonasCalculadas'];
         $tasaCambioAsignada = $response['tasaCambioAsignada'];
         $detalleCalculo = $response['detalleCalculo'];
@@ -255,6 +256,7 @@ class ControladorViatico extends Controller
                 ->with('viajerosLista', $viajerosLista)
                 ->with('zonasDisponibles', $zonasDisponibles)
                 ->with('categorias', $categorias)
+                ->with('verificarMonedaDolar', $verificarMonedaDolar)
                 ->with('zonasCalculadas', $zonasCalculadas)
                 ->with('tasaCambioAsignada', $tasaCambioAsignada)
                 ->with('detalleCalculo', $detalleCalculo)

@@ -799,3 +799,150 @@ alter table tbl_utic_empleados add CONSTRAINT tbl_utic_empleados_via_categorias_
 insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso, unidad, borrado) values ((select max(id_permiso_menu)+1 from seg_permisos_menu),'27-1-23', 'zeta_leer_calculo_viaticos', '27', false);
 insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso, unidad, borrado) values ((select max(id_permiso_menu)+1 from seg_permisos_menu),'27-1-24', 'zeta_escribir_calculo_viaticos', '27', false);
 --Finaliza lanzamiento a produccion
+
+-- FUNCTION: administracion.f_calcular_viaticos(integer, integer)
+
+-- DROP FUNCTION IF EXISTS administracion.f_calcular_viaticos(integer, integer);
+
+CREATE OR REPLACE FUNCTION administracion.f_calcular_viaticos(
+	pnidsolicutd integer,
+	pnnumeroempleado integer)
+    RETURNS text
+    LANGUAGE 'plpgsql'
+    COST 100
+    VOLATILE PARALLEL UNSAFE
+AS $BODY$
+DECLARE	
+	--vnIdCategoria integer;
+	vnZonaNacional integer;
+	vnZonaExterior integer;
+	--vnNumeroEmpleado integer;
+	vcEmpleados record;
+	vcCalculos record;
+	vcActualizarCalculos record;
+		
+BEGIN
+	
+	
+	FOR vcEmpleados IN (
+		SELECT
+			--TODO: modificar la categoria, para que se seleccione de administracion.via_ordenes_viajes_empleados , ya que esta tabla debe tener el id_categoria
+			OVE.CATEGORIA_ID,
+			OVE.NUMERO_EMPLEADO
+		FROM
+			ADMINISTRACION.VIA_ORDENES_VIAJES_EMPLEADOS OVE
+			JOIN ADMINISTRACION.VIA_ORDENES_VIAJES OV ON OVE.ID_ORDEN_VIAJE = OV.ID
+		WHERE
+			OV.ID_SOLICITUD = pnidsolicutd
+			AND OVE.NUMERO_EMPLEADO = COALESCE(pnnumeroempleado, OVE.NUMERO_EMPLEADO)
+	) LOOP
+		
+		raise notice 'EMPLEADO ES: % CON LA CATEGORIA %',vcEmpleados.numero_empleado, vcEmpleados.CATEGORIA_ID;
+		
+		FOR vcCalculos IN (
+			SELECT
+				OVC.ID,
+				VZC.MONTO,
+				OVC.NUMERO_JORNADAS,
+				(VZC.MONTO * OVC.NUMERO_JORNADAS) SUBTOTAL,
+				ROUND(
+					AVG(
+						(
+							CASE
+								WHEN OVC.TIPO_MONEDA_ID = 2 THEN VZC.MONTO * OVC.NUMERO_JORNADAS
+								ELSE NULL
+							END
+						)
+					),
+					2
+				) SUBTOTAL_DOLARES,
+				ROUND(
+					AVG(
+						(
+							CASE
+								WHEN OVC.TIPO_MONEDA_ID = 1 THEN (VZC.MONTO * OVC.NUMERO_JORNADAS)
+								ELSE (VZC.MONTO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
+							END
+						)
+					),
+					2
+				) SUBTOTAL_LEMPIRAS,
+				ROUND(
+					AVG(
+						(
+							CASE
+								WHEN OVC.ES_LIQUIDABLE IS TRUE THEN (
+									CASE
+										WHEN OVC.TIPO_MONEDA_ID = 1 THEN (VZC.MONTO * OVC.NUMERO_JORNADAS)
+										ELSE (VZC.MONTO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
+									END
+								)
+								ELSE NULL
+							END
+						)
+					),
+					2
+				) MONTO_LIQUIDAR
+			FROM
+				ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS OVC
+				JOIN ADMINISTRACION.VIA_ORDENES_VIAJES VOV ON OVC.ORDEN_VIAJE_ID = VOV.ID
+				JOIN ADMINISTRACION.VIA_ZONAS_CATEGORIAS VZC ON OVC.ZONA_CATEGORIA_ID = VZC.ID
+			WHERE
+				VOV.ID_SOLICITUD = pnIdSolicutd 
+				AND OVC.NUMERO_EMPLEADO = vcEmpleados.numero_empleado 
+				AND OVC.DELETED_AT IS NULL
+			GROUP BY
+				OVC.ID,
+				OVC.ZONA_CATEGORIA_ID,
+				VZC.MONTO
+		) LOOP
+			raise notice 'El numero de dias/noches  del empleado % ES: % ',vcEmpleados.numero_empleado, vcCalculos.numero_jornadas;
+
+			
+				UPDATE ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS
+				SET
+					MONTO_ASIGNADO = vcCalculos.MONTO,
+					SUBTOTAL_DOLARES = vcCalculos.SUBTOTAL_DOLARES,
+					SUBTOTAL_LEMPIRAS = vcCalculos.SUBTOTAL_LEMPIRAS,
+					MONTO_LIQUIDAR = vcCalculos.MONTO_LIQUIDAR
+				WHERE
+					ID = vcCalculos.ID;
+
+				UPDATE ADMINISTRACION.VIA_ORDENES_VIAJES_EMPLEADOS VOVE
+				SET
+					MONTO_DIARIO_ASIGNADO = TOTAL
+				FROM
+					(
+						SELECT
+							VOVC.ORDEN_VIAJE_ID,
+							VOVC.NUMERO_EMPLEADO,
+							SUM(VOVC.SUBTOTAL_LEMPIRAS) TOTAL
+						FROM
+							ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS VOVC
+							JOIN ADMINISTRACION.VIA_ORDENES_VIAJES VOV ON VOVC.ORDEN_VIAJE_ID = VOV.ID
+						WHERE
+							VOVC.DELETED_AT IS NULL
+							AND VOVC.NUMERO_EMPLEADO = vcEmpleados.numero_empleado 
+							AND VOV.ID_SOLICITUD = pnIdSolicutd
+						GROUP BY
+							VOVC.ORDEN_VIAJE_ID,
+							VOVC.NUMERO_EMPLEADO
+					) AS X
+				WHERE
+					VOVE.ID_ORDEN_VIAJE = X.ORDEN_VIAJE_ID
+					AND VOVE.NUMERO_EMPLEADO = X.NUMERO_EMPLEADO;
+
+			
+
+		END LOOP;
+
+	END LOOP;
+	
+	return null;
+EXCEPTION WHEN OTHERS THEN
+		return 'ERROR AL GENERAR CALCULOS: '||SQLERRM;
+END;
+$BODY$;
+
+ALTER FUNCTION administracion.f_calcular_viaticos(integer, integer)
+    OWNER TO cmatute;

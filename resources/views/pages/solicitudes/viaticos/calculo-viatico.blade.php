@@ -150,6 +150,7 @@
             <strong>Detalles del Cálculo</strong>
             <div class="mt-3 md:mt-0 md:ml-auto">
                 <div class="flex items-center">
+                    @if($verificarMonedaDolar['moneda_dolar'])
                     <div class="mr-4">
                         <span class="mr-2 text-sm">Asignar tasa de cambio</span>
                     </div>
@@ -164,6 +165,7 @@
                             />
                         </x-base.input-group>
                     </div>
+                    @endif
                     <div class="ml-4">
                         <x-base.button id="btn_ejecutar_calculo" class="w-full md:w-44" variant="primary">
                             <x-base.lucide class="mr-2 h-4 w-4" icon="Activity" />
@@ -395,6 +397,29 @@
 </x-base.dialog>
 <!-- END: Modal Content -->
 
+                        <!-- BEGIN: Modal Content -->
+                        <x-base.dialog
+                            id="modal_cargando"
+                            staticBackdrop
+                        >
+                            <x-base.dialog.panel class="px-5 py-10">
+                                <div class="p-5 text-center">
+                                <div class="flex flex-col items-center justify-end col-span-6 sm:col-span-3 xl:col-span-2">
+                                    <x-base.loading-icon
+                                        class="w-12 h-12"
+                                        icon="spinning-circles"
+                                        color="green"
+                                    />
+                                </div>
+                                    <div class="mt-5 text-3xl">¡Espere!</div>
+                                    <div class="mt-2 text-slate-500">
+                                        Aplicando cambios...
+                                    </div>
+                                </div>
+                            </x-base.dialog.panel>
+                        </x-base.dialog>
+                        <!-- END: Modal Content -->
+
 <!-- END: HTML Table Data -->
 <div class="text-center">
     <!-- BEGIN: Notification Content -->
@@ -446,6 +471,7 @@
             var typeMsg = null;
             var numerofila = null;
             var nuevafila = null;
+            var tipoCambio = "{{$tasaCambioAsignada}}";
             var array = [];
             var objeto = {};
             var calculos = null;
@@ -501,7 +527,7 @@
                         var tipo_jornada = null;
                         var monto = null;
                         var subTotalUSD = null;
-                        var tipoCambio = 0;
+                        tipoCambio = 0;
                         var subTotal = null;
                         var valorCheckbox = false;
                         dias = ({{$row['id']}} == 0) ? 0 : $("#input_dias_{{$row['id']}}").val();
@@ -624,6 +650,13 @@
                 objeto.array = array;
                 calculos = JSON.stringify(objeto.array);
                 console.log(calculos);
+                if(tipoCambio == null || tipoCambio == '' || tipoCambio == 0){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe asignar una tasa de cambio.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
                 if(!accion_guardar){
                     guardarCalculo();
                 }
@@ -631,6 +664,9 @@
 
             function guardarCalculo() {
                 accion_guardar = true;
+                const el2 = document.querySelector("#modal_cargando");
+                const modal2 = tailwind.Modal.getOrCreateInstance(el2);
+                modal2.show();
                 $.ajax({
                     type: "POST",
                     url: url_guardarCalculo,
@@ -649,6 +685,9 @@
                             titleMsg = "Error al Guardar";
                             textMsg = data.msgError;
                             typeMsg = "error";
+                            const el3 = document.querySelector("#modal_cargando");
+                            const modal3 = tailwind.Modal.getOrCreateInstance(el3);
+                            modal3.show();
                         } else {
                             titleMsg = "Datos Guardados";
                             textMsg = data.msgSuccess;
@@ -656,10 +695,6 @@
                             location.reload();
                         }
                         notificacion(); 
-                        accion_guardar = false;
-                        const el = document.querySelector("#modal_agregar_nueva_zona");
-                        const modal = tailwind.Modal.getOrCreateInstance(el);
-                        modal.hide();
                     },
                 });
             }

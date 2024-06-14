@@ -13,6 +13,7 @@ use App\Http\Controllers\Configuracion\TiposSolicitudesController;
 use App\Http\Controllers\Configuracion\ZonasController;
 use App\Http\Controllers\Configuracion\CapitulosController;
 use App\Http\Controllers\Configuracion\CategoriasController;
+use App\Http\Controllers\Tienda\ControladorTiendaUNAG;
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ReporteController;
 
@@ -144,6 +145,14 @@ Route::middleware('auth:api')->group(function () {
     Route::get('configuracion/categorias', [CategoriasController::class, 'view_categorias'])->name('configuracion_categorias');
     Route::post('configuracion/categorias/guardar', [CategoriasController::class, 'guardar_categorias']);
     Route::get('/reportes', [ReporteController::class, 'imprimir_reporte']);
+
+    //Inicia Tienda UNAG
+    Route::get('punto-venta/facturar', [ControladorTiendaUNAG::class, 'view_facturar'])->name('facturar');
+    Route::get('punto-venta/facturar/data/clientes', [ControladorTiendaUNAG::class, 'view_facturar_data_clientes']);
+    Route::post('punto-venta/facturar/data/productos', [ControladorTiendaUNAG::class, 'view_facturar_data_productos']);
+    Route::post('punto-venta/facturar/reservar/productos', [ControladorTiendaUNAG::class, 'tnd_facturas_productos_reservar']);
+    Route::get('punto-venta/facturar/pendientes/factura-modificar/{id_factura}', [ControladorTiendaUNAG::class, 'modificar_tnd_facturas_pendientes']);
+    //Finaliza Tienda UNAG
 });
 
 Route::get('/auth/redirect/google', [AuthController::class, 'redirectToGoogle']);

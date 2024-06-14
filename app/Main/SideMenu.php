@@ -192,6 +192,47 @@ class SideMenu
                 'title' => 'Solicitudes',
                 'permiso' => 'zeta_leer_solicitudes'
             ],
+            'tienda' => [
+                    'icon' => 'ShoppingCart',
+                    'title' => 'Tienda',
+                    'permiso' => 'tnd_menu',
+                    'sub_menu' => [
+                        'grid' => [
+                            'icon' => 'Monitor',
+                            'title' => 'Punto de Venta',
+                            'permiso' => 'tnd_facturar',
+                            'sub_menu' => [
+                                'facturar' => [
+                                    'icon' => 'credit-card',
+                                    'route_name' => 'facturar',
+                                    'params' => [
+                                        'layout' => 'side-menu'
+                                    ],
+                                    'title' => 'Facturar',
+                                    'permiso' => 'tnd_facturar',
+                                ],
+                                'facturas-pendientes' => [
+                                    'icon' => 'List',
+                                    'route_name' => 'tabulator',
+                                    'params' => [
+                                        'layout' => 'side-menu'
+                                    ],
+                                    'title' => 'Facturas Pendientes',
+                                    'permiso' => 'tnd_facturar',
+                                ]
+                            ]
+                        ],
+                        'tab' => [
+                            'icon' => 'activity',
+                            'route_name' => 'tab',
+                            'params' => [
+                                'layout' => 'side-menu'
+                            ],
+                            'title' => 'Tab',
+                            'permiso' => 'zeta_leer_solicitudes',
+                        ],
+                    ]
+                ],
             'configuracion' => [
                 'icon' => 'settings',
                 'title' => 'Configuración',
