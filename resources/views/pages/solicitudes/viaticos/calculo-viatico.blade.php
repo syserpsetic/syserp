@@ -150,7 +150,7 @@
             <strong>Detalles del Cálculo</strong>
             <div class="mt-3 md:mt-0 md:ml-auto">
                 <div class="flex items-center">
-                    @if($verificarMonedaDolar['moneda_dolar'])
+                    @if($verificarMonedaDolar == true)
                     <div class="mr-4">
                         <span class="mr-2 text-sm">Asignar tasa de cambio</span>
                     </div>
@@ -510,7 +510,7 @@
                     "numero_jornadas"    : ({{$row['id']}} === 0) ? 0 : $("#input_dias_{{$row['id']}}").val(),
                     "tipo_jornada_id" : ({{$row['id']}} === 0) ? 0 : $("#input_dia-noche_{{$row['id']}}").val(),
                     "liquidable": ("{{$row['es_liquidable']}}" === '') ? false : true,
-                    "tipo_cambio": ({{$row['id']}} === 0) ? 0 : $("#input_tasa_cambio").val(),
+                    "tipo_cambio": ({{$row['id']}} === 0 || {{$row['tipo_moneda_id']}} == 1) ? 0 : $("#input_tasa_cambio").val(),
                     "sub_total": {{$row['subtotal']}},
                     "tipo_moneda_id" : {{$row['tipo_moneda_id']}},
                 });
@@ -650,13 +650,16 @@
                 objeto.array = array;
                 calculos = JSON.stringify(objeto.array);
                 console.log(calculos);
-                if(tipoCambio == null || tipoCambio == '' || tipoCambio == 0){
+                if("{{$verificarMonedaDolar}}" == true){
+                    if(tipoCambio == null || tipoCambio == '' || tipoCambio == 0){
                     titleMsg = 'Valor Requerido'
                     textMsg = 'Debe asignar una tasa de cambio.';
                     typeMsg = 'error';
                     notificacion()
                     return false;
+                    }
                 }
+                
                 if(!accion_guardar){
                     guardarCalculo();
                 }
@@ -687,7 +690,7 @@
                             typeMsg = "error";
                             const el3 = document.querySelector("#modal_cargando");
                             const modal3 = tailwind.Modal.getOrCreateInstance(el3);
-                            modal3.show();
+                            modal3.hide();
                         } else {
                             titleMsg = "Datos Guardados";
                             textMsg = data.msgSuccess;
