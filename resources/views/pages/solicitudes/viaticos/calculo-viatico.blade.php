@@ -105,7 +105,7 @@
                 <div class="flex flex-wrap gap-3">
                     <div class="mr-auto">
                         <div class="flex items-center leading-3 text-white text-opacity-70 dark:text-slate-300">
-                            PRECIO DEL DOLAR SEGÚN BCH
+                            <!-- PRECIO DEL DOLAR SEGÚN BCH
                             <x-base.tippy
                                 as="div"
                                 content="El total equivale a: $1.00"
@@ -114,10 +114,11 @@
                                     class="ml-1.5 h-4 w-4"
                                     icon="AlertCircle"
                                 />
-                            </x-base.tippy>
+                            </x-base.tippy> -->
                         </div>
-                        <div class="relative mt-3.5 pl-4 text-2xl font-medium leading-5 text-white">
-                            {{$tasaCambioFormato}}
+                        <div class="relative mt-3.5 pl-4 text-1xl font-medium leading-5 text-white">
+                            <!-- {{$tasaCambioFormato}} -->
+                             Consultar precio del dolar en Banco Atlantida
                         </div>
                     </div>
                     <a
