@@ -87,6 +87,12 @@
                     <strong>Fecha de final del viaje:&nbsp; </strong> {{$detalleViaje['fecha_retorno']}}
                 </div>
             </div>
+            <div class="flex items-center justify-center lg:justify-start">
+                <div class="flex items-center truncate sm:whitespace-normal">
+                    <x-base.lucide class="mr-2 h-4 w-4" icon="BarChart2" />
+                    <strong>Porcentaje aplicado al día de salida:&nbsp; </strong> {{$detalleViaje['porcentaje']}}%
+                </div>
+            </div>
             <!-- <div class="flex items-center justify-center lg:justify-start">
                 <div class="flex items-center truncate sm:whitespace-normal">
                     <x-base.lucide class="mr-2 h-4 w-4" icon="DollarSign" />
@@ -203,6 +209,11 @@
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 text-slate-500 dark:bg-darkmode-800">
                                         <div class="flex items-center">
                                             Movimientos
+                                            <div class="mt-3 flex w-15 text-slate-500 lg:mt-0">
+                                                <a href="#" class="ml-3 lg:ml-5" id="agregar_nueva_zona" data-placement="top" title="Agregar Nuevo Movimiento">
+                                                    <x-base.lucide class="h-4 w-4" icon="PlusCircle" />
+                                                </a>
+                                            </div>
                                         </div>
                                     </x-base.table.th>
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 !px-2 text-slate-500 dark:bg-darkmode-800">
@@ -215,7 +226,7 @@
                                         Tipo Cambio
                                     </x-base.table.th>
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 !pl-2 text-slate-500 dark:bg-darkmode-800">
-                                        NO
+                                        Num. Días
                                     </x-base.table.th>
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 !pl-2 text-slate-500 dark:bg-darkmode-800">
                                         DÍA/NOCHE
@@ -535,14 +546,19 @@
                         tipo_jornada = ({{$row['id']}} == 0) ? 0 : $("#input_dia-noche_{{$row['id']}}").val();
                         valorCheckbox = ({{$row['id']}} === 0) ? false : $("#liquidable_{{$row['id']}}").prop('checked');
                         monto = {{$row['monto']}};
-                        subTotal= monto*dias;
+                        if({{$row['movimiento_id']}} == 1){
+                            subTotal= monto*dias;
+                        }else{
+                            subTotal= monto*(1 * ({{$detalleViaje['porcentaje']}}/100) + (dias-1));
+                        }
+                        
                         if({{$row['tipo_moneda_id']}} == 2){
                             subTotalUSD = subTotal.toLocaleString('en-US', { style: 'currency', currency: 'USD' });
                             $("#sub_total_usd_{{$row['id']}}").html(subTotalUSD);
                             tipoCambio = parseFloat($("#input_tasa_cambio").val());
                             var tipoCambioFormato = tipoCambio.toLocaleString('es-HN', { style: 'currency', currency: 'HNL' });
                             $("#td_tipo_cambio_{{$row['id']}}").html(tipoCambioFormato);
-                            //console.log(tipoCambioFormato)
+                            console.log(tipoCambioFormato)
                             subTotal = subTotal*tipoCambio;
                         }
                         subTotalLPS = subTotal.toLocaleString('es-HN', { style: 'currency', currency: 'HNL' });
@@ -650,16 +666,16 @@
                 accion = 4;
                 objeto.array = array;
                 calculos = JSON.stringify(objeto.array);
-                console.log(calculos);
-                if("{{$verificarMonedaDolar}}" == true){
-                    if(tipoCambio == null || tipoCambio == '' || tipoCambio == 0){
-                    titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe asignar una tasa de cambio.';
-                    typeMsg = 'error';
-                    notificacion()
-                    return false;
-                    }
-                }
+                // console.log(calculos);
+                // if("{{$verificarMonedaDolar}}" == true){
+                //     if(tipoCambio == null || tipoCambio == ''){
+                //     titleMsg = 'Valor Requerido'
+                //     textMsg = 'Debe asignar una tasa de cambio.';
+                //     typeMsg = 'error';
+                //     notificacion()
+                //     return false;
+                //     }
+                // }
                 
                 if(!accion_guardar){
                     guardarCalculo();

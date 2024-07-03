@@ -800,6 +800,7 @@ insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso
 insert into seg_permisos_menu (id_permiso_menu, arbol_nivel, descripcion_permiso, unidad, borrado) values ((select max(id_permiso_menu)+1 from seg_permisos_menu),'27-1-24', 'zeta_escribir_calculo_viaticos', '27', false);
 --Finaliza lanzamiento a produccion
 
+-- pase a produccion 20240624_1036
 -- FUNCTION: administracion.f_calcular_viaticos(integer, integer)
 
 -- DROP FUNCTION IF EXISTS administracion.f_calcular_viaticos(integer, integer);
@@ -860,7 +861,14 @@ BEGIN
 					AVG(
 						(
 							CASE
-								WHEN OVC.TIPO_MONEDA_ID = 1 THEN (VZC.MONTO * OVC.NUMERO_JORNADAS)
+								WHEN OVC.TIPO_MONEDA_ID = 1 THEN (
+									CASE
+										WHEN VZC.ZONA_TIPO_MOVIMIENTO_ID = 1 THEN VZC.MONTO * OVC.NUMERO_JORNADAS
+										ELSE VZC.MONTO * (
+											1 * (RH.PORCENTAJE / 100) + (OVC.NUMERO_JORNADAS -1)
+										)
+									END
+								)
 								ELSE (VZC.MONTO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
 							END
 						)
@@ -887,6 +895,8 @@ BEGIN
 				ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS OVC
 				JOIN ADMINISTRACION.VIA_ORDENES_VIAJES VOV ON OVC.ORDEN_VIAJE_ID = VOV.ID
 				JOIN ADMINISTRACION.VIA_ZONAS_CATEGORIAS VZC ON OVC.ZONA_CATEGORIA_ID = VZC.ID
+				LEFT JOIN ADMINISTRACION.VIA_RANGOS_HORA RH ON RH.HORA_INICIO <= VOV.FECHA_SALIDA::TIME
+				AND VOV.FECHA_SALIDA::TIME < RH.HORA_FIN
 			WHERE
 				VOV.ID_SOLICITUD = pnIdSolicutd 
 				AND OVC.NUMERO_EMPLEADO = vcEmpleados.numero_empleado 
@@ -895,6 +905,8 @@ BEGIN
 				OVC.ID,
 				OVC.ZONA_CATEGORIA_ID,
 				VZC.MONTO
+			ORDER BY
+				OVC.ID
 		) LOOP
 			raise notice 'El numero de dias/noches  del empleado % ES: % ',vcEmpleados.numero_empleado, vcCalculos.numero_jornadas;
 
@@ -946,3 +958,25 @@ $BODY$;
 
 ALTER FUNCTION administracion.f_calcular_viaticos(integer, integer)
     OWNER TO cmatute;
+
+
+CREATE TABLE IF NOT EXISTS administracion.via_rangos_hora
+(
+    id serial,
+    nombre text,
+    hora_inicio time,
+	hora_fin time,
+	porcentaje numeric,
+    created_at timestamp without time zone DEFAULT now(),
+    update_at timestamp without time zone,
+    deleted_at timestamp without time zone,
+    CONSTRAINT via_rangos_hora_pk PRIMARY KEY (id)
+);
+
+GRANT SELECT, UPDATE, INSERT ON TABLE administracion.via_rangos_hora TO erpunag;
+insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porcentaje) values ('S', '00:00:00', '08:00:00', 100);
+insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porcentaje) values ('S', '08:00:00', '12:00:00', 75);
+insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porcentaje) values ('S', '13:00:00', '16:30:00', 50);
+insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porcentaje) values ('S', '16:30:00', '23:59:59', 25);
+
+INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('COMBUSTIBLE');
