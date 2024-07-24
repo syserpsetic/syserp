@@ -843,14 +843,14 @@ BEGIN
 		FOR vcCalculos IN (
 			SELECT
 				OVC.ID,
-				VZC.MONTO,
+				OVC.MONTO_ASIGNADO,
 				OVC.NUMERO_JORNADAS,
-				(VZC.MONTO * OVC.NUMERO_JORNADAS) SUBTOTAL,
+				(OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS) SUBTOTAL,
 				ROUND(
 					AVG(
 						(
 							CASE
-								WHEN OVC.TIPO_MONEDA_ID = 2 THEN VZC.MONTO * OVC.NUMERO_JORNADAS
+								WHEN OVC.TIPO_MONEDA_ID = 2 THEN OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS
 								ELSE NULL
 							END
 						)
@@ -863,13 +863,14 @@ BEGIN
 							CASE
 								WHEN OVC.TIPO_MONEDA_ID = 1 THEN (
 									CASE
-										WHEN VZC.ZONA_TIPO_MOVIMIENTO_ID = 1 THEN VZC.MONTO * OVC.NUMERO_JORNADAS
-										ELSE VZC.MONTO * (
+										WHEN OVC.ZONA_TIPO_MOVIMIENTO_ID = 1 THEN OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS
+										WHEN OVC.ZONA_TIPO_MOVIMIENTO_ID NOT IN (1, 2, 3) THEN OVC.MONTO_ASIGNADO
+										ELSE OVC.MONTO_ASIGNADO * (
 											1 * (RH.PORCENTAJE / 100) + (OVC.NUMERO_JORNADAS -1)
 										)
 									END
 								)
-								ELSE (VZC.MONTO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
+								ELSE (OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
 							END
 						)
 					),
@@ -881,8 +882,8 @@ BEGIN
 							CASE
 								WHEN OVC.ES_LIQUIDABLE IS TRUE THEN (
 									CASE
-										WHEN OVC.TIPO_MONEDA_ID = 1 THEN (VZC.MONTO * OVC.NUMERO_JORNADAS)
-										ELSE (VZC.MONTO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
+										WHEN OVC.TIPO_MONEDA_ID = 1 THEN (OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS)
+										ELSE (OVC.MONTO_ASIGNADO * OVC.NUMERO_JORNADAS) * OVC.TASA_CAMBIO
 									END
 								)
 								ELSE NULL
@@ -894,7 +895,7 @@ BEGIN
 			FROM
 				ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS OVC
 				JOIN ADMINISTRACION.VIA_ORDENES_VIAJES VOV ON OVC.ORDEN_VIAJE_ID = VOV.ID
-				JOIN ADMINISTRACION.VIA_ZONAS_CATEGORIAS VZC ON OVC.ZONA_CATEGORIA_ID = VZC.ID
+				--JOIN ADMINISTRACION.VIA_ZONAS_CATEGORIAS VZC ON OVC.ZONA_CATEGORIA_ID = VZC.ID
 				LEFT JOIN ADMINISTRACION.VIA_RANGOS_HORA RH ON RH.HORA_INICIO <= VOV.FECHA_SALIDA::TIME
 				AND VOV.FECHA_SALIDA::TIME < RH.HORA_FIN
 			WHERE
@@ -903,8 +904,8 @@ BEGIN
 				AND OVC.DELETED_AT IS NULL
 			GROUP BY
 				OVC.ID,
-				OVC.ZONA_CATEGORIA_ID,
-				VZC.MONTO
+				--OVC.ZONA_CATEGORIA_ID,
+				OVC.MONTO_ASIGNADO
 			ORDER BY
 				OVC.ID
 		) LOOP
@@ -913,7 +914,7 @@ BEGIN
 			
 				UPDATE ADMINISTRACION.VIA_ORDENES_VIAJES_CALCULOS
 				SET
-					MONTO_ASIGNADO = vcCalculos.MONTO,
+					MONTO_ASIGNADO = vcCalculos.MONTO_ASIGNADO,
 					SUBTOTAL_DOLARES = vcCalculos.SUBTOTAL_DOLARES,
 					SUBTOTAL_LEMPIRAS = vcCalculos.SUBTOTAL_LEMPIRAS,
 					MONTO_LIQUIDAR = vcCalculos.MONTO_LIQUIDAR
@@ -956,8 +957,8 @@ EXCEPTION WHEN OTHERS THEN
 END;
 $BODY$;
 
-ALTER FUNCTION administracion.f_calcular_viaticos(integer, integer)
-    OWNER TO cmatute;
+-- ALTER FUNCTION administracion.f_calcular_viaticos(6, 613)
+--     OWNER TO cmatute;
 
 
 CREATE TABLE IF NOT EXISTS administracion.via_rangos_hora
@@ -980,3 +981,56 @@ insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porce
 insert into administracion.via_rangos_hora (nombre, hora_inicio, hora_fin, porcentaje) values ('S', '16:30:00', '23:59:59', 25);
 
 INSERT INTO administracion.via_zonas_tipos_movimientos(nombre) VALUES ('COMBUSTIBLE');
+
+alter table ADMINISTRACION.VIA_ZONAS_CATEGORIAS add column activo boolean;
+
+DROP TABLE IF EXISTS administracion.via_ordenes_viajes_calculos;
+
+CREATE TABLE IF NOT EXISTS administracion.via_ordenes_viajes_calculos
+(
+    id serial,
+    orden_viaje_id integer,
+    numero_empleado integer,
+	zona_id integer,
+    categoria_id integer,
+    tipo_moneda_id integer,
+    zona_tipo_movimiento_id integer,
+    monto_asignado numeric,
+    tasa_cambio numeric,
+    numero_jornadas numeric,
+    tipo_jornada_id integer,
+    subtotal_dolares numeric,
+    subtotal_lempiras numeric,
+    es_liquidable boolean,
+    monto_liquidado numeric,
+    monto_liquidar numeric,
+    created_at timestamp without time zone DEFAULT now(),
+    updated_at timestamp without time zone,
+    deleted_at timestamp without time zone,
+    CONSTRAINT via_ordenes_viajes_calculos_pk PRIMARY KEY (id),
+    CONSTRAINT via_ordenes_viajes_calculos_aux_tipo_moneda_fkey FOREIGN KEY (tipo_moneda_id)
+        REFERENCES public.aux_tipo_moneda (id_tipo_moneda) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT via_ordenes_viajes_calculos_via_jornadas_fkey FOREIGN KEY (tipo_jornada_id)
+        REFERENCES administracion.via_jornadas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT via_ordenes_viajes_calculos_via_ordenes_viajes_fkey FOREIGN KEY (orden_viaje_id)
+        REFERENCES administracion.via_ordenes_viajes (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT via_zonas_categorias_via_categorias_fkey FOREIGN KEY (categoria_id)
+        REFERENCES administracion.via_categorias (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT via_zonas_categorias_via_zonas_fkey FOREIGN KEY (zona_id)
+        REFERENCES administracion.via_zonas (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION,
+    CONSTRAINT via_zonas_categorias_via_zona_tipo_movimiento_fkey FOREIGN KEY (zona_tipo_movimiento_id)
+        REFERENCES administracion.VIA_ZONAS_TIPOS_MOVIMIENTOS (id) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
+)
+--Finaliza pase a produccion 20240724_1551

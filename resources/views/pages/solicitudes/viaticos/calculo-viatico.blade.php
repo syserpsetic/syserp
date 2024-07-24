@@ -1,7 +1,7 @@
 @extends('../layouts/' . $layout)
 
 @section('subhead')
-    <title>Cáculo De Viáticos</title>
+    <title>Cálculo De Viáticos</title>
 @endsection
 
 @section('subcontent')
@@ -209,11 +209,11 @@
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 text-slate-500 dark:bg-darkmode-800">
                                         <div class="flex items-center">
                                             Movimientos
-                                            <div class="mt-3 flex w-15 text-slate-500 lg:mt-0">
+                                            <!-- <div class="mt-3 flex w-15 text-slate-500 lg:mt-0">
                                                 <a href="#" class="ml-3 lg:ml-5" id="agregar_nueva_zona" data-placement="top" title="Agregar Nuevo Movimiento">
                                                     <x-base.lucide class="h-4 w-4" icon="PlusCircle" />
                                                 </a>
-                                            </div>
+                                            </div> -->
                                         </div>
                                     </x-base.table.th>
                                     <x-base.table.th class="whitespace-nowrap bg-slate-50 !px-2 text-slate-500 dark:bg-darkmode-800">
@@ -242,14 +242,48 @@
                             <x-base.table.tbody>
                                 @foreach($zonasCalculadas as $row)
                                 <x-base.table.tr>
-                                    <x-base.table.td class="border-r" rowspan="5">
-                                        @if($row['id'] == 99999999999999) <h5 class="mt-3 text-lg text-center font-medium leading-none"><strong> {{$row['zona']}} </strong></h5> @else {{$row['zona']}} @endif
+                                    <x-base.table.td class="border-r bg-slate-50 dark:border dark:bg-transparent" rowspan="{{$row['filas']}}">
+                                        @if($row['id'] == 99999999999999) <h5 class="mt-3 text-lg text-center font-medium leading-none"><strong> {{$row['zona']}} </strong></h5> @else {{$row['zona']}}
+                                        <br><br>
+                                        <div class="container flex justify-end"> <!-- Asegúrate de que el contenedor tenga estas clases -->
+                                            <x-base.button
+                                                class="btn_nuevo_movimiento relative justify-end col-span-12 mb-2 border-dashed border-slate-300 dark:border-darkmode-300"
+                                                variant="outline-secondary"
+                                                size="sm"
+                                                data-zona_id="{{$row['id']}}"
+                                                data-zona_categoria_id="{{$row['zona_categoria_id']}}"
+                                            >
+                                                <span class="mr-5 truncate"> Agregar Movimiento </span>
+                                                <span
+                                                    class="absolute right-0 top-0 bottom-0 my-auto ml-auto mr-0.5 flex h-8 w-8 items-center justify-center"
+                                                >
+                                                    <x-base.lucide
+                                                        class="w-4 h-4"
+                                                        icon="ArrowRight"
+                                                    />
+                                                </span>
+                                            </x-base.button>
+                                        </div>
+
+                                        @endif
+                                        
                                     </x-base.table.td>
                                 </x-base.table.tr>
                                 @foreach($detalleCalculo as $row2) @if($row['id'] == $row2['id_zona'])
                                 <x-base.table.tr>
                                     <x-base.table.td>
-                                        {{$row2['movimientos']}}
+                                    <div class="flex items-center justify-start">
+                                        @if(in_array($row2['movimiento_id'], $movimientosCalcular) || $row2['movimiento_id'] == 99999999999999)
+                                        @else
+                                            <a href="#" class="ml-3 lg:ml-5 btn_eliminar_movimiento" data-placement="top" title="Eliminar Movimiento" 
+                                            data-calculo_id="{{$row2['id']}}"
+                                            data-nombre_movimiento="{{$row2['movimientos']}}">
+                                                <x-base.lucide class="h-4 w-4" icon="XCircle" />
+                                            </a>
+                                        @endif
+                                        <span class="ml-2">{{$row2['movimientos']}}</span>
+                                    </div>
+
                                     </x-base.table.td>
                                     <x-base.table.td>
                                         @if($row2['id'] != null)
@@ -262,15 +296,15 @@
                                         {{$row2['monto_formato']}}
                                     </x-base.table.td>
                                     <x-base.table.td class="!px-2" id="td_tipo_cambio_{{$row2['id']}}">
-                                        {{$row2['tasa_cambio']}}
+                                        @if ($row2['tipo_cambio'] != '1') {{$row2['tipo_cambio']}} @endif
                                     </x-base.table.td>
                                     <x-base.table.td class="!pl-2">
-                                        @if($row2['id'] != null)
-                                            <x-base.form-input class="min-w-[6rem]" type="text" placeholder="Días" value="{{$row2['numero_jornadas']}}" id="input_dias_{{$row2['id']}}" />
+                                        @if($row2['id'] != null && in_array($row2['movimiento_id'], $movimientosCalcular))
+                                            <x-base.form-input class="min-w-[6rem]" type="number" placeholder="Días" value="{{$row2['numero_jornadas']}}" id="input_dias_{{$row2['id']}}" />
                                         @endif
                                     </x-base.table.td>
                                     <x-base.table.td class="!pl-2">
-                                        @if($row2['id'] != null)
+                                        @if($row2['id'] != null && in_array($row2['movimiento_id'], $movimientosCalcular))
                                             <x-base.form-select class="mt-2 sm:mr-2" aria-label="Default select example" id="input_dia-noche_{{$row2['id']}}">
                                                 @foreach($diasJornadas as $row3)
                                                     @if ($row3['id'] == 1 && $row2['movimiento_id'] == 1) 
@@ -339,6 +373,45 @@
     </x-base.dialog.panel>
 </x-base.dialog>
 
+<x-base.dialog id="modal_agregar_nuevo_movimiento">
+    <x-base.dialog.panel>
+        <x-base.dialog.title class="bg-primary">
+            <h2 class="mr-auto text-white font-medium">
+                <div class="flex items-center">
+                    <i data-lucide="Plus" class="w-4 h-4 mr-1"></i>
+                    <span class="text-white-700"> Nuevo Movimiento</span>
+                </div>
+            </h2>
+        </x-base.dialog.title>
+        <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
+            <div class="col-span-12 sm:col-span-12">
+                <x-base.form-label class="font-extrabold" for="modal_select_movimiento">
+                    Movimiento
+                </x-base.form-label>
+                <x-base.form-select class="mt-2 sm:mr-2" aria-label="Default select example" id="modal_select_movimiento">
+                    @foreach($movimientos as $row)
+                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                    @endforeach
+                </x-base.form-select>
+            </div>
+            <div class="col-span-12 sm:col-span-12">
+                <x-base.form-label class="font-extrabold" for="input_monto_movimiento">
+                    Monto
+                </x-base.form-label>
+                <x-base.form-input class="mt-2 sm:mr-2" type="number" placeholder="Escriba el Monto" id="input_monto_movimiento" />
+            </div>
+        </x-base.dialog.description>
+        <x-base.dialog.footer class="bg-dark">
+            <x-base.button size="sm" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="danger">
+                Cancelar
+            </x-base.button>
+            <x-base.button size="sm" class="w-20" type="button" variant="primary" id="modal_btn_guardar_nuevo_movimiento">
+                Guardar
+            </x-base.button>
+        </x-base.dialog.footer>
+    </x-base.dialog.panel>
+</x-base.dialog>
+
 <x-base.dialog id="modal_eliminar">
     <x-base.dialog.panel>
         <div class="p-5 text-center">
@@ -363,6 +436,29 @@
                 Cancelar
             </x-base.button>
             <x-base.button class="w-24" type="button" variant="danger" id="btn_eliminar">
+                Eliminar
+            </x-base.button>
+        </div>
+    </x-base.dialog.panel>
+</x-base.dialog>
+
+<x-base.dialog id="modal_eliminar_movimiento">
+    <x-base.dialog.panel>
+        <div class="p-5 text-center">
+            <x-base.lucide class="mx-auto mt-3 h-16 w-16 text-danger" icon="XCircle" />
+            <div class="mt-5 text-3xl">¡Advertencia!</div>
+            <div class="mt-2 text-slate-500">
+                ¿Realmente desea eliminar este movimiento?<br />
+                <div class="col-span-12 sm:col-span-12" id="div_nombre_movimiento">
+                   
+                </div>
+            </div>
+        </div>
+        <div class="px-5 pb-8 text-center">
+            <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                Cancelar
+            </x-base.button>
+            <x-base.button class="w-24" type="button" variant="danger" id="btn_eliminar_movimiento_confirmar">
                 Eliminar
             </x-base.button>
         </div>
@@ -469,8 +565,11 @@
             var id = null;
             var nombre = null;
             var descripcion = null;
+            var calculoId = null;
             var zonaId = null;
             var categoriaId = null;
+            var movimientoId = null;
+            var monto_nuevo_movimiento = null;
             var aplicarCategoriaGeneral = null;
             var numeroEmpleado = {{$detalleViaje['numero_empleado']}};
             var solicitudId = {{$detalleViaje['id_solicitud']}};
@@ -501,6 +600,7 @@
             });
 
                 $("#input_viajero").val(numeroEmpleado);
+                $("#modal_select_categoria").val({{$detalleViaje['categoria_id']}});
 
                 $("#input_viajero").change(function(){
                     var empleadoSeleccionado = $("#input_viajero").val();
@@ -519,8 +619,8 @@
                 array.push({ 
                     "id"    : {{$row['id']}},
                     "id_zona" : {{$row['id_zona']}},
-                    "numero_jornadas"    : ({{$row['id']}} === 0) ? 0 : $("#input_dias_{{$row['id']}}").val(),
-                    "tipo_jornada_id" : ({{$row['id']}} === 0) ? 0 : $("#input_dia-noche_{{$row['id']}}").val(),
+                    "numero_jornadas"    : ({{$row['id']}} === 0 || ({{$row['movimiento_id']}} >= 4 &&  {{$row['movimiento_id']}} < 99999999999999) ) ? 0 : $("#input_dias_{{$row['id']}}").val(),
+                    "tipo_jornada_id" : ({{$row['id']}} === 0 || ({{$row['movimiento_id']}} >= 4 &&  {{$row['movimiento_id']}} < 99999999999999) ) ? 0 : $("#input_dia-noche_{{$row['id']}}").val(),
                     "liquidable": ("{{$row['es_liquidable']}}" === '') ? false : true,
                     "tipo_cambio": ({{$row['id']}} === 0 || {{$row['tipo_moneda_id']}} == 1) ? 0 : $("#input_tasa_cambio").val(),
                     "sub_total": {{$row['subtotal']}},
@@ -543,13 +643,15 @@
                         var subTotal = null;
                         var valorCheckbox = false;
                         dias = ({{$row['id']}} == 0) ? 0 : $("#input_dias_{{$row['id']}}").val();
-                        tipo_jornada = ({{$row['id']}} == 0) ? 0 : $("#input_dia-noche_{{$row['id']}}").val();
+                        tipo_jornada = ({{$row['id']}} == 0 || ({{$row['movimiento_id']}} >= 4 &&  {{$row['movimiento_id']}} < 99999999999999)) ? 0 : $("#input_dia-noche_{{$row['id']}}").val();
                         valorCheckbox = ({{$row['id']}} === 0) ? false : $("#liquidable_{{$row['id']}}").prop('checked');
                         monto = {{$row['monto']}};
-                        if({{$row['movimiento_id']}} == 1){
-                            subTotal= monto*dias;
-                        }else{
+                        if(({{$row['movimiento_id']}} == 2 || {{$row['movimiento_id']}} == 3) && {{$row['tipo_moneda_id']}} != 2){
                             subTotal= monto*(1 * ({{$detalleViaje['porcentaje']}}/100) + (dias-1));
+                        }else{
+                            dias = ({{$row['movimiento_id']}} == 1 || {{$row['movimiento_id']}} == 2 || {{$row['movimiento_id']}} == 3) ? dias : 1;
+                            //console.log(dias)
+                            subTotal= monto* dias;
                         }
                         
                         if({{$row['tipo_moneda_id']}} == 2){
@@ -558,7 +660,7 @@
                             tipoCambio = parseFloat($("#input_tasa_cambio").val());
                             var tipoCambioFormato = tipoCambio.toLocaleString('es-HN', { style: 'currency', currency: 'HNL' });
                             $("#td_tipo_cambio_{{$row['id']}}").html(tipoCambioFormato);
-                            console.log(tipoCambioFormato)
+                            //console.log(tipoCambioFormato)
                             subTotal = subTotal*tipoCambio;
                         }
                         subTotalLPS = subTotal.toLocaleString('es-HN', { style: 'currency', currency: 'HNL' });
@@ -619,11 +721,50 @@
 
             });
 
+            $(".btn_nuevo_movimiento").on("click", function (event) {
+                zonaId = $(this).data('zona_id');
+                categoriaId = $(this).data('zona_categoria_id');
+                movimientoId = $("#modal_select_movimiento").val();
+                accion = 5;
+                const el = document.querySelector("#modal_agregar_nuevo_movimiento");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+
+            });
+
+            $(".btn_eliminar_movimiento").on("click", function (event) {
+                calculoId = $(this).data('calculo_id');
+                var nombreMovimiento = $(this).data('nombre_movimiento');
+                $("#div_nombre_movimiento").html('<strong>'+nombreMovimiento+'</strong>');
+                accion = 6;
+                const el = document.querySelector("#modal_eliminar_movimiento");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+
+            });
+
             $("#modal_btn_guardar_zona").on("click", function () {
                 zonaId = $("#modal_select_zona").val();
                 categoriaId = $("#modal_select_categoria").val();
+                
+                if(!accion_guardar){
+                    guardarCalculo();
+                }
+                
+            });
 
-                //alert(zonaId+' '+categoriaId+' '+numeroEmpleado+' '+solicitudId)
+            $("#btn_eliminar_movimiento_confirmar").on("click", function () {
+
+                if(!accion_guardar){
+                    guardarCalculo();
+                }
+                
+            });
+
+            $("#modal_btn_guardar_nuevo_movimiento").on("click", function () {
+                monto_nuevo_movimiento = $("#input_monto_movimiento").val();
+
+                //alert(zonaId+' '+categoriaId+' '+numeroEmpleado+' '+solicitudId+' '+movimientoId+' '+monto_nuevo_movimiento)
                 
                 if(!accion_guardar){
                     guardarCalculo();
@@ -666,7 +807,7 @@
                 accion = 4;
                 objeto.array = array;
                 calculos = JSON.stringify(objeto.array);
-                // console.log(calculos);
+                console.log(calculos);
                 // if("{{$verificarMonedaDolar}}" == true){
                 //     if(tipoCambio == null || tipoCambio == ''){
                 //     titleMsg = 'Valor Requerido'
@@ -698,7 +839,10 @@
                         'categoriaId' : categoriaId,
                         'solicitudId' : solicitudId,
                         'numeroEmpleado' : numeroEmpleado,
-                        'calculos' : calculos
+                        'calculos' : calculos,
+                        'movimientoId' : movimientoId,
+                        'monto_nuevo_movimiento' : monto_nuevo_movimiento,
+                        'calculoId' : calculoId
                     },
                     success: function(data) {
                         if (data.msgError) {

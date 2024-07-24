@@ -242,6 +242,7 @@ class ControladorViatico extends Controller
         $viajerosLista = $response['viajerosLista'];
         $zonasDisponibles = $response['zonasDisponibles'];
         $movimientos = $response['movimientos'];
+        $movimientosCalcular = $response['movimientosCalcular'];
         $categorias = $response['categorias'];
         $verificarMonedaDolar = $response['verificarMonedaDolar'];
         $zonasCalculadas = $response['zonasCalculadas'];
@@ -257,6 +258,7 @@ class ControladorViatico extends Controller
                 ->with('viajerosLista', $viajerosLista)
                 ->with('zonasDisponibles', $zonasDisponibles)
                 ->with('movimientos', $movimientos)
+                ->with('movimientosCalcular', $movimientosCalcular)
                 ->with('categorias', $categorias)
                 ->with('verificarMonedaDolar', $verificarMonedaDolar)
                 ->with('zonasCalculadas', $zonasCalculadas)
@@ -274,6 +276,9 @@ class ControladorViatico extends Controller
         $solicitudId = $request->solicitudId;
         $numeroEmpleado = $request->numeroEmpleado;
         $calculos = $request->calculos;
+        $movimientoId = $request->movimientoId;
+        $monto_nuevo_movimiento = $request->monto_nuevo_movimiento;
+        $calculoId = $request->calculoId;
         $accion = $request->accion;
         $msgSuccess = null;
         $msgError = null;
@@ -291,6 +296,9 @@ class ControladorViatico extends Controller
                 'solicitudId' => $solicitudId,
                 'numeroEmpleado' => $numeroEmpleado,
                 'calculos' => $calculos,
+                'movimientoId' => $movimientoId,
+                'monto_nuevo_movimiento' => $monto_nuevo_movimiento,
+                'calculoId' => $calculoId,
             ]);
             
             $data = $response->json();
