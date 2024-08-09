@@ -21,16 +21,16 @@
                 </div>
                 <div class="ml-5">
                     <div class="w-240 truncate text-lg font-medium sm:w-400 sm:whitespace-normal">
-                        {{ $perfil->name}}
+                        {{$perfil['name']}}
                     </div>
-                    <!-- <div class="text-slate-500">{{ $perfil->username}}</div> -->
+                    <!-- <div class="text-slate-500">{{ $perfil['username']}}</div> -->
                     <div class="flex items-center truncate sm:whitespace-normal">
                         <x-base.lucide class="mr-2 h-4 w-4" icon="User" />
-                        {{ $perfil->username}}
+                        {{ $perfil['username']}}
                     </div>
                     <div class="flex items-center truncate sm:whitespace-normal">
                         <x-base.lucide class="mr-2 h-4 w-4" icon="Mail" />
-                        {{ $perfil->email}}
+                        {{ $perfil['email']}}
                     </div>
                     <br />
                     <div class="flex items-center truncate sm:whitespace-normal">
@@ -41,7 +41,10 @@
                             variant="primary"
                             class="transition duration-200 border shadow-sm inline-flex items-center justify-center py-2 px-3 rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-primary border-primary text-white dark:border-primary mb-2 mr-1 w-24 mb-2 mr-1 w-50"
                         >
-                            Cambiar Contraseña
+                        <x-base.lucide
+                                    class="h-4 w-4"
+                                    icon="Key"
+                                /> &nbsp; Cambiar Contraseña
                         </x-base.button>
                     </div>
                 </div>
@@ -52,36 +55,39 @@
 <x-base.preview-component class="intro-y box">
     <x-base.dialog id="modal_cambio_clave">
         <x-base.dialog.panel>
-            <x-base.dialog.title>
-                <h2 class="mr-auto text-base font-medium">
-                    Cambiar Contraseña
-                </h2>
+            <x-base.dialog.title class="bg-primary">
+                <h2 class="mr-auto text-white font-medium">
+                        <div class="flex items-center">
+                        <i data-lucide="Key" class="w-4 h-4 mr-1"></i>
+                            <span class="text-white-700"> Cambiar Contraseña</span>
+                        </div>
+                    </h2>
             </x-base.dialog.title>
             <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
                 <div class="col-span-12 sm:col-span-12">
-                    <x-base.form-label for="input-clave_actual">Contraseña Actual</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input-clave_actual">Contraseña Actual</x-base.form-label>
                     <x-base.form-input id="input-clave_actual" type="password" placeholder="Escribe tu contraseña actual" />
                     <div class="login__input-error mt-2 text-danger" id="error-clave_actual"></div>
                 </div>
                 <div class="col-span-12 sm:col-span-12">
-                    <x-base.form-label for="input-clave_nueva">Nueva Contraseña</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input-clave_nueva">Nueva Contraseña</x-base.form-label>
                     <x-base.form-input id="input-clave_nueva" type="password" placeholder="Escribe tu nueva contraseña" />
                     <div class="login__input-error mt-2 text-danger" id="error-clave_nueva"></div>
                 </div>
 
                 <div class="col-span-12 sm:col-span-12">
-                    <x-base.form-label for="input-verificar_clave">
+                    <x-base.form-label class="font-extrabold" for="input-verificar_clave">
                         Verificar Contraseña
                     </x-base.form-label>
                     <x-base.form-input id="input-verificar_clave" type="password" placeholder="Vuelve a escribir tu nueva contraseña" />
                     <div class="login__input-error mt-2 text-danger" id="error-verificar_clave"></div>
                 </div>
             </x-base.dialog.description>
-            <x-base.dialog.footer>
-                <x-base.button id="btn_cerrar_modal" class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+            <x-base.dialog.footer class="bg-dark">
+                <x-base.button id="btn_cerrar_modal" data-tw-dismiss="modal" size="sm" class="mr-1 w-20" type="button" variant="danger">
                     Cancelar
                 </x-base.button>
-                <x-base.button id="btn_cambiar_clave" class="w-20" type="button" variant="primary">
+                <x-base.button id="btn_cambiar_clave" size="sm" class="w-20" type="button" variant="primary">
                     Cambiar
                 </x-base.button>
             </x-base.dialog.footer>

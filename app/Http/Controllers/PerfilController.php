@@ -8,9 +8,7 @@ use DB;
 use Illuminate\Support\Facades\Auth;
 use Exception;
 use Illuminate\Support\Facades\Hash;
-use App\Traits\ZetaTrait;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
+use Illuminate\Support\Facades\Http;
 
 class PerfilController extends Controller
 {
@@ -18,46 +16,55 @@ class PerfilController extends Controller
      * Show specified view.
      *
      */
+
+    public function perfil(Request $request)
+    {
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/ver_perfil');
+
+        if($response->status() === 403){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
+        $perfil = $response['perfil'];
+        $scopes = $response['scopes'];
+
+        return view('pages.perfil')->with('perfil', $perfil)->with('scopes', $scopes);
+    }
+
     public function cambiar_clave(Request $request)
     {
-        $msgError = null;
         $msgSuccess = null;
+        $msgError = null;
         $clave_actual = $request->clave_actual;
         $clave_nueva = $request->clave_nueva;
-        $clave_nueva = Hash::make($clave_nueva);
-        $username = Auth::user()->username;
-
-        ////crear permiso
-        //$permission = Permission::create(['name' => 'edit articles']);
-        $role = Role::where('id', 1)->first();
-        $permission = Permission::where('id', 3)->first();
-        $role->givePermissionTo($permission);
-        throw New Exception('Permiso asignado');
 
         try {
-
-        //     $variable = null;
-        // $probemos = ZetaTrait::cargarPermisosYLogs($username);
-        // foreach($probemos as $permisos){
-        //     $variable = $permisos->permiso;
-        // }
-
-        // throw New Exception($variable);
-
-            if (password_verify($clave_actual, Auth::user()->password)) {
-                DB::select("update users set password = :clave_nueva where username = :username",
-                ["clave_nueva" => $clave_nueva, "username" => $username]);
-            } else {
-                throw New Exception('La contraseña actual no es válida.');
-            }
+            //throw new Exception('Epa', true);
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/cambiar-clave-perfil', [
+                'clave_actual' => $clave_actual,
+                'clave_nueva' => $clave_nueva
+            ]);
             
-            $msgSuccess = 'Contraseña cambiada con éxito.';
+            $data = $response->json();
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
 
+                $msgSuccess = $data["msgSuccess"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
+            }
         } catch (Exception $e) {
             $msgError = $e->getMessage();
         }
 
-        return response()->json(["msgSuccess" => $msgSuccess, "msgError" => $msgError]);
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError]);
     }
 
 }

@@ -68,7 +68,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('users-layout-2-page', 'usersLayout2')->name('users-layout-2');
         Route::get('users-layout-3-page', 'usersLayout3')->name('users-layout-3');
         Route::get('profile-overview-1-page', 'profileOverview1')->name('profile-overview-1');
-        Route::get('mi-perfil-page', 'perfil');
+        // Route::get('mi-perfil-page', 'perfil');
         Route::get('profile-overview-2-page', 'profileOverview2')->name('profile-overview-2');
         Route::get('profile-overview-3-page', 'profileOverview3')->name('profile-overview-3');
         Route::get('wizard-layout-1-page', 'wizardLayout1')->name('wizard-layout-1');
@@ -118,6 +118,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get('slider-page', 'slider')->name('slider');
         Route::get('image-zoom-page', 'imageZoom')->name('image-zoom');
     });
+    Route::get('mi-perfil', [PerfilController::class, 'perfil']);
     Route::post('mi-perfil-cambiar-clave', [PerfilController::class, 'cambiar_clave']);
     Route::get('solicitudes', [SolicitudesController::class, 'view_solicitudes'])->name('solicitudes');
     Route::get('solicitudes/data', [SolicitudesController::class, 'data_solicitudes']);

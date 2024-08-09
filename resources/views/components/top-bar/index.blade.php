@@ -220,13 +220,13 @@
                         {{ $fakers[0]['users'][0]['username'] }}
                     </div>
                 </x-base.menu.header>
-                <!-- <x-base.menu.divider class="bg-white/[0.08]" />
-                <x-base.menu.item class="hover:bg-white/5" href="mi-perfil-page">
+                <x-base.menu.divider class="bg-white/[0.08]" />
+                <x-base.menu.item class="hover:bg-white/5" href="{{url('/mi-perfil')}}">
                     <x-base.lucide
                         class="mr-2 h-4 w-4"
                         icon="User"
                     /> Mi Perfil
-                </x-base.menu.item> -->
+                </x-base.menu.item>
                 <!-- <x-base.menu.item class="hover:bg-white/5">
                     <x-base.lucide
                         class="mr-2 h-4 w-4"
