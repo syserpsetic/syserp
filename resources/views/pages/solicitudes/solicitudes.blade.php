@@ -11,10 +11,13 @@
                 <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
                    
                    
-                            <x-base.lucide
-                                class="h-40 w-40"
-                                icon="file"
-                            />
+                        <lord-icon
+                            src="https://cdn.lordicon.com/yqiuuheo.json"
+                            trigger="in"
+                            delay="1000"
+                            state="in-reveal"
+                            style="width:180px;height:180px">
+                        </lord-icon>
                         
                 
                     <div class="ml-5">
@@ -199,10 +202,49 @@
             </div> -->
         </div>
         <div class="scrollbar-hidden overflow-x-auto">
-            <div
+            <!-- <div
                 class="mt-5"
                 id="tabulator"
-            ></div>
+            ></div> -->
+            <table id="sdatatable" class="display datatable" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Solicitud</th>
+                        <th>Usuario Registró</th>
+                        <th>Etapa</th>
+                        <th>Fecha Registró</th>
+                        <th>Viajeros</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($solicitudes as $row)
+                    <tr>
+                        <td>{{$row['id']}}</td>
+                        <td>{{$row['solicitud']}}</td>
+                        <td>{{$row['username']}}</td>
+                        <td><div class="text-xs text-slate-500 whitespace-nowrap"><span class="mr-1 rounded-full bg-primary px-1 text-xs text-white">{{$row['etapa']}}</span></div></td>
+                        <td>{{$row['fechas_registro']}}</td>
+                        <td>{{$row['viajeros']}}</td>
+                        <td>
+                            <x-base.button
+                                class="mb-2 mr-1 opciones"
+                                variant="primary"
+                                size="sm"
+                                data-id="{{$row['id']}}"
+                            >
+                                <x-base.lucide
+                                    class="h-4 w-4"
+                                    icon="Settings"
+                                />
+                            </x-base.button>
+                        
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
         <!-- BEGIN: Modal Content -->
         <x-base.dialog id="modal_eliminar">
@@ -319,6 +361,7 @@
         @vite('resources/js/pages/modal/index.js')
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
         <script type="module">
             var accion_guardar = false;
             var accion = null;
@@ -364,283 +407,45 @@
 
                 //console.log(navigator.userAgent)
 
-                (function () {
-                "use strict";
-
-
-                // Tabulator
-                if ($("#tabulator").length) {
-                    // Setup Tabulator
-                    tabulator = new Tabulator("#tabulator", {
-                        ajaxURL: url_solicitudes_data,
-                        paginationMode: "local",
-                        filterMode: "local",
-                        sortMode: "local",
-                        fitColumns:true,
-                        printAsHtml: true,
-                        printStyled: true,
-                        pagination: true,
-                        groupBy:"solicitud",
-                        paginationSize: 10,
-                        paginationSizeSelector: [10, 20, 30, 40],
-                        layout: "fitColumns",
-                        responsiveLayout: "collapse",
-                        placeholder: "No matching records found",
-                        columns: [
-                            {
-                                title: "",
-                                formatter: "responsiveCollapse",
-                                width: 40,
-                                minWidth: 30,
-                                hozAlign: "center",
-                                resizable: false,
-                                headerSort: false,
-                            },
-
-                            // For HTML table
-                            {
-                                title: "ID",
-                                width: 100,
-                                minWidth: 30,
-                                field: "id",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"number",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.id}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "SOLICITUD",
-                                minWidth: 200,
-                                responsive: 0,
-                                field: "solicitud",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="font-medium whitespace-nowrap">${response.solicitud}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "USUARIO REGISTRÓ",
-                                minWidth: 250,
-                                responsive: 0,
-                                field: "usuario_registro",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.usuario_registro}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "ETAPA",
-                                minWidth: 150,
-                                responsive: 0,
-                                field: "etapa",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap"><span class="mr-1 rounded-full bg-primary px-1 text-xs text-white">${response.etapa}</span></div>
-                                </div>`;
-                                },
-                            },
-                            // {
-                            //     title: "ESTADO",
-                            //     minWidth: 150,
-                            //     responsive: 0,
-                            //     field: "estado",
-                            //     vertAlign: "middle",
-                            //     print: false,
-                            //     download: false,
-                            //     headerFilter:"input",
-                            //     headerFilterPlaceholder:"Buscar",
-                            //     formatter(cell) {
-                            //         const response = cell.getData();
-                            //         return `<div>
-                            //         <div class="text-xs text-slate-500 whitespace-nowrap"><span class="mr-1 rounded-full bg-primary px-1 text-xs text-white">${response.estado}</span></div>
-                            //     </div>`;
-                            //     },
-                            // },
-                            {
-                                title: "FECHA REGISTRO",
-                                minWidth: 150,
-                                responsive: 0,
-                                field: "fechas_registro",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                headerFilter:"input",
-                                headerFilterPlaceholder:"Buscar",
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    return `<div>
-                                    <div class="text-xs text-slate-500 whitespace-nowrap">${response.fechas_registro}</div>
-                                </div>`;
-                                },
-                            },
-                            {
-                                title: "ACCIONES",
-                                minWidth: 100,
-                                field: "actions",
-                                responsive: 1,
-                                hozAlign: "center",
-                                headerHozAlign: "center",
-                                vertAlign: "middle",
-                                print: false,
-                                download: false,
-                                formatter(cell) {
-                                    const response = cell.getData();
-                                    let a =
-                                        $(`<div class="flex items-center lg:justify-center">
-                                            <a class="flex items-center mr-3 opciones href="javascript:;">
-                                                <i data-lucide="settings" class="w-4 h-4 mr-1"></i> <strong>Opciones </strong>
-                                            </a>
-                                        </div>`);
-                                    $(a)
-                                        .find(".opciones")
-                                        .on("click", function () {
-                                            tabulator_id_viajeros = response.id_viajeros
-                                            tabulator_viajeros = response.viajeros
-                                            tabulator_id_solicitud = response.id;
-
-                                            $("#btn_editar").attr("href", ("{{url('/viaticos/editar/')}}/"+tabulator_id_solicitud));
-
-                                            const el = document.querySelector("#modal_opciones");
-                                            const modal = tailwind.Modal.getOrCreateInstance(el);
-                                            modal.show();
-                                        });
-                                    return a[0];
-                                },
-                            },
-                            
-
-                            // For print format
-                            {
-                                title: "ID",
-                                field: "id",
-                                visible: false,
-                                print: true,
-                                download: true,
-                            },
-                            {
-                                title: "VIAJEROS",
-                                field: "viajeros",
-                                visible: false,
-                                print: true,
-                                download: true,
-                            },
-                        
-                        ],
+                $('#sdatatable').DataTable({
+                        language: { 
+                            "decimal": ",", 
+                            "thousands": ".", 
+                            "lengthMenu": "Mostrar _MENU_ registros", 
+                            "zeroRecords": "No se encontraron resultados", 
+                            "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros", 
+                            "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros", 
+                            "infoFiltered": "(filtrado de un total de _MAX_ registros)", 
+                            "sSearch": "Buscar:", 
+                            "oPaginate": { 
+                                "sFirst": "Primero", 
+                                "sLast":"Último", 
+                                "sNext":"Siguiente", 
+                                "sPrevious": "Anterior" 
+                            }, 
+            
+                            "oAria": { 
+                                "sSortAscending": ": Activar para ordenar la columna de manera ascendente", 
+                                "sSortDescending": ": Activar para ordenar la columna de manera descendente" 
+                            }, 
+            
+                            "sProcessing":"Cargando..." 
+                        },
+                        "processing": true,
+                        serverSide: false,
                     });
-
-                    tabulator.on("renderComplete", () => {
-                        createIcons({
-                            icons,
-                            attrs: {
-                                "stroke-width": 1.5,
-                            },
-                            nameAttr: "data-lucide",
-                        });
-                    });
-
-                    // Redraw table onresize
-                    window.addEventListener("resize", () => {
-                        tabulator.redraw();
-                        createIcons({
-                            icons,
-                            "stroke-width": 1.5,
-                            nameAttr: "data-lucide",
-                        });
-                    });
-
-                    // Filter function
-                    function filterHTMLForm() {
-                        let field = $("#tabulator-html-filter-field").val();
-                        let type = $("#tabulator-html-filter-type").val();
-                        let value = $("#tabulator-html-filter-value").val();
-                        tabulator.setFilter(field, type, value);
-                    }
-
-                    // On submit filter form
-                    $("#tabulator-html-filter-form")[0].addEventListener(
-                        "keypress",
-                        function (event) {
-                            let keycode = event.keyCode ? event.keyCode : event.which;
-                            if (keycode == "13") {
-                                event.preventDefault();
-                                filterHTMLForm();
-                            }
-                        }
-                    );
-
-                    // On click go button
-                    $("#tabulator-html-filter-go").on("click", function (event) {
-                        filterHTMLForm();
-                    });
-
-                    // On reset filter form
-                    $("#tabulator-html-filter-reset").on("click", function (event) {
-                        $("#tabulator-html-filter-field").val("id");
-                        $("#tabulator-html-filter-type").val("like");
-                        $("#tabulator-html-filter-value").val("");
-                        filterHTMLForm();
-                    });
-
-                    // Export
-                    $("#tabulator-export-csv").on("click", function (event) {
-                        tabulator.download("csv", "data.csv");
-                    });
-
-                    $("#tabulator-export-json").on("click", function (event) {
-                        tabulator.download("json", "data.json");
-                    });
-
-                    $("#tabulator-export-xlsx").on("click", function (event) {
-                        tabulator.download("xlsx", "data.xlsx", {
-                            sheetName: "Products",
-                        });
-                    });
-
-                    $("#tabulator-export-html").on("click", function (event) {
-                        tabulator.download("html", "data.html", {
-                            style: true,
-                        });
-                    });
-
-                    // Print
-                    $("#tabulator-print").on("click", function (event) {
-                        tabulator.print();
-                    });
-                }
-            })();
-
             });
 
+            $('#sdatatable tbody').on('click', '.opciones', function() {
+                id = $(this).data('id');
+                $("#btn_editar").attr("href", ("{{url('/viaticos/editar/')}}/"+id));
+                const el = document.querySelector("#modal_opciones");
+                const modal = tailwind.Modal.getOrCreateInstance(el);
+                modal.show();
+            });
             
             $("#btn_id_solicitud").on("click", function (event) {
-                window.location.href = (`{{url('/solicitudes/${tabulator_id_solicitud}/viaticos/imprimir')}}`);
+                window.location.href = (`{{url('/solicitudes/${id}/viaticos/imprimir')}}`);
                 /*$("#lista_empleados").html("");
                 var id_viajeros = tabulator_id_viajeros;
                 var arreglo_id_viajeros = id_viajeros.split(",");
@@ -669,9 +474,8 @@
             });
 
             $("#btn_modal_eliminar").on("click", function (event) {
-                $("#id_registro").html("Regsitro: " + tabulator_id_solicitud);
+                $("#id_registro").html("Registro: " + id);
                 accion = 3;
-                id = tabulator_id_solicitud;
                 const el = document.querySelector("#modal_eliminar");
                 const modal = tailwind.Modal.getOrCreateInstance(el);
                 modal.show();

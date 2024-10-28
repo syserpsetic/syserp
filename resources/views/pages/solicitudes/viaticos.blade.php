@@ -5,81 +5,77 @@
 @endsection
 
 @section('subcontent')
-<div class="intro-y col-span-12 lg:col-span-6">
-        <x-base.preview-component class="intro-y box">
-            <div class="p-5">
-                <x-base.preview>
-                    <div>
-                        <div class="flex flex-col text-center sm:text-center lg:flex-row">
-                            <div class="w-6/12">
-                                <h1 class="text-4xl lg:text-left font-medium leading-none">
-                                    Ordenes de Viaje
-                                </h1>
-                            </div>
-                            <!-- <div class="w-6/12">
-                                <div class="text-2xl text-warning lg:text-right font-sm leading-none">
-                                    <strong>
-                                        <span class="inline-block align-middle">{{$detalle_viatico['estado']}}
-                                    </strong>
-                                </div>
-                            </div> -->
+<!-- BEGIN: Profile Info -->
+        <div class="intro-y box mt-5 px-5 pt-5">
+            <div class="-mx-5 flex flex-col border-b border-slate-200/60 pb-5 dark:border-darkmode-400 lg:flex-row">
+                <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
+                <lord-icon
+                            src="https://cdn.lordicon.com/kzagefqq.json"
+                            trigger="in"
+                            delay="1000"
+                            state="in-reveal"
+                            colors="primary:#3a3347,secondary:#ffffff,tertiary:#0a5c15,quaternary:#ffffff,quinary:#f24c00,senary:#646e78"
+                            style="width:180px;height:180px">
+                        </lord-icon>
+                    
+                    <div class="ml-5">
+                        <div class="w-580 truncate text-lg font-medium sm:w-100 sm:whitespace-normal">
+                            <h1 class="text-5xl font-medium leading-none">ORDENES DE VIAJE</h1>
                         </div>
-                        <br>
-                        <div class="w-full border-t border-dashed border-slate-200/60 dark:border-darkmode-400"></div>
-                        <br>
-                        <div class="flex flex-col items-center sm:flex-row">
-                            <x-base.lucide icon="Truck" class="w-6 h-6 inline-block align-middle" />
-                            <span class="inline-block align-middle text-sm">&nbsp; Módulo de registro y gestión de ordenes de viajes.</span>
+                        <div class="text-slate-500">Pantalla de registro y edición de ordenes de viaje.</div>
+                    </div>
+
+                    <!-- Este div será movido a la derecha -->
+                    <div class="ml-auto"> <!-- Cambia ml-5 por ml-auto para empujar el contenido hacia la derecha -->
+                        <div class="w-full sm:w-100 text-right truncate text-lg font-medium">
                             @if($detalle_viatico['estado'] != null)
-                            <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
-                                <x-base.preview>
-                                    <div class="text-2xl text-primary lg:text-center font-sm leading-none">
-                                        <strong>
-                                            {{$detalle_viatico['estado']}}
-                                        </strong>
-                                    </div>
-                                    <br>
-                                    @if($cambiar_estado == 1)
-                                    <div class="flex flex-wrap">
-                                        <x-base.button
-                                            class="mb-2 mr-2 w-32"
-                                            variant="danger"
-                                            size="sm"
-                                            id="btn_rechazar"
-                                        >
-                                            <x-base.lucide
-                                                class="mr-2 h-4 w-4"
-                                                icon="ArrowLeft"
-                                            /> Rechazar
-                                        </x-base.button>
-                                        <x-base.button
-                                            class="mb-2 mr-2 w-32"
-                                            variant="primary"
-                                            size="sm"
-                                            id="btn_enviar"
-                                        > &nbsp;&nbsp;Enviar &nbsp;
-                                        <x-base.lucide
-                                                class="mr-2 h-4 w-4"
-                                                icon="ArrowRight"
-                                            />
-                                        </x-base.button>
-                                    </div>
-                                    @endif
-                                </x-base.preview>
-                            </x-base.form-switch>
+                                <x-base.form-switch class="mt-3 w-full sm:ml-auto sm:mt-0 sm:w-auto">
+                                    <x-base.preview>
+                                        <div class="text-2xl text-primary font-sm leading-none">
+                                            <strong>{{$detalle_viatico['estado']}}</strong>
+                                        </div>
+                                        @if($cambiar_estado == 1)
+                                        <div class="flex flex-wrap justify-center mt-4">
+                                            <x-base.button
+                                                class="mb-2 mr-2 w-32"
+                                                variant="danger"
+                                                size="sm"
+                                                id="btn_rechazar"
+                                            >
+                                                <x-base.lucide
+                                                    class="mr-2 h-4 w-4"
+                                                    icon="ArrowLeft"
+                                                /> Rechazar
+                                            </x-base.button>
+                                            <x-base.button
+                                                class="mb-2 mr-2 w-32"
+                                                variant="primary"
+                                                size="sm"
+                                                id="btn_enviar"
+                                            > 
+                                                &nbsp;&nbsp;Enviar &nbsp;
+                                                <x-base.lucide
+                                                    class="mr-2 h-4 w-4"
+                                                    icon="ArrowRight"
+                                                />
+                                            </x-base.button>
+                                        </div>
+                                        @endif
+                                    </x-base.preview>
+                                </x-base.form-switch>
                             @endif
                         </div>
-                                 
                     </div>
-                </x-base.preview>
+                </div>
+
             </div>
-        </x-base.preview-component>
-</div>
+        </div>
+        <!-- END: Profile Info -->
 <div class="intro-y mt-8 flex items-center">
     <x-base.preview-component class="intro-y box mt-5">
         <!-- BEGIN: Multiple Select -->
         <div class="p-5">
-            <x-base.form-label for="crud-form-2">Empleados</x-base.form-label>
+            <x-base.form-label class="font-extrabold" for="crud-form-2">Empleados</x-base.form-label>
             <x-base.tom-select id="input_empleados" class="w-full" data-placeholder="Selección de empleados" multiple>
                 @foreach($empleados as $row)
                 @if ($row['numero_empleado'] == 0) 
@@ -106,7 +102,7 @@
         <div class="mt-5 grid grid-cols-12 gap-6">
             <!-- <div class="intro-y col-span-12 lg:col-span-4">
                 <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Asignación por día</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Asignación por día</x-base.form-label>
                     <x-base.input-group class="mt-2" inputGroup>
                         <x-base.form-input id="input_asignacion" type="number" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese la cantidad" />
                         <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
@@ -117,7 +113,7 @@
             </div> -->
             <div class="intro-y col-span-12 lg:col-span-6">
                 <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Fecha y hora de salida</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Fecha y hora de salida</x-base.form-label>
                     <x-base.input-group class="mt-2" inputGroup>
                         <x-base.form-input id="input_fecha_salida" type="date" aria-label="Price" aria-describedby="input-group-price"/>
                         <x-base.form-input id="input_hora_salida" type="time" aria-label="Price" aria-describedby="input-group-price"/>
@@ -131,7 +127,7 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-6">
             <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Fecha y hora de regreso</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Fecha y hora de regreso</x-base.form-label>
                     <x-base.input-group class="mt-2" inputGroup>
                         <x-base.form-input id="input_fecha_regreso" type="date" aria-label="Price" aria-describedby="input-group-price"/>
                         <x-base.form-input id="input_hora_regreso" type="time" aria-label="Price" aria-describedby="input-group-price"/>
@@ -149,7 +145,7 @@
         <div class="mt-5 grid grid-cols-12 gap-6">
             <div class="intro-y col-span-12 lg:col-span-6">
                 <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Vehículo placa No.</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Vehículo placa No.</x-base.form-label>
                     <x-base.input-group class="mt-2" inputGroup>
                         <x-base.form-input id="input_vehiculo_placa" type="text" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese la placa" />
                         <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
@@ -162,7 +158,7 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-6">
                 <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Tipo de Vehículo</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Tipo de Vehículo</x-base.form-label>
                     <x-base.input-group class="mt-2" inputGroup>
                         <x-base.form-input id="input_vehiculo_tipo" type="text" aria-label="Price" aria-describedby="input-group-price" placeholder="Ingrese el tipo de vehículo" />
                         <x-base.input-group.text id="input-group-price" class="z-30 -mr-1 flex w-10 items-center justify-center rounded-l border bg-slate-100 text-slate-600 dark:border-darkmode-800 dark:bg-darkmode-700 dark:text-slate-400">
@@ -178,7 +174,7 @@
         <!-- Inicia sección de dos columnas -->
   
                 <div class="p-5">
-                    <x-base.form-label for="regular-form-4">Conductor</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="regular-form-4">Conductor</x-base.form-label>
                     <x-base.tom-select id="input_numero_empleado_conductor" class="w-full" data-placeholder="Selección de empleados">
                         @foreach($empleado_conductor as $row)
                         <option value="{{$row['numero_empleado']}}" {{$row['selected']}}>{{$row['empleado']}}</option>
@@ -191,7 +187,7 @@
                 <div class="p-5">
                 <div class="input-form mt-3">
                         <div>
-                        <x-base.form-label for="crud-form-2">Itinerario de viaje</x-base.form-label>
+                        <x-base.form-label class="font-extrabold" for="crud-form-2">Itinerario de viaje</x-base.form-label>
                             <x-base.form-input
                                 id="autocomplete-input"
                                 type="text"
@@ -214,9 +210,13 @@
                     class="flex flex-col items-center border-b border-slate-200/60 p-5 dark:border-darkmode-400 sm:flex-row">
                     
                     <h3 class="mr-auto text-base font-small">
-                        <x-base.lucide
-                        icon="Map-pin"
-                        />
+                    <lord-icon
+                        src="https://cdn.lordicon.com/iikoxwld.json"
+                        trigger="loop"
+                        delay="1500"
+                        state="in-roll-calm"
+                        style="width:40px;height:40px">
+                    </lord-icon>
                         <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
                             Si desea eliminar un destino haga click sobre el.
                         </span><br>
@@ -233,21 +233,33 @@
             </div>
         </div>
         <!-- END: Multiple Select -->
-        <div class="p-5">
-            <div class="input-form mt-3">
-                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_proposito">
-                    Propósito del viaje
-                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
-                        Espacio para redactar con libertad
-                    </span>
-                </x-base.form-label>
-                <x-base.form-textarea rows="5" class="form-control" id="input_proposito" name="comment" placeholder="Describa el propósito del viaje..."></x-base.form-textarea>
+        <div class="mt-5 grid grid-cols-12 gap-6">
+            <!-- Sección de Propósito del Viaje -->
+            <div class="intro-y col-span-12 lg:col-span-6">
+                <div class="p-5">
+                    <x-base.form-label class="flex w-full flex-col sm:flex-row font-extrabold" htmlFor="input_proposito_viajeros">
+                        Propósito del viaje (viajeros)
+                        <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">Espacio para redactar con libertad</span>
+                    </x-base.form-label>
+                    <x-base.form-textarea rows="5" class="form-control" id="input_proposito_viajeros" placeholder="Describa el propósito del viaje para los viajeros"></x-base.form-textarea>
+                </div>
+            </div>
+            <div class="intro-y col-span-12 lg:col-span-6">
+                <div class="p-5">
+                    <x-base.form-label class="flex w-full flex-col sm:flex-row font-extrabold" htmlFor="input_proposito_conductor">
+                        Propósito del viaje (conductor)
+                        <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">Espacio para redactar con libertad</span>
+                    </x-base.form-label>
+                    <x-base.form-textarea rows="5" class="form-control" id="input_proposito_conductor" placeholder="Describa el propósito del viaje para el conductor"></x-base.form-textarea>
+                </div>
             </div>
         </div>
+
+        <!-- Sección de Selección -->
         <div class="mt-5 grid grid-cols-12 gap-6">
             <div class="intro-y col-span-12 lg:col-span-2">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Fuente</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_fuente">Fuente</x-base.form-label>
                     <x-base.tom-select id="input_fuente" class="w-full">
                         @foreach($fuentes as $row)
                             <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['fuente']}}</option>
@@ -257,7 +269,7 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-2">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">GA</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_ga">GA</x-base.form-label>
                     <x-base.tom-select id="input_ga" class="w-full" disabled>
                         @foreach($gerencia_administrativa as $row)
                             <option value="{{$row['id']}}" {{$row['seleccion']}}>{{$row['gerencia']}}</option>
@@ -267,7 +279,7 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-2">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Programa</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_programa">Programa</x-base.form-label>
                     <x-base.tom-select id="input_programa" class="w-full">
                         @foreach($programas as $row)
                             <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['programa']}}</option>
@@ -277,7 +289,7 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-2">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">UE</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_ue">UE</x-base.form-label>
                     <x-base.tom-select id="input_ue" class="w-full">
                         @foreach($ue as $row)
                             <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['ue']}}</option>
@@ -287,48 +299,40 @@
             </div>
             <div class="intro-y col-span-12 lg:col-span-4">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Actividad</x-base.form-label>
-                    <x-base.tom-select id="input_actividad" class="w-full">
-                        @foreach($act as $row)
-                            <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['act']}}</option>
-                        @endforeach
-                    </x-base.tom-select>
+                    <x-base.form-label class="font-extrabold" for="input_actividad">Actividad</x-base.form-label>
+                    <x-base.form-select id="input_actividad" 
+                        class="sm:mt-2 sm:mr-2"
+                        aria-label=".form-select-lg example"
+                        class="w-full" 
+                        data-placeholder="Seleccione una Actividad">
+                        
+                    </x-base.form-select>
                 </div>
             </div>
-        </div>
-        <!-- <div class="p-5">
-            <div class="input-form mt-3">
-                <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="validation-form-6">
-                    Artículos aplicados
-                    <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0">
-                        Espacio para redactar con libertad
-                    </span>
-                </x-base.form-label>
-                <x-base.form-textarea rows="5" class="form-control" id="validation-form-6" name="comment" placeholder="Describa el propósito del viaje..."></x-base.form-textarea>
-            </div>
-        </div> -->
-        <div class="mt-5 grid grid-cols-12 gap-6">
+ 
             <div class="intro-y col-span-12 lg:col-span-6">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Artículos aplicados</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_articulos">Artículos aplicados</x-base.form-label>
                     <x-base.tom-select id="input_articulos" class="w-full" data-placeholder="Selección de artículos" multiple>
                         @foreach($articulos as $row)
-                        <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['nombre']}}</option>
+                            <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['nombre']}}</option>
                         @endforeach
                     </x-base.tom-select>
                 </div>
             </div>
             <div class="intro-y col-span-12 lg:col-span-6">
                 <div class="p-5">
-                    <x-base.form-label for="crud-form-2">Firma de jefatura</x-base.form-label>
+                    <x-base.form-label class="font-extrabold" for="input_firma_jefatura">Firma de jefatura</x-base.form-label>
                     <x-base.tom-select id="input_firma_jefatura" class="w-full" data-placeholder="Selección de firma de jefatura">
                         @foreach($firmas_jefaturas as $row)
-                        <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['nombre']}}</option>
+                            <option value="{{$row['id']}}" {{$row['selected']}}>{{$row['nombre']}}</option>
                         @endforeach
                     </x-base.tom-select>
                 </div>
             </div>
         </div>
+
+
 
         <div class="p-5">
             <div class="mt-3">
@@ -443,6 +447,7 @@
         @vite('resources/js/pages/modal/index.js')
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
         <script type="module">
             var accion_guardar = false;   
             var accion_guardar_estado = false;            
@@ -461,7 +466,8 @@
             var hora_retorno = null;
             var numero_empleado_conductor = null;
             var itinerario = null;
-            var proposito = null;
+            var proposito_viajeros = null;
+            var proposito_conductor = null;
             var id_institucion = 1;
             var id_fuente = null;
             var id_gerencia_administrativa = null;
@@ -473,6 +479,7 @@
             var enviar_correo = null;
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var url_guardar_cambiar_estados = "{{url('/cambiar_estados')}}";
+            var url_cambiar_actividades_obras = "{{url('/viaticos/cargar/actividades_obras')}}";
             var titleMsg = null;
             var textMsg = null;
             var typeMsg = null;
@@ -513,6 +520,8 @@
                         }
                     });
 
+                    id_programa = $("#input_programa").val();
+                    cargar_actividades_obras();
 
                     //Iterar itinerario para editar
                     if(id_solicitud.length != 0){
@@ -562,6 +571,13 @@
                     }
                 //Finaliza Itinerario
 
+                $("#input_programa").change(function(selectElement){
+                    $("#input_actividad").val('');
+                    $("#input_actividad").prop("disabled", true);
+                    id_programa = $("#input_programa").val();
+                    cargar_actividades_obras()
+                });
+
             });
 
             $("#btn_rechazar").on("click", function (event) {
@@ -593,7 +609,8 @@
             $("#input_hora_regreso").val("{{$detalle_viatico['hora_retorno']}}");
             $("#input_vehiculo_placa").val("{{$detalle_viatico['vehiculo_placa']}}");
             $("#input_vehiculo_tipo").val("{{$detalle_viatico['vehiculo_tipo']}}");
-            $("#input_proposito").val("{{$detalle_viatico['proposito']}}");
+            $("#input_proposito_viajeros").val("{{$detalle_viatico['proposito_viajeros']}}");
+            $("#input_proposito_conductor").val("{{$detalle_viatico['proposito_conductor']}}");
             //Finaliza Llenar los inputs para editar
                         
             $("#btn_guardar").on("click", function () {
@@ -605,7 +622,8 @@
                 vehiculo_placa = $("#input_vehiculo_placa").val();
                 vehiculo_tipo = $("#input_vehiculo_tipo").val();
                 numero_empleado_conductor = $("#input_numero_empleado_conductor").val();
-                proposito = $("#input_proposito").val();
+                proposito_viajeros = $("#input_proposito_viajeros").val();
+                proposito_conductor = $("#input_proposito_conductor").val();
                 id_fuente = $("#input_fuente").val();
                 id_gerencia_administrativa = $("#input_ga").val();
                 id_programa = $("#input_programa").val();
@@ -686,9 +704,17 @@
                 //     return false;
                 // }
 
-                if(proposito == null || proposito == ''){
+                if(proposito_viajeros == null || proposito_viajeros == ''){
                     titleMsg = 'Valor Requerido'
-                    textMsg = 'Debe especificar un valor para Propósito del viaje';
+                    textMsg = 'Debe especificar un valor para Propósito del viaje de los viajeros';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+
+                if(proposito_conductor == null || proposito_conductor == ''){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Propósito del viaje del conductor';
                     typeMsg = 'error';
                     notificacion()
                     return false;
@@ -781,7 +807,8 @@
                         'hora_retorno': hora_retorno,
                         'numero_empleado_conductor': numero_empleado_conductor,
                         'itinerario': itinerario,
-                        'proposito': proposito,
+                        'proposito_viajeros': proposito_viajeros,
+                        'proposito_conductor': proposito_conductor,
                         'id_institucion': id_institucion,
                         'id_fuente': id_fuente,
                         'id_gerencia_administrativa': id_gerencia_administrativa,
@@ -851,6 +878,26 @@
                             // $("#btn_guardar").prop("disabled", false);
                             // $("#icon_guardando").removeClass('w-8 h-8')
                         }
+                    },
+                });
+            }
+
+            function cargar_actividades_obras() {
+                $.ajax({
+                    type: "post",
+                    url: url_cambiar_actividades_obras,
+                    data: {
+                        'id_programa': id_programa,
+                        'id_solicitud': id_solicitud
+                    },
+                    success: function (data) {
+                        var act_list = data.act_list;
+                        $('#input_actividad').html('');
+
+                        for (let i = 0; i < act_list.length; i++) {
+                            $('#input_actividad').append('<option value="'+act_list[i].id+'" '+act_list[i].selected+'>'+act_list[i].act+'</option>');
+                        }
+                        $("#input_actividad").prop("disabled", false);
                     },
                 });
             }

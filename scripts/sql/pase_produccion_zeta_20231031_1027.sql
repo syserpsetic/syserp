@@ -1034,3 +1034,34 @@ CREATE TABLE IF NOT EXISTS administracion.via_ordenes_viajes_calculos
         ON DELETE NO ACTION
 )
 --Finaliza pase a produccion 20240724_1551
+
+--Nuevo pase a produccion 20240815_0928
+
+INSERT INTO
+	ADMINISTRACION.VIA_ZONAS_TIPOS_MOVIMIENTOS (NOMBRE)
+VALUES
+	('FONDO DE EMERGENCIA');
+
+INSERT INTO
+	ADMINISTRACION.VIA_ZONAS_TIPOS_MOVIMIENTOS (NOMBRE)
+VALUES
+	('PEAJE');
+
+delete from administracion.estados_tipos_solicitudes_destinos;
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (1,1,2);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (2,1,3);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (3,1,4);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (5,1,6);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (6,1,7);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (7,1,null);
+insert into administracion.estados_tipos_solicitudes_destinos (id_estado_solicitud, id_tipo_solicitud, id_estado_solicitud_destino) values (4,1,5);
+
+insert into administracion.via_firmas_jefaturas (nombre) values ('VICERECTOR ADMINISTRATIVO');
+insert into administracion.via_firmas_jefaturas (nombre) values ('VICERECTOR DE VIDA ESTUDIANTIL');
+insert into administracion.via_firmas_jefaturas (nombre) values ('VICERECTOR DE VINCULACIÓN');
+
+alter table ADMINISTRACION.VIA_ORDENES_VIAJES add column proposito_2 text;
+alter table administracion.via_ordenes_viajes_empleados add column numero_orden text;
+alter table administracion.via_ordenes_viajes_empleados add column observacion text;
+alter table ADMINISTRACION.VIA_ORDENES_VIAJES_EMPLEADOS add column numero_orden_viaje text;
+--Finaliza Nuevo pase a produccion 20240815_0928

@@ -19,9 +19,8 @@
                             {{$orden_viaje['etapa']}}
                         </strong>
                     </div>
-                    <br />
                     @if($cambiar_estado == 1)
-                    <div class="flex flex-wrap">
+                    <div class="flex flex-wrap justify-center mt-4">
                         <x-base.button class="mb-2 mr-2 w-32" variant="danger" size="sm" id="btn_rechazar"> <x-base.lucide class="mr-2 h-4 w-4" icon="ArrowLeft" /> Rechazar </x-base.button>
                         <x-base.button class="mb-2 mr-2 w-32" variant="primary" size="sm" id="btn_enviar">
                             &nbsp;&nbsp;Enviar &nbsp;
@@ -97,6 +96,8 @@
                         <th>Viajero</th>
                         <th>Tipo</th>
                         <th>Monto Asignado</th>
+                        <th>Viaje</th>
+                        <th>Observación</th>
                         <th>Acciones</th>
                     </tr>
                 </thead>
@@ -107,38 +108,71 @@
                         <td>{{$row['viajeros']}}</td>
                         <td>{{$row['tipo']}}</td>
                         <td>{{$row['monto_diario_asignado_formato']}}</td>
+                        <td><lord-icon
+                                @if($row['activo_viaje']) src="https://cdn.lordicon.com/guqkthkk.json" @else src="https://cdn.lordicon.com/ramibnzh.json" @endif
+                                trigger="loop"
+                                delay="1000"
+                                @if(!$row['activo_viaje']) colors="primary:#e83a30,secondary:#e4e4e4" state="in-reveal" @else state="in-reveal" @endif
+                                style="width:14px;height:14px">
+                            </lord-icon> {{$row['estado']}}
+                        </td>
+                        <td>{{$row['observacion']}}</td>
                         <td>
+                        @if($row['activo_viaje'])
+                                <x-base.button
+                                    href="{{url('/solicitudes/')}}/{{$orden_viaje['id_solicitud']}}/empleado/{{$row['numero_empleado']}}/imprimir"
+                                    as="a"
+                                    class="mb-2 mr-1 text-dark"
+                                    variant="pending"
+                                    size="sm"
+                                ><i data-lucide="Printer" class="w-4 h-4 mr-1"></i> Imprimir Orden Viaje
+                                </x-base.button>
+                            @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
+                                <x-base.button
+                                    href="{{url('/solicitud_viaticos/')}}/{{$orden_viaje['id_solicitud']}}/ver_calculos/viajero/{{$row['numero_empleado']}}"
+                                    as="a"
+                                    class="mb-2 mr-1 text-white"
+                                    variant="success"
+                                    size="sm"
+                                ><i data-lucide="percent" class="w-4 h-4 mr-1"></i> Calcular Viáticos
+                                </x-base.button>
+                            @endif
+                            @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
+                                <x-base.button
+                                    class="mb-2 mr-1 text-white btn_asignar_monto"
+                                    variant="primary"
+                                    size="sm"
+                                    data-id_ove="{{$row['id_ove']}}" 
+                                    data-viajeros="{{$row['viajeros']}}" 
+                                    data-tipo="{{$row['tipo']}}"
+                                    data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
+                                ><i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> Asignar Monto
+                                </x-base.button>
+                            @endif
+                                <x-base.button
+                                    class="mb-2 mr-1 btn_anular_viaje"
+                                    variant="danger"
+                                    size="sm"
+                                    data-id_ove="{{$row['id_ove']}}" 
+                                    data-viajeros="{{$row['viajeros']}}" 
+                                    data-tipo="{{$row['tipo']}}"
+                                    data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
+                                    data-viajero="{{$row['viajeros']}}"
+                                ><i data-lucide="minus-circle" class="w-4 h-4 mr-1"></i> Anular Viaje
+                                </x-base.button>
+                        @else
                             <x-base.button
-                                href="{{url('/solicitudes/')}}/{{$orden_viaje['id_solicitud']}}/empleado/{{$row['numero_empleado']}}/imprimir"
-                                as="a"
-                                class="mb-2 mr-1 text-dark"
-                                variant="pending"
-                                size="sm"
-                            ><i data-lucide="Printer" class="w-4 h-4 mr-1"></i> Imprimir Orden Viaje
-                            </x-base.button>
-                        @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
-                            <x-base.button
-                                href="{{url('/solicitud_viaticos/')}}/{{$orden_viaje['id_solicitud']}}/ver_calculos/viajero/{{$row['numero_empleado']}}"
-                                as="a"
-                                class="mb-2 mr-1 text-white"
-                                variant="success"
-                                size="sm"
-                            ><i data-lucide="percent" class="w-4 h-4 mr-1"></i> Calcular Viáticos
-                            </x-base.button>
-                        @endif
-                        @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
-                            <x-base.button
-                                class="mb-2 mr-1 text-white btn_asignar_monto"
-                                variant="primary"
+                                class="mb-2 mr-1 btn_anular_viaje"
+                                variant="facebook"
                                 size="sm"
                                 data-id_ove="{{$row['id_ove']}}" 
                                 data-viajeros="{{$row['viajeros']}}" 
                                 data-tipo="{{$row['tipo']}}"
                                 data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
-                            ><i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> Asignar Monto
+                                data-viajero="{{$row['viajeros']}}"
+                            ><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Reactivar Viaje
                             </x-base.button>
                         @endif
-                        
                         </td>
                     </tr>
                     @endforeach
@@ -180,6 +214,41 @@
     </x-base.dialog.panel>
 </x-base.dialog>
 <!-- END: Invoice -->
+
+<!-- BEGIN: Modal Content -->
+<x-base.dialog id="modal_anular_viaje">
+            <x-base.dialog.panel>
+                <div class="p-5 text-center">
+                    <lord-icon
+                        src="https://cdn.lordicon.com/akqsdstj.json"
+                        trigger="loop"
+                        delay="1000"
+                        style="width:150px;height:150px">
+                    </lord-icon>
+                    <div class="mt-5 text-3xl">¡Advertencia!</div>
+                    <div class="mt-2 text-slate-500">
+                        ¿Realmente desea modificar el viaje de este empleado?<br />
+                        <div id="viajero"></div>
+                    </div>
+                    <div class="input-form mt-3">
+                        <x-base.form-label class="flex w-full flex-col sm:flex-row" htmlFor="input_observacion_anulacion">
+                            Observación
+                            <span class="mt-1 text-xs text-slate-500 sm:ml-auto sm:mt-0" id="text_observacion"> </span>
+                        </x-base.form-label>
+                        <x-base.form-textarea rows="5" class="form-control" id="input_observacion_anulacion" name="comment" placeholder="Escriba sus observaciones..."></x-base.form-textarea>
+                    </div>
+                </div>
+                <div class="px-5 pb-8 text-center">
+                    <x-base.button class="mr-1 w-24" data-tw-dismiss="modal" type="button" variant="outline-secondary">
+                        Cancelar
+                    </x-base.button>
+                    <x-base.button class="w-24" type="button" variant="primary" id="btn_guardar_anular_viaje">
+                        Aceptar
+                    </x-base.button>
+                </div>
+            </x-base.dialog.panel>
+        </x-base.dialog>
+        <!-- END: Modal Content -->
 
 <div class="text-center">
     <!-- BEGIN: Notification Content -->
@@ -264,9 +333,11 @@
         @vite('resources/js/pages/modal/index.js')
         @vite('resources/js/vendor/toastify/index.js')
         @vite('resources/js/pages/notification/index.js')
+        <script src="https://cdn.lordicon.com/lordicon.js"></script>
         <script type="module">
             var accion_guardar = false;
             var accion_guardar_estado = false;  
+            var accion_guardar_anulacion = false;  
             var id_solicitud_estado = "{{$orden_viaje['id_solicitud_estado']}}";
             var accion = null;
             var id = null;
@@ -275,6 +346,7 @@
             var id = (id_solicitud.length != 0) ? "{{$orden_viaje['id_solicitud']}}" : null;
             var estado = null
             var observacion_estado = null;
+            var observacion_anulacion = null;
             var id_ove = null;
             var monto = null;
             var numero_empleado = null;
@@ -300,9 +372,11 @@
             var tabulator_editar = null;
             var enviar_correo = null;
             var tabulator = null;
+            var app_url = "{{ env('APP_URL') }}";
             var url_solicitud_viaticos_data = "{{url('/solicitudes/')}}/{{$orden_viaje['id_solicitud']}}/viaticos/imprimir/viajeros";
             var url_guardar_viaticos = "{{url('/viaticos/guardar')}}";
             var url_guardar_monto = "{{url('/viaticos/guardar_monto')}}";
+            var url_anular_viaje = "{{url('/viaticos/anular_viaje')}}";
             var url_guardar_cambiar_estados = "{{url('/cambiar_estados')}}";
             var titleMsg = null;
             var textMsg = null;
@@ -311,6 +385,7 @@
             var table = null;
             var rowNumber = null;
             var numerofila = null;
+            var fila = null;
             var id_seleccionar = localStorage.getItem("sdatatable_id_seleccionar");
 
             $(document).ready(function () {
@@ -361,11 +436,9 @@
                                      });
 
             $("#sdatatable tbody").on("click", ".btn_asignar_monto", function () {
-                var fila = $('#sdatatable').DataTable().row($(this).parents('tr'));
                 id_ove = $(this).data('id_ove');
                 monto = $(this).data('monto_diario_asignado');
                 $("#modal_input_monto").val(monto);
-                numerofila = fila.index(); 
                 $("#modal_text_viajero").html('<strong>EMPLEADO: </strong>'+$(this).data('viajeros'));
                 $("#modal_text_tipo").html('<strong>TIPO: </strong>'+$(this).data('tipo'));
                 const el = document.querySelector("#modal_asignar_monto");
@@ -394,6 +467,16 @@
                 $("#text_observacion").html('Opcional');
                 modal_estado_accion();
             });
+
+            $('#sdatatable tbody').on('click', '.btn_anular_viaje', function() {
+                    accion = 3;
+                    id = $(this).data('id_ove');
+                    $('#viajero').html($(this).data('viajero'));
+                    $("#input_observacion_anulacion").val('');
+                    const el = document.querySelector("#modal_anular_viaje");
+                    const modal = tailwind.Modal.getOrCreateInstance(el);
+                    modal.show(); 
+                });
 
             $("#modal_btn_guardar_monto").on("click", function () {
                 monto = $("#modal_input_monto").val();
@@ -435,6 +518,23 @@
                 if(!accion_guardar_estado){
                     cambiar_estados()
                 }
+            });
+
+            $("#btn_guardar_anular_viaje").on("click", function () {
+                observacion_anulacion = $("#input_observacion_anulacion").val();
+                
+                if(observacion_anulacion == null || observacion_anulacion == ''){
+                    titleMsg = 'Valor Requerido'
+                    textMsg = 'Debe especificar un valor para Observación.';
+                    typeMsg = 'error';
+                    notificacion()
+                    return false;
+                }
+                
+                if(!accion_guardar_anulacion){
+                    anular_viaje();
+                }
+                
             });
 
             function modal_estado_accion(){
@@ -539,10 +639,91 @@
                                 '</button>'
                                 @endif
                             ]; 
-                            $('#sdatatable').DataTable().row(numerofila).data(nuevoFila);
+                            $('#sdatatable').DataTable().row(rowNumber).data(nuevoFila);
                             notificacion()
                             accion_guardar = false;
                             const el = document.querySelector("#modal_asignar_monto");
+                            const modal = tailwind.Modal.getOrCreateInstance(el);
+                            modal.hide();
+                        }
+                    },
+                });
+            }
+
+            function anular_viaje() {
+                accion_guardar_anulacion = true;
+                $.ajax({
+                    type: "post",
+                    url: url_anular_viaje,
+                    data: {
+                        'id': id,
+                        'observacion': observacion_anulacion
+                    },
+                    success: function (data) {
+                        if (data.msgError != null) {
+                            titleMsg = "Error al Guardar";
+                            textMsg = data.msgError;
+                            typeMsg = "error";
+                            notificacion()
+                            accion_guardar = false;
+                        } else {
+                            titleMsg = "Datos Guardados";
+                            textMsg = data.msgSuccess;
+                            typeMsg = "success";
+                            var row = data.viajero;
+                            var nuevoFila = [
+                                row.numero_empleado, row.viajeros, row.tipo, row.monto_diario_asignado_formato, (row.activo_viaje) ? '<lord-icon src="https://cdn.lordicon.com/guqkthkk.json" trigger="loop" delay="1000" state="in-reveal" style="width:14px;height:14px"> ' + row.estado : '<lord-icon src="https://cdn.lordicon.com/ramibnzh.json" trigger="loop" delay="1000" colors="primary:#e83a30,secondary:#e4e4e4" state="in-reveal" style="width:14px;height:14px"> ' + row.estado, row.observacion, 
+                                (row.activo_viaje) ?
+                                '<a href="'+app_url+'/solicitudes/'+id_solicitud+'/empleado/'+row.numero_empleado+'/imprimir" class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-pending border-pending dark:border-pending mb-2 mr-1 text-dark">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="Printer" data-lucide="Printer" class="lucide lucide-Printer w-4 h-4 mr-1">'+
+                                    '<polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg> Imprimir Orden Viaje'+
+                                '</a>'
+                                @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
+                                +'<a href="'+app_url+'/solicitud_viaticos/'+id_solicitud+'/ver_calculos/viajero/'+row.numero_empleado+'" class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-success border-success dark:border-success mb-2 mr-1 text-white">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="percent" data-lucide="percent" class="lucide lucide-percent w-4 h-4 mr-1">'+
+                                    '<line x1="19" y1="5" x2="5" y2="19"></line><circle cx="6.5" cy="6.5" r="2.5"></circle><circle cx="17.5" cy="17.5" r="2.5"></circle></svg> Calcular Viáticos'+
+                                '</a>'
+                                @endif
+                                @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
+                                +'<button '+
+                                    'data-id_ove="' + row.id_ove + '" '+
+                                    'data-viajeros="' + row.viajeros + '" '+
+                                    'data-tipo="' + row.tipo + '" '+
+                                    'data-monto_diario_asignado="' + row.monto_diario_asignado + '" '+
+                                    'class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&amp;:hover:not(:disabled)]:bg-opacity-90 [&amp;:hover:not(:disabled)]:border-opacity-90 [&amp;:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-primary border-primary dark:border-primary btn_asignar_monto mb-2 mr-1 text-white btn_asignar_monto">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="dollar-sign" data-lucide="dollar-sign" class="lucide lucide-dollar-sign w-4 h-4 mr-1">'+
+                                        '<line x1="12" y1="2" x2="12" y2="22"></line>'+
+                                        '<path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>'+
+                                    '</svg> Asignar Monto'+
+                                '</button>'
+                                @endif
+                                +'<button '+
+                                    'data-id_ove="' + row.id_ove + '" '+
+                                    'data-viajeros="' + row.viajeros + '" '+
+                                    'data-tipo="' + row.tipo + '" '+
+                                    'data-monto_diario_asignado="' + row.monto_diario_asignado + '" '+
+                                    'data-viajero="' + row.viajeros + '"'+
+                                    'class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-danger border-danger text-white dark:border-danger btn_anular_viaje mb-2 mr-1 btn_anular_viaje">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="minus-circle" data-lucide="minus-circle" class="lucide lucide-minus-circle w-4 h-4 mr-1"><circle cx="12" cy="12" r="10"></circle><line x1="8" y1="12" x2="16" y2="12"></line></svg> Anular Viaje'+
+                                '</button>'
+                                : '<button '+
+                                    'data-id_ove="' + row.id_ove + '"'+
+                                    'data-viajeros="' + row.viajeros + '"'+
+                                    'data-tipo="' + row.tipo + '"'+
+                                    'data-monto_diario_asignado="' + row.monto_diario_asignado + '"'+
+                                    'data-viajero="' + row.viajeros + '"'+
+                                    'class="transition duration-200 border shadow-sm inline-flex items-center justify-center rounded-md font-medium cursor-pointer focus:ring-4 focus:ring-primary focus:ring-opacity-20 focus-visible:outline-none dark:focus:ring-slate-700 dark:focus:ring-opacity-50 [&:hover:not(:disabled)]:bg-opacity-90 [&:hover:not(:disabled)]:border-opacity-90 [&:not(button)]:text-center disabled:opacity-70 disabled:cursor-not-allowed text-xs py-1.5 px-2 bg-[#3b5998] border-[#3b5998] text-white dark:border-[#3b5998] btn_anular_viaje mb-2 mr-1 btn_anular_viaje">'+
+                                    '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" icon-name="check-circle" data-lucide="check-circle" class="lucide lucide-check-circle w-4 h-4 mr-1"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline>'+
+                                        '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>'+
+                                        '<polyline points="22 4 12 14.01 9 11.01"></polyline>'+
+                                    '</svg>'+
+                                    'Reactivar Viaje'+
+                                '</button>'
+                            ]; 
+                            $('#sdatatable').DataTable().row(rowNumber).data(nuevoFila);
+                            notificacion()
+                            accion_guardar_anulacion = false;
+                            const el = document.querySelector("#modal_anular_viaje");
                             const modal = tailwind.Modal.getOrCreateInstance(el);
                             modal.hide();
                         }

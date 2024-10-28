@@ -9,7 +9,13 @@
 <div class="intro-y box mt-5 px-5 pt-5">
     <div class="-mx-5 flex flex-col border-b border-slate-200/60 pb-5 dark:border-darkmode-400 lg:flex-row">
         <div class="flex flex-1 items-center justify-center px-5 lg:justify-start">
-            <x-base.lucide class="h-40 w-40" icon="percent" />
+                        <lord-icon
+                            src="https://cdn.lordicon.com/nqtlkdwi.json"
+                            trigger="in"
+                            delay="1000"
+                            state="in-reveal"
+                            style="width:180px;height:180px">
+                        </lord-icon>
             <div class="lg:ml-5 mt-5 lg:mt-0">
                 <div class="text-center lg:text-left">
                     <h1 class="text-5xl font-medium leading-none">CÁLCULO DE VIÁTICOS</h1>
@@ -72,7 +78,7 @@
             <div class="flex items-center justify-center lg:justify-start">
                 <div class="flex items-center truncate sm:whitespace-normal">
                     <x-base.lucide class="mr-2 h-4 w-4" icon="Hash" />
-                    <strong>Orden de viaje No.:&nbsp; </strong>
+                    <strong>Orden de viaje No.:&nbsp; </strong>{{$detalleViaje['numero_orden_viaje']}} 
                 </div>
             </div>
             <div class="flex items-center justify-center lg:justify-start">
@@ -153,15 +159,17 @@
 <!-- BEGIN: Product Variant (Details) -->
 <div class="intro-y box mt-5 p-5">
     <div class="rounded-md border border-slate-200/60 p-5 dark:border-darkmode-400">
-        <div class="flex items-center flex-col md:flex-row border-b border-slate-200/60 pb-5 text-base font-medium dark:border-darkmode-400">
-            <strong>Detalles del Cálculo</strong>
-            <div class="mt-3 md:mt-0 md:ml-auto">
-                <div class="flex items-center">
+        <div class="flex flex-col md:flex-row items-start md:items-center border-b border-slate-200/60 pb-5 text-base font-medium dark:border-darkmode-400">
+            <div class="mt-3 md:mt-0 md:ml-auto w-full md:w-auto">
+                <div class="flex flex-col md:flex-row md:items-center">
+                    <div class="flex-shrink-0 md:ml-auto text-left">
+                        <strong>Detalles del Cálculo</strong>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 
+                    </div>
                     @if($verificarMonedaDolar == true)
-                    <div class="mr-4">
+                    <div class="flex-shrink-0 md:ml-auto">
                         <span class="mr-2 text-sm">Asignar tasa de cambio</span>
                     </div>
-                    <div class="flex-shrink-0">
+                    <div class="flex-shrink-0 md:ml-auto">
                         <x-base.input-group inputGroup>
                             <x-base.input-group.text>L.</x-base.input-group.text>
                             <x-base.form-input
@@ -173,7 +181,24 @@
                         </x-base.input-group>
                     </div>
                     @endif
-                    <div class="ml-4">
+                    <div class="mb-4 md:mb-0 md:mr-4">
+                    &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                    </div>
+                    <div class="flex-shrink-0 md:ml-auto">
+                        <x-base.input-group inputGroup>
+                            <x-base.input-group.text>No.Orden.</x-base.input-group.text>
+                            <x-base.form-input
+                                type="text"
+                                placeholder="000-99"
+                                id="input_numero_orden"
+                                maxlength="6"
+                            />
+                        </x-base.input-group>
+                    </div>
+                    <div class="mb-4 md:mb-0 md:mr-4">
+                        &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
+                        </div>
+                    <div class="flex-shrink-0 md:ml-auto">
                         <x-base.button id="btn_ejecutar_calculo" class="w-full md:w-44" variant="primary">
                             <x-base.lucide class="mr-2 h-4 w-4" icon="Activity" />
                             Ejecutar
@@ -563,6 +588,7 @@
             var accion_guardar = false;
             var accion = null;
             var id = null;
+            var id_orden_viaje_empleado = {{$detalleViaje['id_orden_viaje_empleado']}};;
             var nombre = null;
             var descripcion = null;
             var calculoId = null;
@@ -573,6 +599,8 @@
             var aplicarCategoriaGeneral = null;
             var numeroEmpleado = {{$detalleViaje['numero_empleado']}};
             var solicitudId = {{$detalleViaje['id_solicitud']}};
+            var numero_orden_viaje = ("{{$detalleViaje['numero_orden_viaje']}}" == "") ? "{{$numero_orden_viaje['orden_viaje']}}" : "{{$detalleViaje['numero_orden_viaje']}}";
+            var input_numero_orden = null;
             var enviar_correo = null;
             var tabulator = null;
             var url_zonas_data = "{{url('/configuracion/zonas/data')}}";
@@ -596,6 +624,16 @@
                     }
                     
                 });	 
+
+                $('#input_numero_orden').on('input', function() {
+                let value = $(this).val().replace(/\D/g, ''); // Elimina cualquier carácter que no sea dígito
+                if (value.length > 3) {
+                    value = value.substring(0, 3) + '-' + value.substring(3, 6);
+                }
+                $(this).val(value);
+            });
+
+            $("#input_numero_orden").val(numero_orden_viaje);
                     
             });
 
@@ -825,6 +863,7 @@
 
             function guardarCalculo() {
                 accion_guardar = true;
+                input_numero_orden = $("#input_numero_orden").val();
                 const el2 = document.querySelector("#modal_cargando");
                 const modal2 = tailwind.Modal.getOrCreateInstance(el2);
                 modal2.show();
@@ -842,7 +881,9 @@
                         'calculos' : calculos,
                         'movimientoId' : movimientoId,
                         'monto_nuevo_movimiento' : monto_nuevo_movimiento,
-                        'calculoId' : calculoId
+                        'calculoId' : calculoId,
+                        'numero_orden_viaje' : input_numero_orden,
+                        'id_orden_viaje_empleado' : id_orden_viaje_empleado
                     },
                     success: function(data) {
                         if (data.msgError) {

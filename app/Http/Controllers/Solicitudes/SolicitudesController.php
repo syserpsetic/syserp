@@ -17,9 +17,22 @@ use App\Http\Controllers\ControladorPermisos;
 class SolicitudesController extends Controller
 {
     public function view_solicitudes(Request $request){
-        $scopes = new ControladorPermisos();
-        $scopes = $scopes->ver_permisos();
-        return view('pages.solicitudes.solicitudes')->with('scopes', $scopes);
+        // $scopes = new ControladorPermisos();
+        // $scopes = $scopes->ver_permisos();
+
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/solicitudes');
+
+        if($response->status() === 403){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
+        $solicitudes = $response['solicitudes'];
+        $scopes = $response['scopes'];
+
+        return view('pages.solicitudes.solicitudes')->with('solicitudes', $solicitudes)->with('scopes', $scopes);
+        //return view('pages.solicitudes.solicitudes')->with('scopes', $scopes);
     }
 
     public function data_solicitudes(Request $request){

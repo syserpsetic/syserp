@@ -127,7 +127,9 @@ Route::middleware('auth:api')->group(function () {
     Route::get('/viaticos/agregar', [ControladorViatico::class, 'agregar_viaticos']);
     Route::get('/viaticos/editar/{id_viatico}', [ControladorViatico::class, 'editar_viaticos']);
     Route::post('/viaticos/guardar', [ControladorViatico::class, 'guardar_viaticos']);
+    Route::post('/viaticos/cargar/actividades_obras', [ControladorViatico::class, 'cargar_actividades_obras']);
     Route::post('/viaticos/guardar_monto', [ControladorViatico::class, 'guardar_viaticos_monto']);
+    Route::post('/viaticos/anular_viaje', [ControladorViatico::class, 'anular_viaje']);
     Route::get('/solicitud_viaticos/{id_viatico}/ver_calculos/viajero/{numero_empleado}', [ControladorViatico::class, 'verCalculos']);
     Route::post('/solicitud_viaticos/guardar_calculos/viajero', [ControladorViatico::class, 'guardarCalculos']);
     Route::post('/cambiar_estados', [EstadosController::class, 'cambiar_estados']);

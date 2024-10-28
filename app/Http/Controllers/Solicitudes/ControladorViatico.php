@@ -110,7 +110,7 @@ class ControladorViatico extends Controller
         $gerencia_administrativa = $response['gerencia_administrativa'];
         $programas = ($id_solicitud == null || $id_solicitud == '') ? $response['programas'] : $data['programas'];
         $ue = ($id_solicitud == null || $id_solicitud == '') ? $response['ue'] : $data['ue'];
-        $act = ($id_solicitud == null || $id_solicitud == '') ? $response['act'] : $data['act'];
+        //$act = ($id_solicitud == null || $id_solicitud == '') ? $response['act'] : $data['act'];
         $articulos = ($id_solicitud == null || $id_solicitud == '') ? $response['articulos'] : $data['articulos'];
         $firmas_jefaturas = ($id_solicitud == null || $id_solicitud == '') ? $response['firmas_jefaturas'] : $data['firmas_jefaturas'];
         $detalle_viatico = ($id_solicitud == null || $id_solicitud == '') ? $response['detalle_viatico'] : $data['detalle_viatico'];
@@ -124,13 +124,42 @@ class ControladorViatico extends Controller
                 ->with('departamentos', $departamentos)->with('ciudades_elegidas', $ciudades_elegidas)
                 ->with('ciudades', $ciudades)->with('fuentes', $fuentes)
                 ->with('gerencia_administrativa', $gerencia_administrativa)
-                ->with('programas', $programas)->with('ue', $ue)->with('act', $act)
+                ->with('programas', $programas)->with('ue', $ue)//->with('act', $act)
                 ->with('articulos', $articulos)->with('firmas_jefaturas', $firmas_jefaturas)
                 ->with('detalle_viatico', $detalle_viatico)->with("id_solicitud", $id_solicitud)
                 ->with('scopes', $scopes);
         
     }
     
+    public function cargar_actividades_obras(Request $request){
+        $msgSuccess = null;
+        $msgError = null;
+        $act_list = null;
+        
+        try {
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/cargar/actividades_obras', [
+                'id_programa' => $request->id_programa,
+                'id_solicitud' => $request->id_solicitud
+            ]);
+            
+            $data = $response->json();
+            if($response->status() === 200){
+                $act_list = $data["act"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
+            }
+        } catch (Exception $e) {
+            $msgError = $e->getMessage();
+        }
+
+        
+        // //return response()->json($data);
+        //throw new \Exception($act_list);
+        return response()->json(['act_list' => $act_list]);
+    }
 
     public function guardar_viaticos(Request $request){
         $msgSuccess = null;
@@ -150,7 +179,8 @@ class ControladorViatico extends Controller
                 'fecha_retorno' => $request->fecha_retorno,
                 'itinerario' => $request->itinerario,
                 'numero_empleado_conductor' => $request->numero_empleado_conductor,
-                'proposito' => $request->proposito,
+                'proposito_viajeros' => $request->proposito_viajeros,
+                'proposito_conductor' => $request->proposito_conductor,
                 'id_institucion' => $request->id_institucion,
                 'id_fuente' => $request->id_fuente,
                 'id_gerencia_administrativa' => $request->id_gerencia_administrativa,
@@ -220,6 +250,42 @@ class ControladorViatico extends Controller
         return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError,"viajerosList" => $viajerosList]);
     }
 
+    public function anular_viaje(Request $request){
+        $viajero = null;
+        $msgSuccess = null;
+        $msgError = null;
+        
+        try {
+            //throw new \Exception($request->observacion);
+            $response = Http::withHeaders([
+                'Authorization' => session('token'),
+                'Content-Type' => 'application/json',
+            ])->post(env('API_BASE_URL_ZETA').'/api/auth/viaticos/anular_viaje', [
+                'id' => $request->id,
+                'observacion' => $request->observacion,
+            ]);
+            
+            $data = $response->json();
+            if($response->status() === 200){
+                if(!$data["estatus"]){
+                    $msgError = "Desde backend: ".$data["msgError"];
+                }
+
+                $msgSuccess = $data["msgSuccess"];
+                $viajero = $data["viajero"];
+            }elseif($response->status() === 403){
+                $msgError = "No tiene permisos para realizar esta acción";
+            }
+        } catch (Exception $e) {
+            $msgError = $e->getMessage();
+        }
+
+        
+        // //return response()->json($data);
+        //throw new \Exception($data);
+        return response()->json(['msgSuccess' => $msgSuccess, 'msgError' => $msgError,"viajero"=>$viajero]);
+    }
+
     public function verCalculos($id_solicitud, $numero_empleado){
         $msgSuccess = null;
         $msgError = null;
@@ -237,6 +303,7 @@ class ControladorViatico extends Controller
             return view('pages.error-page-403')->with('scopes', $scopes = array());
         }
 
+        $numero_orden_viaje = $response['numero_orden_viaje'];
         $diasJornadas = $response['diasJornadas'];
         $detalleViaje = $response['detalleViaje'];
         $viajerosLista = $response['viajerosLista'];
@@ -253,6 +320,7 @@ class ControladorViatico extends Controller
         $scopes = $response['scopes'];
 
         return view('pages.solicitudes.viaticos.calculo-viatico')
+                ->with('numero_orden_viaje', $numero_orden_viaje)
                 ->with('diasJornadas', $diasJornadas)
                 ->with('detalleViaje', $detalleViaje)
                 ->with('viajerosLista', $viajerosLista)
@@ -279,6 +347,8 @@ class ControladorViatico extends Controller
         $movimientoId = $request->movimientoId;
         $monto_nuevo_movimiento = $request->monto_nuevo_movimiento;
         $calculoId = $request->calculoId;
+        $numero_orden_viaje = $request->numero_orden_viaje;
+        $id_orden_viaje_empleado = $request->id_orden_viaje_empleado;
         $accion = $request->accion;
         $msgSuccess = null;
         $msgError = null;
@@ -299,6 +369,8 @@ class ControladorViatico extends Controller
                 'movimientoId' => $movimientoId,
                 'monto_nuevo_movimiento' => $monto_nuevo_movimiento,
                 'calculoId' => $calculoId,
+                'numero_orden_viaje' => $numero_orden_viaje,
+                'id_orden_viaje_empleado' => $id_orden_viaje_empleado
             ]);
             
             $data = $response->json();
