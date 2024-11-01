@@ -136,6 +136,17 @@
                                     size="sm"
                                 ><i data-lucide="percent" class="w-4 h-4 mr-1"></i> Calcular Viáticos
                                 </x-base.button>
+                                <x-base.button
+                                    class="mb-2 mr-1 btn_anular_viaje"
+                                    variant="danger"
+                                    size="sm"
+                                    data-id_ove="{{$row['id_ove']}}" 
+                                    data-viajeros="{{$row['viajeros']}}" 
+                                    data-tipo="{{$row['tipo']}}"
+                                    data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
+                                    data-viajero="{{$row['viajeros']}}"
+                                ><i data-lucide="minus-circle" class="w-4 h-4 mr-1"></i> Anular Viaje
+                                </x-base.button>
                             @endif
                             @if(in_array('zeta_escribir_viaticos_asignar_monto', $scopes))
                                 <x-base.button
@@ -149,29 +160,20 @@
                                 ><i data-lucide="dollar-sign" class="w-4 h-4 mr-1"></i> Asignar Monto
                                 </x-base.button>
                             @endif
+                        @else
+                            @if(in_array('zeta_escribir_calculo_viaticos', $scopes))
                                 <x-base.button
                                     class="mb-2 mr-1 btn_anular_viaje"
-                                    variant="danger"
+                                    variant="facebook"
                                     size="sm"
                                     data-id_ove="{{$row['id_ove']}}" 
                                     data-viajeros="{{$row['viajeros']}}" 
                                     data-tipo="{{$row['tipo']}}"
                                     data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
                                     data-viajero="{{$row['viajeros']}}"
-                                ><i data-lucide="minus-circle" class="w-4 h-4 mr-1"></i> Anular Viaje
+                                ><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Reactivar Viaje
                                 </x-base.button>
-                        @else
-                            <x-base.button
-                                class="mb-2 mr-1 btn_anular_viaje"
-                                variant="facebook"
-                                size="sm"
-                                data-id_ove="{{$row['id_ove']}}" 
-                                data-viajeros="{{$row['viajeros']}}" 
-                                data-tipo="{{$row['tipo']}}"
-                                data-monto_diario_asignado="{{$row['monto_diario_asignado']}}" 
-                                data-viajero="{{$row['viajeros']}}"
-                            ><i data-lucide="check-circle" class="w-4 h-4 mr-1"></i> Reactivar Viaje
-                            </x-base.button>
+                            @endif
                         @endif
                         </td>
                     </tr>
