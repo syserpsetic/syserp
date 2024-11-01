@@ -41,7 +41,9 @@
                 {{$orden_viaje['fecha_viaje']}}
             </div>
             <br />
-            <div class="mt-1 text-justify"><strong>Propósito del viaje:</strong> {{$orden_viaje['proposito']}}</div>
+            <div class="mt-1 text-justify"><strong>Propósito del viaje (Viajeros):</strong> {{$orden_viaje['proposito']}}</div>
+            <br />
+            <div class="mt-1 text-justify"><strong>Propósito del viaje (Conductor):</strong> {{$orden_viaje['proposito_2']}}</div>
             <br />
             <div class="mt-1 text-justify"><strong>Itinerario de viaje:</strong> {{$orden_viaje['itinerario']}}</div>
         </div>
