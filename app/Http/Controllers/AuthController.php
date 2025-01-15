@@ -7,6 +7,7 @@ use App\Http\Requests\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Socialite;
+use Exception;
 
 class AuthController extends Controller
 {
@@ -53,35 +54,20 @@ class AuthController extends Controller
     }
 
     /*Funcion que captura los datos y los maneja*/
-    public function handleGoogleCallback()
-    {
-        try {
-            
-            $user = Socialite::driver('google')->user();
+    public function handleGoogleCallback(Request $request)
+{
+    $response = Http::get(env('API_BASE_URL_ZETA').'/api/auth/google/callback');
+    //throw new Exception('Hola');
+    if ($response->successful()) {
+        $data = $response->json();
 
-            //$findGuser = User::where('email', $user->email)->first();
-            $findGuser = User::where(DB::raw('lower(email)'), 'LIKE', strtolower($user->email) )->first();
-            
-            if($findGuser ){
-            
-               $usuarioId = $findGuser->username;
-               
-               
-               Auth::login($findGuser);
-               return $this->cargaPermisosRuta( $usuarioId);
-    
-               
-               //return redirect('/home');
-     
-            } else {
-                //$msg = 'It is done';
-                \Session::flash('msgWarning', 'Su cuenta '.$user->email.' no pertenece a una registrada, por favor use otra.' );
-                
-                return redirect('login');
-            }
+        // Guarda el token en el cliente (por ejemplo, en localStorage o cookies)
+        session(['access_token' => $data['access_token']]);
 
-        } catch (Exception $e) {
-            dd($e->getMessage());
-        }
+        return redirect('/');
     }
+
+    return redirect('/login')->with('error', 'Error al autenticar con Google.');
+}
+
 }

@@ -68,4 +68,22 @@ class ApiAuthController extends Controller
         }
         
     }
+
+    /*Funcion que captura los datos y los maneja*/
+    public function handleGoogleCallback(Request $request)
+{
+    throw new Exception('Hola');
+    $response = Http::get(env('API_BASE_URL_ZETA').'/api/auth/google/callback');
+    //throw new Exception('Hola');
+    if ($response->successful()) {
+        $data = $response->json();
+
+        // Guarda el token en el cliente (por ejemplo, en localStorage o cookies)
+        session(['access_token' => $data['access_token']]);
+
+        return redirect('/');
+    }
+
+    return redirect('/login')->with('error', 'Error al autenticar con Google.');
+}
 }

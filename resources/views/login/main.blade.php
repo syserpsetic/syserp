@@ -46,12 +46,16 @@
                 <div class="my-10 flex h-screen py-5 xl:my-0 xl:h-auto xl:py-0">
                     <div
                         class="mx-auto my-auto w-full rounded-md bg-white px-5 py-8 shadow-md dark:bg-darkmode-600 sm:w-3/4 sm:px-8 lg:w-2/4 xl:ml-20 xl:w-auto xl:bg-transparent xl:p-0 xl:shadow-none">
-                        <h2 class="intro-x text-center text-2xl font-bold xl:text-left xl:text-3xl">
-                            Inicio de Sesión
+                        <h2 class="intro-x text-center text-2xl font-bold xl:text-center xl:text-3xl">
+                            IDENTIFÍCATE PARA INGRESAR
                         </h2>
                         <div class="intro-x mt-2 text-center text-slate-400 xl:hidden">
                             ¡Bienvenidos a ZETA UNAG!
                         </div>
+                        <div class="intro-x mt-10 text-center  dark:text-slate-500 xl:text-center">
+                            <p>Debes iniciar sesión con tu correo institucional para ingresar a ZETA UNAG.</p>
+                        </div>
+                        @if(env('APP_DEBUG'))
                         <div class="intro-x mt-8">
                             <form id="login-form">
                                 <x-base.form-input
@@ -76,6 +80,7 @@
                                 ></div>
                             </form>
                         </div>
+                        @endif
                         <!-- <div class="intro-x mt-4 flex text-xs text-slate-600 dark:text-slate-500 sm:text-sm">
                             <div class="mr-auto flex items-center">
                                 <x-base.form-check.input
@@ -93,21 +98,28 @@
                             <a href="">Forgot Password?</a>
                         </div> -->
                         <div class="intro-x mt-5 text-center xl:mt-8 xl:text-left">
+                            @if(env('APP_DEBUG'))
                             <x-base.button
                                 class="w-full px-4 py-3 align-top xl:mr-3 xl:w-32"
                                 id="btn-login"
                                 variant="primary"
                             >
                                 Ingresar
-                            </x-base.button>
-                            <!-- <x-base.button
-                                class="w-full px-4 py-3 align-top xl:mr-3 xl:w-32"
-                                href="{{ url('/auth/redirect/google') }}"
+                            </x-base.button> 
+                            <br><br><br>
+                            @endif
+                            <br>
+                            <x-base.button
+                                class="w-full px-6 py-4 text-lg align-top flex items-center justify-center space-x-3 xl:mr-3 xl:w-40"
+                                href="{{ url('/auth/google') }}"
                                 as="a"
                                 variant="secondary"
                             >
-                                Google
-                            </x-base.button> -->
+                                <img src="{{asset('img/google.png')}}" alt="Google Logo" class="h-6 w-6">
+                                <span>&nbsp; Google</span>
+                            </x-base.button>
+
+
                             <!-- <x-base.button
                                 class="mt-3 w-full px-4 py-3 align-top xl:mt-0 xl:w-32"
                                 variant="outline-secondary"

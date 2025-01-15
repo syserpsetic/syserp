@@ -16,6 +16,7 @@ use App\Http\Controllers\Configuracion\CategoriasController;
 use App\Http\Controllers\Tienda\ControladorTiendaUNAG;
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ReporteController;
+use App\Http\Controllers\googleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,12 @@ Route::get('color-scheme-switcher/{color_scheme}', [ColorSchemeController::class
 //     Route::get('login', 'loginView')->name('login.index');
 //     Route::post('login', 'login')->name('login.check');
 // });
+
+Route::get('/auth/google', function () {
+    return redirect(env('API_BASE_URL_ZETA').'/api/auth/google/redirect');
+});
+
+Route::get('/sesion/{email}/{token}', [googleController::class, 'handleGoogleCallback']);
 
 Route::get('/login', [ApiAuthController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [ApiAuthController::class, 'login']);
