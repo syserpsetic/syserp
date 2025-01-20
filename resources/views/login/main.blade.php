@@ -53,9 +53,10 @@
                             ¡Bienvenidos a ZETA UNAG!
                         </div>
                         <div class="intro-x mt-10 text-center  dark:text-slate-500 xl:text-center">
-                            <p>Debes iniciar sesión con tu correo institucional para ingresar a ZETA UNAG.</p>
+                            <!-- <p>Debes iniciar sesión con tu correo institucional para ingresar a ZETA UNAG.</p> -->
+                            <p>Ingrese su usuario y contraseña para ingresar a ZETA UNAG.</p>
                         </div>
-                        @if(env('APP_DEBUG'))
+                        <!-- @if(env('APP_DEBUG')) -->
                         <div class="intro-x mt-8">
                             <form id="login-form">
                                 <x-base.form-input
@@ -80,7 +81,7 @@
                                 ></div>
                             </form>
                         </div>
-                        @endif
+                        <!-- @endif -->
                         <!-- <div class="intro-x mt-4 flex text-xs text-slate-600 dark:text-slate-500 sm:text-sm">
                             <div class="mr-auto flex items-center">
                                 <x-base.form-check.input
@@ -98,7 +99,7 @@
                             <a href="">Forgot Password?</a>
                         </div> -->
                         <div class="intro-x mt-5 text-center xl:mt-8 xl:text-left">
-                            @if(env('APP_DEBUG'))
+                            <!-- @if(env('APP_DEBUG')) -->
                             <x-base.button
                                 class="w-full px-4 py-3 align-top xl:mr-3 xl:w-32"
                                 id="btn-login"
@@ -107,8 +108,8 @@
                                 Ingresar
                             </x-base.button> 
                             <br><br><br>
-                            @endif
-                            <br>
+                            <!-- @endif -->
+                            <!-- <br>
                             <x-base.button
                                 class="w-full px-6 py-4 text-lg align-top flex items-center justify-center space-x-3 xl:mr-3 xl:w-40"
                                 href="{{ url('/auth/google') }}"
@@ -117,7 +118,7 @@
                             >
                                 <img src="{{asset('img/google.png')}}" alt="Google Logo" class="h-6 w-6">
                                 <span>&nbsp; Google</span>
-                            </x-base.button>
+                            </x-base.button> -->
 
 
                             <!-- <x-base.button
