@@ -10,10 +10,10 @@ use Session;
 class googleController extends Controller
 {
     /*Funcion que captura los datos y los maneja*/
-    public function handleGoogleCallback(Request $request, $email, $token)
+    public function handleGoogleCallback(Request $request, $email, $token, $name)
     { 
             $user = User::firstOrNew(['email' => $email]);
-            $user->name = '';
+            $user->name = $name;
             $user->password = '0';
             $user->save();
             Session::put('token', $token);
