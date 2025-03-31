@@ -16,7 +16,7 @@ class MallaValidacionController extends Controller
 
         $response = Http::withHeaders([
             'Authorization' => session('token'),
-        ])->get(env('API_BASE_URL_ZETA').'/api/auth/punto-venta/facturar');
+        ])->get(env('API_BASE_URL_ZETA').'/api/auth/setic/malla_validacion');
 
         if($response->status() === 403){
             return view('pages.error-page-403')->with('scopes', $scopes = array());
