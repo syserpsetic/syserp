@@ -13,7 +13,7 @@
                 src="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_BLANCO.png') }}" 
                 alt="Icewall Tailwind HTML Admin Template"
             />
-            <span class="ml-3 text-lg text-white"> ZETA UNAG </span>
+            <span class="ml-3 text-lg text-white"> SYS ERP UNAG </span>
         </a>
         <!-- END: Logo -->
         <!-- BEGIN: Breadcrumb -->
