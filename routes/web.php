@@ -17,6 +17,7 @@ use App\Http\Controllers\Tienda\ControladorTiendaUNAG;
 use App\Http\Controllers\ApiAuthController;
 use App\Http\Controllers\ReporteController;
 use App\Http\Controllers\googleController;
+use App\Http\Controllers\MallaValidacion\MallaValidacionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,6 +156,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('configuracion/categorias', [CategoriasController::class, 'view_categorias'])->name('configuracion_categorias');
     Route::post('configuracion/categorias/guardar', [CategoriasController::class, 'guardar_categorias']);
     Route::get('/reportes', [ReporteController::class, 'imprimir_reporte']);
+    Route::get('/setic/malla_validacion', [MallaValidacionController::class, 'malla_validaciones'])->name('malla_validacion');
 
     //Inicia Tienda UNAG
     Route::get('punto-venta/facturar', [ControladorTiendaUNAG::class, 'view_facturar'])->name('facturar');

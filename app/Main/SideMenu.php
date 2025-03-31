@@ -184,107 +184,107 @@ class SideMenu
             //     ]
             // ],
             'solicitudes' => [
-                'icon' => 'file',
-                'route_name' => 'solicitudes',
+                'icon' => 'grid',
+                'route_name' => 'malla_validacion',
                 'params' => [
                     'layout' => 'side-menu'
                 ],
-                'title' => 'Solicitudes',
+                'title' => 'Malla De Validaciones',
                 'permiso' => 'zeta_leer_solicitudes'
             ],
-            'tienda' => [
-                    'icon' => 'ShoppingCart',
-                    'title' => 'Tienda',
-                    'permiso' => 'tnd_menu',
-                    'sub_menu' => [
-                        'grid' => [
-                            'icon' => 'Monitor',
-                            'title' => 'Punto de Venta',
-                            'permiso' => 'tnd_facturar',
-                            'sub_menu' => [
-                                'facturar' => [
-                                    'icon' => 'credit-card',
-                                    'route_name' => 'facturar',
-                                    'params' => [
-                                        'layout' => 'side-menu'
-                                    ],
-                                    'title' => 'Facturar',
-                                    'permiso' => 'tnd_facturar',
-                                ],
-                                'facturas-pendientes' => [
-                                    'icon' => 'List',
-                                    'route_name' => 'tabulator',
-                                    'params' => [
-                                        'layout' => 'side-menu'
-                                    ],
-                                    'title' => 'Facturas Pendientes',
-                                    'permiso' => 'tnd_facturar',
-                                ]
-                            ]
-                        ],
-                        'tab' => [
-                            'icon' => 'activity',
-                            'route_name' => 'tab',
-                            'params' => [
-                                'layout' => 'side-menu'
-                            ],
-                            'title' => 'Tab',
-                            'permiso' => 'zeta_leer_solicitudes',
-                        ],
-                    ]
-                ],
-            'configuracion' => [
-                'icon' => 'settings',
-                'title' => 'Configuración',
-                'permiso' => 'zeta_configuraciones',
-                'sub_menu' => [
-                    'configuracion_estados' => [
-                        'icon' => 'crosshair',
-                        'route_name' => 'configuracion_estados',
-                        'params' => [
-                            'layout' => 'side-menu',
-                        ],
-                        'title' => 'Estados',
-                        'permiso' => 'zeta_leer_estados'
-                    ],
-                    'configuracion_tipos_solicitudes' => [
-                        'icon' => 'file-text',
-                        'route_name' => 'configuracion_tipos_solicitudes',
-                        'params' => [
-                            'layout' => 'side-menu',
-                        ],
-                        'title' => 'Tipos Solicitudes',
-                        'permiso' => 'zeta_leer_tipos_solicitudes'
-                    ],
-                    'configuracion_zonas' => [
-                        'icon' => 'compass',
-                        'route_name' => 'configuracion_zonas',
-                        'params' => [
-                            'layout' => 'side-menu',
-                        ],
-                        'title' => 'Zonas',
-                        'permiso' => 'zeta_leer_zonas'
-                    ],
-                    'configuracion_capitulos' => [
-                        'icon' => 'book-open',
-                        'route_name' => 'configuracion_capitulos',
-                        'params' => [
-                            'layout' => 'side-menu',
-                        ],
-                        'title' => 'Capítulos',
-                        'permiso' => 'zeta_leer_capitulos'
-                    ],
-                    'configuracion_categorias' => [
-                        'icon' => 'book',
-                        'route_name' => 'configuracion_categorias',
-                        'params' => [
-                            'layout' => 'side-menu',
-                        ],
-                        'title' => 'Categorías',
-                        'permiso' => 'zeta_leer_categorias'
-                    ],
-                ]
-            ],
+            // 'tienda' => [
+            //         'icon' => 'ShoppingCart',
+            //         'title' => 'Tienda',
+            //         'permiso' => 'tnd_menu',
+            //         'sub_menu' => [
+            //             'grid' => [
+            //                 'icon' => 'Monitor',
+            //                 'title' => 'Punto de Venta',
+            //                 'permiso' => 'tnd_facturar',
+            //                 'sub_menu' => [
+            //                     'facturar' => [
+            //                         'icon' => 'credit-card',
+            //                         'route_name' => 'facturar',
+            //                         'params' => [
+            //                             'layout' => 'side-menu'
+            //                         ],
+            //                         'title' => 'Facturar',
+            //                         'permiso' => 'tnd_facturar',
+            //                     ],
+            //                     'facturas-pendientes' => [
+            //                         'icon' => 'List',
+            //                         'route_name' => 'tabulator',
+            //                         'params' => [
+            //                             'layout' => 'side-menu'
+            //                         ],
+            //                         'title' => 'Facturas Pendientes',
+            //                         'permiso' => 'tnd_facturar',
+            //                     ]
+            //                 ]
+            //             ],
+            //             'tab' => [
+            //                 'icon' => 'activity',
+            //                 'route_name' => 'tab',
+            //                 'params' => [
+            //                     'layout' => 'side-menu'
+            //                 ],
+            //                 'title' => 'Tab',
+            //                 'permiso' => 'zeta_leer_solicitudes',
+            //             ],
+            //         ]
+            //     ],
+            // 'configuracion' => [
+            //     'icon' => 'settings',
+            //     'title' => 'Configuración',
+            //     'permiso' => 'zeta_configuraciones',
+            //     'sub_menu' => [
+            //         'configuracion_estados' => [
+            //             'icon' => 'crosshair',
+            //             'route_name' => 'configuracion_estados',
+            //             'params' => [
+            //                 'layout' => 'side-menu',
+            //             ],
+            //             'title' => 'Estados',
+            //             'permiso' => 'zeta_leer_estados'
+            //         ],
+            //         'configuracion_tipos_solicitudes' => [
+            //             'icon' => 'file-text',
+            //             'route_name' => 'configuracion_tipos_solicitudes',
+            //             'params' => [
+            //                 'layout' => 'side-menu',
+            //             ],
+            //             'title' => 'Tipos Solicitudes',
+            //             'permiso' => 'zeta_leer_tipos_solicitudes'
+            //         ],
+            //         'configuracion_zonas' => [
+            //             'icon' => 'compass',
+            //             'route_name' => 'configuracion_zonas',
+            //             'params' => [
+            //                 'layout' => 'side-menu',
+            //             ],
+            //             'title' => 'Zonas',
+            //             'permiso' => 'zeta_leer_zonas'
+            //         ],
+            //         'configuracion_capitulos' => [
+            //             'icon' => 'book-open',
+            //             'route_name' => 'configuracion_capitulos',
+            //             'params' => [
+            //                 'layout' => 'side-menu',
+            //             ],
+            //             'title' => 'Capítulos',
+            //             'permiso' => 'zeta_leer_capitulos'
+            //         ],
+            //         'configuracion_categorias' => [
+            //             'icon' => 'book',
+            //             'route_name' => 'configuracion_categorias',
+            //             'params' => [
+            //                 'layout' => 'side-menu',
+            //             ],
+            //             'title' => 'Categorías',
+            //             'permiso' => 'zeta_leer_categorias'
+            //         ],
+            //     ]
+            // ],
             // 'inbox' => [
             //     'icon' => 'inbox',
             //     'route_name' => 'inbox',
