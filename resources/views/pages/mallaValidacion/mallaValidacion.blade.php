@@ -6,21 +6,23 @@
 
 @section('subcontent')
 <br>
-<div class="w-full bg-gradient-to-r from-blue-900 to-black text-white py-4 px-6 rounded-2xl flex items-center overflow-hidden border-4 border-blue-500 shadow-lg">
-    <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center">
-        <img src="{{ asset('img/LOGO_SETIC.png') }}" alt="Logo" class="w-14 h-14 object-contain rounded-full">
-    </div>&nbsp;&nbsp;&nbsp;&nbsp;
-    <div class="w-full flex overflow-hidden relative" id="news-container">
-        <div class="flex space-x-10 whitespace-nowrap" id="news-list">
-            @foreach ($noticias as $item)
-                <div class="flex items-center space-x-2 news-item">
-                    <img src="https://portal.unag.edu.hn/matricula/documentos/fotos/{{$item['foto']}}" alt="News Icon" class="w-10 h-10 object-cover rounded-full" onerror="this.onerror=null; this.src='{{ Vite::asset('resources/images/fakers/user2.png') }}';">
-                    <span class="font-medium">{{$item['name'] }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-                </div>
-            @endforeach
+@if(in_array('malla_validacion_leer_cinta_noticias', $scopes))
+    <div class="w-full bg-gradient-to-r from-blue-900 to-black text-white py-4 px-6 rounded-2xl flex items-center overflow-hidden border-4 border-blue-500 shadow-lg">
+        <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center">
+            <img src="{{ asset('img/LOGO_SETIC.png') }}" alt="Logo" class="w-14 h-14 object-contain rounded-full">
+        </div>&nbsp;&nbsp;&nbsp;&nbsp;
+        <div class="w-full flex overflow-hidden relative" id="news-container">
+            <div class="flex space-x-10 whitespace-nowrap" id="news-list">
+                @foreach ($noticias as $item)
+                    <div class="flex items-center space-x-2 news-item">
+                        <img src="https://portal.unag.edu.hn/matricula/documentos/fotos/{{$item['foto']}}" alt="News Icon" class="w-10 h-10 object-cover rounded-full" onerror="this.onerror=null; this.src='{{ Vite::asset('resources/images/fakers/user2.png') }}';">
+                        <span class="font-medium">{{$item['name'] }}</span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    </div>
+                @endforeach
+            </div>
         </div>
     </div>
-</div>
+@endif
 
 <!-- <div class="intro-y mt-8 flex flex-col items-center sm:flex-row">
         <h2 class="mr-auto text-lg font-medium">Chat</h2>
@@ -60,8 +62,10 @@
             </x-base.menu>
         </div>
     </div> -->
+
     <div class="intro-y mt-5 grid grid-cols-12 gap-5">
         <!-- BEGIN: Chat Side Menu -->
+        @if(in_array('malla_validacion_leer_lista_pendientes', $scopes))
         <x-base.tab.group class="col-span-12 lg:col-span-4 2xl:col-span-3">
             <div class="intro-y pr-1">
                 <div class="box p-2">
@@ -185,6 +189,7 @@
                 </x-base.tab.panel>
             </x-base.tab.panels>
         </x-base.tab.group>
+        @endif
         <!-- END: Chat Side Menu -->
         <!-- BEGIN: Chat Content -->
         <div class="intro-y col-span-12 lg:col-span-8 2xl:col-span-9">
@@ -253,6 +258,7 @@
         </div>
         <!-- END: Chat Content -->
     </div>
+
 
 <style>
 #news-container {

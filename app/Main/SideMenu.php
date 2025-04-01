@@ -190,7 +190,7 @@ class SideMenu
                     'layout' => 'side-menu'
                 ],
                 'title' => 'Malla De Validaciones',
-                'permiso' => 'zeta_leer_solicitudes'
+                'permiso' => 'malla_validacion'
             ],
             // 'tienda' => [
             //         'icon' => 'ShoppingCart',
