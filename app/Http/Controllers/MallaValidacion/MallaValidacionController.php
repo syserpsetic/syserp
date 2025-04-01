@@ -26,12 +26,14 @@ class MallaValidacionController extends Controller
         $indicadoresMallaValidaciones = $response['indicadoresMallaValidaciones'];
         $personas = $response['personas'];
         $noticias = $response['noticias'];
+        $narracion = $response['narracion'];
         $coutPendientes = $response['coutPendientes'];
 
         return view("pages.mallaValidacion.mallaValidacion")
         ->with('indicadoresMallaValidaciones', $indicadoresMallaValidaciones)
         ->with('personas', $personas)
         ->with('noticias', $noticias)
+        ->with('narracion', $narracion)
         ->with('coutPendientes', $coutPendientes)
         ->with('scopes', $scopes);
     }

@@ -77,6 +77,7 @@
                             <x-base.tab.button
                                 class="w-full py-2"
                                 as="button"
+                                id="boton"
                             >
                                 Nexus
                             </x-base.tab.button>
@@ -316,6 +317,7 @@
         @vite('resources/js/pages/notification/index.js')
         
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=mzutkZDE"></script>
         <script type="module">
            $(document).ready(function() {
 
@@ -325,6 +327,21 @@
                     }
                     
                 });	 
+
+                $('#boton').trigger("click");
+        
+                    @if(in_array('malla_validacion_reproducir_narrador', $scopes) && ($narracion['narracion'] != null || $narracion['narracion'] != ''))
+                    var mensaje = "SE HAN ASIGNADO NUEVAS TAREAS A: {{$narracion['narracion']}}";
+                    console.log(mensaje);
+                    responsiveVoice.speak(mensaje, "Spanish Latin American Female", {
+                        rate: 1.2,   // Aumenta la velocidad al 180%
+                        pitch: 1,  // Un poco más agudo
+                        volume: 1    // Máximo volumen
+                    });
+                @endif
+      
+                
+                
 
                 setTimeout(function () {
                     location.reload();
