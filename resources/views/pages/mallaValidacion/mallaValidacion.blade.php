@@ -458,7 +458,7 @@
                                         '<div class="p-5">'+
                                             '<div class="tab-content">'+
                                                 '<div data-transition="" data-selector=".active" data-enter="transition-[visibility,opacity] ease-linear duration-150" data-enter-from="!p-0 !h-0 overflow-hidden invisible opacity-0" data-enter-to="visible opacity-100" data-leave="transition-[visibility,opacity] ease-linear duration-150" data-leave-from="visible opacity-100" data-leave-to="!p-0 !h-0 overflow-hidden invisible opacity-0" id="modal_detalle_tareas_personas_listad" role="tabpanel" aria-labelledby="modal_detalle_tareas_personas_listad-tab" class="tab-pane active visible opacity-100" data-state="enter"><div class="flex items-center">'+
-                                                    '<div class="border-l-2 border-primary pl-4 dark:border-primary">'+
+                                                    '<div class="border-l-2 border-' + row.color_badge + ' pl-4 dark:border-primary">'+
                                                         '<a class="font-medium" href="#">'+
                                                             row.name +
                                                         '</a>'+
