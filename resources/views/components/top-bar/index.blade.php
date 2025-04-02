@@ -10,10 +10,10 @@
         >
             <img
                 class="w-6"
-                src="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_BLANCO.png') }}" 
+                src="{{ Vite::asset('resources/images/escudo.png') }}" 
                 alt="Icewall Tailwind HTML Admin Template"
             />
-            <span class="ml-3 text-lg text-white"> SYS ERP UNAG </span>
+            <span class="ml-3 text-lg text-white"> SYS UNAG </span>
         </a>
         <!-- END: Logo -->
         <!-- BEGIN: Breadcrumb -->

@@ -20,21 +20,21 @@
                     >
                         <img
                             class="w-6"
-                            src="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_BLANCO.png') }}"
+                            src="{{ Vite::asset('resources/images/escudo.png') }}"
                             alt="Midone Tailwind HTML Admin Template"
                         />
-                        <span class="ml-3 text-lg text-white"> SYS ERP UNAG </span>
+                        <span class="ml-3 text-lg text-white"> SYS UNAG </span>
                     </a>
                     <div class="my-auto">
                     <br><br><br><br>
                         <img
                             class="-intro-x -mt-16 w-1/2"
-                            src="{{asset('img/LOGO_SISTEMA_ZETA_BLANCO.png')}}"
+                            src="{{asset('img/UNAG_BLANCO.png')}}"
                             alt="Midone Tailwind HTML Admin Template"
                         />
                         <br><br><br><br>
                         <div class="-intro-x mt-10 text-4xl font-medium leading-tight text-white">
-                            ¡Bienvenidos a SYS ERP UNAG!
+                            ¡Bienvenidos a SYS UNAG!
                         </div>
                         <!-- <div class="-intro-x mt-5 text-lg text-white text-opacity-70 dark:text-slate-400">
                             Manage all your e-commerce accounts in one place
@@ -50,11 +50,11 @@
                             IDENTIFÍCATE PARA INGRESAR
                         </h2>
                         <div class="intro-x mt-2 text-center text-slate-400 xl:hidden">
-                            ¡Bienvenidos a SYS ERP UNAG!
+                            ¡Bienvenidos a SYS UNAG!
                         </div>
                         <div class="intro-x mt-10 text-center  dark:text-slate-500 xl:text-center">
                             <!-- <p>Debes iniciar sesión con tu correo institucional para ingresar a ZETA UNAG.</p> -->
-                            <p>Ingrese su usuario y contraseña para ingresar a SYS ERP UNAG.</p>
+                            <p>Ingrese su usuario y contraseña para ingresar a SYS UNAG.</p>
                         </div>
                         {{-- @if(env('APP_DEBUG')) --}}
                         <div class="intro-x mt-8">

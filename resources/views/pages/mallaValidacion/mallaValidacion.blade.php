@@ -7,7 +7,7 @@
 @section('subcontent')
 <br>
 @if(in_array('malla_validacion_leer_cinta_noticias', $scopes))
-    <div class="w-full bg-gradient-to-r from-blue-900 to-black text-white py-4 px-6 rounded-2xl flex items-center overflow-hidden border-4 border-blue-500 shadow-lg">
+    <div class="w-full bg-gradient-to-r from-green-900 to-black text-white py-4 px-6 rounded-2xl flex items-center overflow-hidden border-4 shadow-lg">
         <div class="w-16 h-16 rounded-full bg-white flex items-center justify-center">
             <img src="{{ asset('img/LOGO_SETIC.png') }}" alt="Logo" class="w-14 h-14 object-contain rounded-full">
         </div>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -148,10 +148,10 @@
                     <div class="chat-list scrollbar-hidden mt-4 h-[725px] overflow-y-auto pt-1 pr-1">
                         @foreach ($personas as $row)
                             <div @class([
-                                'intro-x cursor-pointer box relative flex items-center p-5',
+                                'intro-x cursor-pointer box relative flex items-center p-5 btn_detalle_tareas',
                                 'mt-5' => $row['id_member'] ,
-                            ])>
-                                <div class="image-fit mr-1 h-12 w-12 flex-none">
+                            ]) data-id_member="{{$row['id_member']}}" data-pendientes="{{$row['tareas']}}">
+                                <div class="image-fit mr-1 h-12 w-12 flex-none" >
                                     <img
                                         class="rounded-full"
                                         src="https://portal.unag.edu.hn/matricula/documentos/fotos/{{$row['foto']}}"
@@ -259,6 +259,100 @@
         </div>
         <!-- END: Chat Content -->
     </div>
+    <x-base.dialog id="modal_detalle_tareas_personas" size="xl">
+    <x-base.dialog.panel>
+        <x-base.dialog.title class="bg-primary">
+            <h2 class="mr-auto text-white font-medium">
+                        <div class="flex items-center">
+                        <i data-lucide="Clock" class="w-4 h-4 mr-1"></i>
+                            <span class="text-white-700"> Detalles de tareas pendientes</span>
+                        </div>
+                    </h2>
+        </x-base.dialog.title>
+        <x-base.dialog.description class="grid grid-cols-12 gap-4 gap-y-3">
+            <div class="intro-y mt-5 px-5 pt-5 flex flex-col items-center text-center w-full col-span-12">
+                <div class="flex flex-col items-center border-b border-slate-200/60 pb-5 dark:border-darkmode-400 w-full">
+                    <div class="relative h-32 w-32 sm:h-32 sm:w-32" id="modal_detalle_tareas_personas_responsable_foto">
+                        <img
+                            class="rounded-full object-cover h-full w-full"
+                            src="{{ Vite::asset($fakers[0]['photos'][0]) }}"
+                            alt="Midone Tailwind HTML Admin Template"
+                        />
+                    </div>
+                    <div class="mt-3 text-center">
+                        <div class="text-lg font-medium" id="modal_detalle_tareas_personas_responsable">{{ $fakers[0]['users'][0]['name'] }}</div>
+                        <!-- <div class="text-slate-500">{{ $fakers[0]['jobs'][0] }}</div> -->
+                    </div>
+                </div>
+            </div>
+            <x-base.tab.group class="intro-y box col-span-12 lg:col-span-12">
+                        <div
+                            class="flex items-center border-b border-slate-200/60 px-5 py-5 dark:border-darkmode-400 sm:py-0">
+                            <h2 class="mr-auto text-base font-medium">
+                                Tareas Pendientes
+                            </h2>
+                        </div>
+                        <div class="p-5">
+                            <x-base.tab.panels>
+                                <x-base.tab.panel
+                                    id="latest-tasks-new"
+                                    selected
+                                >
+                                    <div class="flex items-center">
+                                        <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                            <a
+                                                class="font-medium"
+                                                href=""
+                                            >
+                                                Create New Campaign
+                                            </a>
+                                            <div class="text-slate-500">10:00 AM</div>
+                                        </div>
+                                        <x-base.form-switch class="ml-auto">
+                                            <x-base.form-switch.input type="checkbox" />
+                                        </x-base.form-switch>
+                                    </div>
+                                    <div class="mt-5 flex items-center">
+                                        <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                            <a
+                                                class="font-medium"
+                                                href=""
+                                            >
+                                                Meeting With Client
+                                            </a>
+                                            <div class="text-slate-500">02:00 PM</div>
+                                        </div>
+                                        <x-base.form-switch class="ml-auto">
+                                            <x-base.form-switch.input type="checkbox" />
+                                        </x-base.form-switch>
+                                    </div>
+                                    <div class="mt-5 flex items-center">
+                                        <div class="border-l-2 border-primary pl-4 dark:border-primary">
+                                            <a
+                                                class="font-medium"
+                                                href=""
+                                            >
+                                                Create New Repository
+                                            </a>
+                                            <div class="text-slate-500">04:00 PM</div>
+                                        </div>
+                                        <x-base.form-switch class="ml-auto">
+                                            <x-base.form-switch.input type="checkbox" />
+                                        </x-base.form-switch>
+                                    </div>
+                                </x-base.tab.panel>
+                            </x-base.tab.panels>
+                        </div>
+                    </x-base.tab.group>
+        </x-base.dialog.description>
+        <x-base.dialog.footer class="bg-dark">
+            <x-base.button class="mr-1 w-20" data-tw-dismiss="modal" type="button" variant="primary">
+                Aceptar
+            </x-base.button>
+        </x-base.dialog.footer>
+    </x-base.dialog.panel>
+</x-base.dialog>
+
 
 
 <style>
@@ -319,6 +413,10 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.responsivevoice.org/responsivevoice.js?key=mzutkZDE"></script>
         <script type="module">
+            var titleMsg = null;
+            var textMsg = null;
+            var typeMsg = null;
+            var url_setic_malla_validacion_tareas_pendientes_personas = "{{url('setic/malla_validacion/tareas_pendientes_personas')}}"; 
            $(document).ready(function() {
 
                 $.ajaxSetup({
@@ -348,6 +446,71 @@
                 }, 300000);
                     
                 });
+
+                $(".btn_detalle_tareas").on("click", function () {
+                    var id_member = $(this).data('id_member');
+                    var pendientes = $(this).data('pendientes');
+                    reservar_productos(id_member, pendientes);
+                });
+
+                function reservar_productos(id_member, pendientes){
+                    //alert(id_member+' '+pendientes);
+                    $.ajax({
+                        type: "post",
+                        url: url_setic_malla_validacion_tareas_pendientes_personas,
+                        data: {
+                            "id_member": id_member,
+                        },
+                        success: function (data) {
+                            if (data.msgError != null) {
+                                titleMsg = "Error al Cargar";
+                                textMsg = data.msgError;
+                                typeMsg = "error";
+                            } else {
+                                titleMsg = "Datos Cargados";
+                                textMsg = data.msgSuccess;
+                                typeMsg = "success";
+                                var detalle_tareas = data.detalle_tareas;
+                                $("#modal_detalle_tareas_personas_responsable_foto").html('');
+                                $("#modal_detalle_tareas_personas_responsable").html('');
+                                $("#modal_detalle_tareas_personas_total").html('');
+                                $("#modal_detalle_tareas_personas_lista").html('');
+                                console.log(detalle_tareas.length)
+                                for (var i = 0; i < detalle_tareas.length; i++) {
+                                    var row = detalle_tareas[i];
+                                    $("#modal_detalle_tareas_personas_responsable_foto").html('<img class="rounded-full object-cover h-full w-full" src="https://portal.unag.edu.hn/matricula/documentos/fotos/'+row.foto+'" onerror="this.onerror=null; this.src=\'{{ Vite::asset('resources/images/fakers/user2.png') }}\';" alt="Midone Tailwind HTML Admin Template">');
+                                    $("#modal_detalle_tareas_personas_responsable").html(row.member);
+                                    $("#modal_detalle_tareas_personas_total").html(pendientes+' <i class="fa fa-exclamation-circle"></i>');
+                                    $("#modal_detalle_tareas_personas_lista").append(
+                                            '<a href="#" class="list-group-item">' +
+                                                '<h4 class="list-group-item-heading d-flex justify-content-between">' +
+                                                    '<span><strong>' + row.name + '</strong></span>'+
+                                                    '<span class="' + row.estado_color + '" style="float: right; color: white;">'+ row.estado +'</span>'+
+                                                '</h4>' +
+                                                '<p class="list-group-item-text">' +
+                                                    '<span class="' + row.color_badge + '" style=" color: white;"><strong><i class="fa fa-calendar"></i> Fecha de Inicio:</strong> ' + row.fecha_inicio + 
+                                                    ' | <strong>Fecha de Finalización: </strong>' + row.fecha_vencimiento +'</span>' +
+                                                '</p>' +
+                                            '</a>'
+                                        );
+
+                                    //console.log(row.id)
+                                }
+                                const el = document.querySelector("#modal_detalle_tareas_personas");
+                                const modal = tailwind.Modal.getOrCreateInstance(el);
+                                modal.show(); 
+                            }
+                            // $(function () {
+                            //     new PNotify({
+                            //         title: titleMsg,
+                            //         text: textMsg,
+                            //         type: typeMsg,
+                            //         shadow: true,
+                            //     });
+                            // });
+                        },
+                    });
+                }
         </script>
     @endpush
 @endonce

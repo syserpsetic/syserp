@@ -21,7 +21,8 @@ class MallaValidacionController extends Controller
         if($response->status() === 403){
             return view('pages.error-page-403')->with('scopes', $scopes = array());
         }
-
+        
+        //throw new Exception($response->status());
         $scopes = $response['scopes'];
         $indicadoresMallaValidaciones = $response['indicadoresMallaValidaciones'];
         $personas = $response['personas'];
@@ -36,5 +37,28 @@ class MallaValidacionController extends Controller
         ->with('narracion', $narracion)
         ->with('coutPendientes', $coutPendientes)
         ->with('scopes', $scopes);
+    }
+
+    public function malla_validaciones_tareas_pendientes_personas(Request $request){
+        $id_member = $request->id_member;
+        $msgError = null;
+        $msgSuccess = null;
+        $response = Http::withHeaders([
+            'Authorization' => session('token'),
+        ])->post(env('API_BASE_URL_ZETA').'/api/auth/setic/malla_validacion/tareas_pendientes_personas', [
+            'id_member' => $id_member
+        ]);
+
+        if($response->status() === 403){
+            return view('pages.error-page-403')->with('scopes', $scopes = array());
+        }
+
+        $msgSuccess = $response['msgSuccess'];
+        $detalle_tareas = $response['detalle_tareas'];
+
+        return response()->json([
+            "msgSuccess" => $msgSuccess,
+            "detalle_tareas" => $detalle_tareas
+        ]);
     }
 }

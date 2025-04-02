@@ -157,6 +157,7 @@ Route::middleware('auth:api')->group(function () {
     Route::post('configuracion/categorias/guardar', [CategoriasController::class, 'guardar_categorias']);
     Route::get('/reportes', [ReporteController::class, 'imprimir_reporte']);
     Route::get('/setic/malla_validacion', [MallaValidacionController::class, 'malla_validaciones'])->name('malla_validacion');
+    Route::post("setic/malla_validacion/tareas_pendientes_personas", [MallaValidacionController::class, 'malla_validaciones_tareas_pendientes_personas']); 
 
     //Inicia Tienda UNAG
     Route::get('punto-venta/facturar', [ControladorTiendaUNAG::class, 'view_facturar'])->name('facturar');
