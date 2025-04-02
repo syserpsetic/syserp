@@ -1,7 +1,7 @@
 @extends('../layouts/' . $layout)
 
 @section('subhead')
-        <title>ZETA - UNAG</title>
+        <title>SYS UNAG</title>
 @endsection
 
 @section('subcontent')

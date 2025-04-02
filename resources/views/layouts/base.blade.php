@@ -17,7 +17,7 @@ License: You must have a valid license purchased only from themeforest(the above
 <head>
     <meta charset="utf-8">
     <link
-        href="{{ Vite::asset('resources/images/LOGO_SISTEMA_ZETA_BLANCO.png') }}"
+        href="{{ Vite::asset('resources/images/hoja-unag.png') }}"
         rel="shortcut icon"
     >
     <meta

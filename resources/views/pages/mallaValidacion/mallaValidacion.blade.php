@@ -297,6 +297,7 @@
                                 <x-base.tab.panel
                                     id="latest-tasks-new"
                                     selected
+                                    id="modal_detalle_tareas_personas_lista"
                                 >
                                     <div class="flex items-center">
                                         <div class="border-l-2 border-primary pl-4 dark:border-primary">
@@ -307,34 +308,6 @@
                                                 Create New Campaign
                                             </a>
                                             <div class="text-slate-500">10:00 AM</div>
-                                        </div>
-                                        <x-base.form-switch class="ml-auto">
-                                            <x-base.form-switch.input type="checkbox" />
-                                        </x-base.form-switch>
-                                    </div>
-                                    <div class="mt-5 flex items-center">
-                                        <div class="border-l-2 border-primary pl-4 dark:border-primary">
-                                            <a
-                                                class="font-medium"
-                                                href=""
-                                            >
-                                                Meeting With Client
-                                            </a>
-                                            <div class="text-slate-500">02:00 PM</div>
-                                        </div>
-                                        <x-base.form-switch class="ml-auto">
-                                            <x-base.form-switch.input type="checkbox" />
-                                        </x-base.form-switch>
-                                    </div>
-                                    <div class="mt-5 flex items-center">
-                                        <div class="border-l-2 border-primary pl-4 dark:border-primary">
-                                            <a
-                                                class="font-medium"
-                                                href=""
-                                            >
-                                                Create New Repository
-                                            </a>
-                                            <div class="text-slate-500">04:00 PM</div>
                                         </div>
                                         <x-base.form-switch class="ml-auto">
                                             <x-base.form-switch.input type="checkbox" />
@@ -482,16 +455,19 @@
                                     $("#modal_detalle_tareas_personas_responsable").html(row.member);
                                     $("#modal_detalle_tareas_personas_total").html(pendientes+' <i class="fa fa-exclamation-circle"></i>');
                                     $("#modal_detalle_tareas_personas_lista").append(
-                                            '<a href="#" class="list-group-item">' +
-                                                '<h4 class="list-group-item-heading d-flex justify-content-between">' +
-                                                    '<span><strong>' + row.name + '</strong></span>'+
-                                                    '<span class="' + row.estado_color + '" style="float: right; color: white;">'+ row.estado +'</span>'+
-                                                '</h4>' +
-                                                '<p class="list-group-item-text">' +
-                                                    '<span class="' + row.color_badge + '" style=" color: white;"><strong><i class="fa fa-calendar"></i> Fecha de Inicio:</strong> ' + row.fecha_inicio + 
-                                                    ' | <strong>Fecha de Finalización: </strong>' + row.fecha_vencimiento +'</span>' +
-                                                '</p>' +
-                                            '</a>'
+                                        '<div class="p-5">'+
+                                            '<div class="tab-content">'+
+                                                '<div data-transition="" data-selector=".active" data-enter="transition-[visibility,opacity] ease-linear duration-150" data-enter-from="!p-0 !h-0 overflow-hidden invisible opacity-0" data-enter-to="visible opacity-100" data-leave="transition-[visibility,opacity] ease-linear duration-150" data-leave-from="visible opacity-100" data-leave-to="!p-0 !h-0 overflow-hidden invisible opacity-0" id="modal_detalle_tareas_personas_listad" role="tabpanel" aria-labelledby="modal_detalle_tareas_personas_listad-tab" class="tab-pane active visible opacity-100" data-state="enter"><div class="flex items-center">'+
+                                                    '<div class="border-l-2 border-primary pl-4 dark:border-primary">'+
+                                                        '<a class="font-medium" href="#">'+
+                                                            row.name +
+                                                        '</a>'+
+                                                    '<div class="text-slate-500"> <strong>Fecha de Inicio:</strong> '+ row.fecha_inicio +' | <strong>Fecha de Finalización:</strong> '+ row.fecha_vencimiento +'</div>'+
+                                                '</div>'+
+                                            '<div class="flex items-center text-right ml-auto"><h6 class="mt-3 font-medium leading-none text-slate-500 text-'+ row.estado_color +'">'+ row.estado +'</h6></div>'+
+                                            '</div></div>'+
+                                                '</div>'+
+                                           '</div>'
                                         );
 
                                     //console.log(row.id)
